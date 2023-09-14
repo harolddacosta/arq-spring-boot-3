@@ -79,7 +79,7 @@ pipeline {
       steps {
         container('maven') {
           withSonarQubeEnv('Sonarqube in Kubernetes') {
-            sh 'mvn -B install sonar:sonar -Dsonar.projectKey=EdminioPerez_arq-spring-boot-3_AYqVV9osqRybk-ciqZ8f -Dsonar.projectName="arq-spring-boot-3" -Dembedded.postgresql.host="localhost"'
+            sh 'mvn -B verify sonar:sonar -Dsonar.projectKey=EdminioPerez_arq-spring-boot-3_AYqVV9osqRybk-ciqZ8f -Dsonar.projectName="arq-spring-boot-3" -Dembedded.postgresql.host="localhost"'
           }
         }
       }
