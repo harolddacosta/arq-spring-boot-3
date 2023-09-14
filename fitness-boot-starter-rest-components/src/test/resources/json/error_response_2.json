@@ -1,0 +1,5 @@
+{
+  "title": "Exception title",
+  "status": 400,
+  "detail": "Excepcion traducida"
+}

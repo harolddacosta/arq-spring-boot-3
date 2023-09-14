@@ -1,0 +1,96 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="
+		http://www.liquibase.org/xml/ns/dbchangelog 
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.2.xsd">
+    
+    <changeSet author="harold (generated)" id="1551726869721-186">  
+	    <createSequence
+	            sequenceName="PERSONA_ID_SEQ" />  
+	</changeSet>
+    
+    <changeSet author="harold (generated)" id="1551726869721-187">
+        <createTable tableName="persona">
+            <column autoIncrement="true" name="id" type="BIGSERIAL">
+                <constraints primaryKey="true" primaryKeyName="pk_persona"/>
+            </column>
+            <column name="codigo_persona" type="VARCHAR(16)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="cedula_persona" type="VARCHAR(64)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="nombre_persona" type="VARCHAR(64)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="apellido_persona" type="VARCHAR(64)"/>
+            <column name="rif_persona" type="VARCHAR(64)"/>
+            <column name="numero_msas" type="VARCHAR"/>
+            <column name="fecha_nacimiento_persona" type="DATE"/>
+            <column name="fecha_defuncion_persona" type="DATE"/>
+            <column name="fecha_vencimiento_rif" type="DATE"/>
+            <column name="telefono_movil_persona" type="VARCHAR(32)"/>
+            <column name="telefono_fijo_persona" type="VARCHAR(32)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="e_mail_persona" type="VARCHAR(64)"/>
+            <column name="direccion_persona" type="VARCHAR">
+                <constraints nullable="false"/>
+            </column>
+            <column name="nombre_contacto_uno" type="VARCHAR(64)"/>
+            <column name="telefono_contacto_uno" type="VARCHAR(32)"/>
+            <column name="telefono_movil_contacto_uno" type="VARCHAR(32)"/>
+            <column name="email_contacto_uno" type="VARCHAR(64)"/>
+            <column name="parentesco_contacto_uno" type="VARCHAR"/>
+            <column name="nombre_contacto_dos" type="VARCHAR(64)"/>
+            <column name="telefono_contacto_dos" type="VARCHAR(32)"/>
+            <column name="telefono_movil_contacto_dos" type="VARCHAR(32)"/>
+            <column name="email_contacto_dos" type="VARCHAR(64)"/>
+            <column name="parentesco_contacto_dos" type="VARCHAR"/>
+            <column name="edad" type="FLOAT4"/>
+            <column name="url1" type="VARCHAR(255)"/>
+            <column name="url1_file_name" type="VARCHAR(255)"/>
+            <column name="url1_file_size" type="FLOAT8"/>
+            <column name="comentarios_adicionales" type="VARCHAR"/>
+            <column name="nombre_doctor_referencia" type="VARCHAR"/>
+            <column name="telefono_contacto_doctor_referencia" type="VARCHAR(32)"/>
+            <column name="telefono_movil_doctor_referencia" type="VARCHAR(32)"/>
+            <column name="email_doctor_referencia" type="VARCHAR(64)"/>
+            <column name="lugar_nacimiento_otro" type="VARCHAR(128)"/>
+            <column name="direccion_persona_calle_avenida" type="VARCHAR"/>
+            <column name="direccion_persona_edificio" type="VARCHAR"/>
+            <column name="direccion_persona_consultorio" type="VARCHAR"/>
+            <column defaultValueNumeric="1" name="es_activa" type="BIGINT"/>
+            <column defaultValueNumeric="2" name="es_publica" type="BIGINT"/>
+            <column name="id_estado_civil" type="BIGINT"/>
+            <column name="id_sexo" type="BIGINT"/>
+            <column name="id_tipo_sangre" type="BIGINT"/>
+            <column name="id_ubicacion_geografica_nacimiento" type="BIGINT"/>
+            <column name="id_distintivo_persona" type="BIGINT"/>
+            <column name="id_pais" type="BIGINT"/>
+            <column name="id_codigo_postal" type="BIGINT" />	
+            <column name="id_tipo_documento_identificacion" type="BIGINT" />
+            <column defaultValue="&quot;current_user&quot;()" name="usuario_creacion" type="VARCHAR(64)"/>
+            <column defaultValueComputed="now()" name="fecha_creacion" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="usuario_modificacion" type="VARCHAR(64)"/>
+            <column name="fecha_modificacion" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column defaultValueNumeric="0" name="version" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        
+        <addUniqueConstraint columnNames="cedula_persona"
+        	tableName="persona" constraintName="uq_person_global_identification"/>
+        	
+       	<addUniqueConstraint columnNames="codigo_persona"
+        	tableName="persona" constraintName="uq_message_not_found_coverage"/>
+        	
+        <addUniqueConstraint columnNames="numero_msas"
+        	tableName="persona" constraintName="uq_constraint_found_but_no_message_configured"/>
+        	        	
+        <createIndex indexName="email_index" tableName="persona">
+            <column name="e_mail_persona"/>
+        </createIndex>
+    </changeSet>
+</databaseChangeLog>

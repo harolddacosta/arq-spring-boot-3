@@ -1,0 +1,14 @@
+{
+  "title": "Exception title",
+  "status": 400,
+  "detail": "Excepcion traducida",
+  "front_end_code": 2000,
+  "url": "/api/v1/exception-handling/logic-exception-translated-fields",
+  "violations": [
+    {
+      "title": "FieldError title",
+      "detail": "Excepcion en campo traducida",
+      "translation_key": "error.field.logic-exception-translated"
+    }
+  ]
+}
