@@ -79,7 +79,7 @@ pipeline {
       steps {
         container('maven') {
           withSonarQubeEnv('Sonarqube in Kubernetes') {
-            sh 'mvn -B verify sonar:sonar -Dsonar.projectKey=arq-demo -Dsonar.projectName="arq-demo" -Dembedded.postgresql.host="localhost"  -Dsonar.token="sqp_758b1b6f1a1c6c749c60dccce77bc3ef24d2c0de"'
+            sh 'mvn -B verify sonar:sonar -Dembedded.postgresql.host="localhost" -Dsonar.projectKey=arq-demo -Dsonar.projectName="arq-demo" -Dsonar.host.url=https://assentsoftware.tplinkdns.com/sonarqube -Dsonar.token=sqp_758b1b6f1a1c6c749c60dccce77bc3ef24d2c0de'
           }
         }
       }
