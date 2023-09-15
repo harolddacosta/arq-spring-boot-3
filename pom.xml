@@ -12,6 +12,7 @@
   <artifactId>dkt-fitness-libs-parent</artifactId>
   <version>${revision}</version>
   <packaging>pom</packaging>
+  <name>arq-spring-boot-3</name>
 
   <modules>
     <module>fitness-rest-bom</module>
