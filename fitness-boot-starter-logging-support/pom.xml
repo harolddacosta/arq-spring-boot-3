@@ -3,8 +3,8 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>com.decathlon</groupId>
-    <artifactId>dkt-fitness-libs-parent</artifactId>
+    <groupId>org.assentsoftware</groupId>
+    <artifactId>spring-boot-parent</artifactId>
     <version>${revision}</version>
   </parent>
 
@@ -81,7 +81,7 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>com.decathlon</groupId>
+      <groupId>org.assentsoftware</groupId>
       <artifactId>dkt-fitness-rest-services-commons</artifactId>
       <scope>test</scope>
     </dependency>
