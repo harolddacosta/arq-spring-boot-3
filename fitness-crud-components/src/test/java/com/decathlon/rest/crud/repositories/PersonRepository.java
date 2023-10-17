@@ -22,8 +22,7 @@ public class PersonRepository {
             entityToSave.setId(Long.valueOf(RandomStringUtils.randomNumeric(5)));
         }
 
-        entityToSave.setVersion(
-                entityToSave.getVersion() == null ? 0L : entityToSave.getVersion() + 1);
+        entityToSave.setVersion(entityToSave.getVersion() + 1);
 
         return entityToSave;
     }

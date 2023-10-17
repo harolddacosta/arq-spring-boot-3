@@ -12,6 +12,7 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
+import org.openapitools.jackson.nullable.JsonNullableModule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -38,6 +39,7 @@ public class JsonConfiguration {
         modules.add(new ProblemModule());
         modules.add(new ConstraintViolationProblemModule());
         modules.add(new JavaTimeModule());
+        modules.add(new JsonNullableModule());
         configureSerializers(builder);
 
         builder.simpleDateFormat(restConfigParameters.getDates().getDateTimeFormat());

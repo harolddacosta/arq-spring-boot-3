@@ -13,13 +13,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
-import org.springframework.test.context.TestPropertySource;
 
 @WebMvcTest(controllers = {AuthorizationRestController.class})
 @Import({DefaultService.class, SecurityOAuth2Configuration.class})
-@TestPropertySource(
-        locations = {"/application.properties"},
-        properties = {"app.jackson.hibernate-module-enable=false"})
 @WithMockedUser
 class JwtUtilsTest {
 

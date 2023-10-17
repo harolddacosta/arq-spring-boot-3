@@ -67,5 +67,5 @@ public class PersonDto implements Identifiable, Versionable, Serializable {
 
     private Long sexId;
 
-    private Long version;
+    private long version;
 }

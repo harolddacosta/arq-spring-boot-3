@@ -15,7 +15,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.client.HttpClientErrorException;
 import org.zalando.problem.Problem;
@@ -29,7 +28,6 @@ import java.util.Optional;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {RestServicesConfiguration.class})
-@TestPropertySource(properties = {"app.jackson.hibernate-module-enable=false"})
 class ExceptionUtilsTest {
 
     @Autowired private ObjectMapper mappingJackson2HttpMessageConverter;

@@ -10,6 +10,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
+import org.springframework.boot.actuate.health.HealthEndpoint;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -32,7 +34,6 @@ public class DefaultJwtSecurityConfiguration {
         "/webjars/**",
         "/api-docs/**",
         "/performance-monitor/**",
-        "/actuator/**",
         "/swagger-ui/**",
         "/v3/**",
         "/v1/ping"
@@ -82,6 +83,9 @@ public class DefaultJwtSecurityConfiguration {
                                                 requests.requestMatchers(mvc.pattern(authUrl))
                                                         .permitAll();
                                             });
+
+                            requests.requestMatchers(EndpointRequest.to(HealthEndpoint.class))
+                                    .permitAll();
                         });
 
         if (StringUtils.isNotBlank(apiKey)) {

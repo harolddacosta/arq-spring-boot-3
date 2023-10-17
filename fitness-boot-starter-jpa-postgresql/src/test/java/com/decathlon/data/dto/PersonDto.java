@@ -2,7 +2,6 @@
 package com.decathlon.data.dto;
 
 import com.decathlon.core.domain.types.Identifiable;
-import com.decathlon.core.domain.types.Versionable;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
@@ -19,7 +18,7 @@ import java.time.LocalDate;
 
 @Data
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class PersonDto implements Identifiable, Versionable, Serializable {
+public class PersonDto implements Identifiable, Serializable {
 
     private static final long serialVersionUID = -8293952137314357678L;
 

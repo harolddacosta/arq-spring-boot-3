@@ -24,11 +24,7 @@ import org.springframework.test.web.servlet.MockMvc;
 @Import({DefaultService.class, SecurityOAuth2Configuration.class})
 @TestPropertySource(
         locations = {"classpath:application.properties", "classpath:oauth.properties"},
-        properties = {
-            "app.jackson.hibernate-module-enable=false",
-            "app.security.api-key=Testing api key",
-            "spring.security.oauth2.resourceserver.jwt.audience=account"
-        })
+        properties = {"app.security.api-key=Testing api key"})
 @WithMockedUser
 class SecuredEndpointsWithWebMVCSliceAndApiKeyFilterTest {
 

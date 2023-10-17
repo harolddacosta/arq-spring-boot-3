@@ -16,7 +16,7 @@ public class Persona implements Versionable, Identifiable, Auditable, java.io.Se
 
     private Long id;
 
-    private Long version;
+    private long version;
 
     private Sexo sexo;
 
@@ -210,11 +210,11 @@ public class Persona implements Versionable, Identifiable, Auditable, java.io.Se
         this.id = id;
     }
 
-    public Long getVersion() {
+    public long getVersion() {
         return this.version;
     }
 
-    public void setVersion(Long version) {
+    public void setVersion(long version) {
         this.version = version;
     }
 
@@ -533,12 +533,12 @@ public class Persona implements Versionable, Identifiable, Auditable, java.io.Se
     }
 
     @Override
-    public LocalDateTime getCreatedDate() {
+    public LocalDateTime getCreatedAt() {
         return fechaCreacion;
     }
 
     @Override
-    public void setCreatedDate(LocalDateTime fechaCreacion) {
+    public void setCreatedAt(LocalDateTime fechaCreacion) {
         this.fechaCreacion = fechaCreacion;
     }
 
@@ -676,7 +676,7 @@ public class Persona implements Versionable, Identifiable, Auditable, java.io.Se
                 .append(getDireccionPersonaConsultorio())
                 .append("' ");
         buffer.append("usuarioCreacion").append("='").append(getCreatedBy()).append("' ");
-        buffer.append("fechaCreacion").append("='").append(getCreatedDate()).append("' ");
+        buffer.append("fechaCreacion").append("='").append(getCreatedAt()).append("' ");
         buffer.append("usuarioModificacion").append("='").append(getLastModifiedBy()).append("' ");
         buffer.append("fechaModificacion").append("='").append(getLastModifiedDate()).append("' ");
         buffer.append("]");
@@ -706,7 +706,7 @@ public class Persona implements Versionable, Identifiable, Auditable, java.io.Se
         int result = 17;
 
         result = 37 * result + (getId() == null ? 0 : this.getId().hashCode());
-        result = 37 * result + (int) this.getVersion().intValue();
+        result = 37 * result + (int) this.getVersion();
 
         return result;
     }

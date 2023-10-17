@@ -9,9 +9,9 @@ public interface Auditable {
 
     void setCreatedBy(String usuarioCreacion);
 
-    LocalDateTime getCreatedDate();
+    LocalDateTime getCreatedAt();
 
-    void setCreatedDate(LocalDateTime fechaCreacion);
+    void setCreatedAt(LocalDateTime fechaCreacion);
 
     String getLastModifiedBy();
 

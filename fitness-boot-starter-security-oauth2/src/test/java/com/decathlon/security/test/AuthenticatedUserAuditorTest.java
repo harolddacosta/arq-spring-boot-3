@@ -22,9 +22,7 @@ import java.util.Optional;
 
 @WebMvcTest(controllers = {AuthorizationRestController.class})
 @Import({DefaultService.class, SecurityOAuth2Configuration.class})
-@TestPropertySource(
-        locations = {"classpath:application.properties", "classpath:oauth.properties"},
-        properties = {"app.jackson.hibernate-module-enable=false"})
+@TestPropertySource(locations = {"classpath:application.properties", "classpath:oauth.properties"})
 @WithMockedUser
 class AuthenticatedUserAuditorTest {
 

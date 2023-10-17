@@ -3,24 +3,20 @@ package com.decathlon.rest.controllers;
 
 import com.decathlon.rest.api.PingApi;
 
-import jakarta.servlet.http.HttpServletResponse;
-
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.actuate.health.HealthComponent;
+import org.springframework.boot.actuate.health.HealthEndpoint;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
 public class PingController implements PingApi {
 
-    @Value("${server.servlet.context-path}")
-    private String contextPath;
+    private final HealthEndpoint healthEndpoint;
 
     @Override
-    public void ping(HttpServletResponse response) throws IOException {
-        response.sendRedirect(contextPath + "/actuator/health");
+    public HealthComponent ping() {
+        return healthEndpoint.health();
     }
 }
