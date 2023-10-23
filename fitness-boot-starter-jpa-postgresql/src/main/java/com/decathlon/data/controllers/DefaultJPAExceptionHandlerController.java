@@ -44,7 +44,6 @@ public class DefaultJPAExceptionHandlerController implements AdviceTrait {
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<Problem> dataIntegrityViolationExceptionHandler(
             DataIntegrityViolationException exception, NativeWebRequest request) {
-        log.error(DefaultJPAExceptionHandlerController.BUILDING_ERROR_RESPONSE, exception);
 
         String rootMsg = ExceptionUtils.getRootCause(exception).getMessage();
         ProblemBuilder problemBuilder =
