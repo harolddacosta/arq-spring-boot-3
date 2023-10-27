@@ -43,7 +43,7 @@ pipeline {
             - name: maven-cache
               persistentVolumeClaim:
                 claimName: maven-cache-claim
-        '''
+      '''
     }
   }
   environment {
