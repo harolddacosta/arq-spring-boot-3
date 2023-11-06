@@ -12,7 +12,7 @@ public class FlywayConfiguration {
 
     public FlywayConfiguration(
             DataSource dataSource,
-            @Value("${spring.flyway.locations}") String flywayLocations,
+            @Value("${spring.flyway.locations}") String[] flywayLocations,
             @Value("${spring.flyway.table}") String table,
             @Value("${spring.flyway.repair}") boolean repair) {
         Flyway flyway =
