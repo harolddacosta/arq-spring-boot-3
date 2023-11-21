@@ -15,6 +15,7 @@ import org.springframework.boot.actuate.health.HealthEndpoint;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.server.resource.web.authentication.BearerTokenAuthenticationFilter;
 import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
@@ -57,8 +58,8 @@ public class DefaultJwtSecurityConfiguration {
     protected final HttpSecurity preconfigureSecurityFilterChain(
             HttpSecurity http, MvcRequestMatcher.Builder mvc) throws Exception {
         http.cors(withDefaults())
-                .csrf(csrf -> csrf.disable()) // NOSONAR as we use stateless apis
-                .httpBasic(httpBasic -> httpBasic.disable())
+                .csrf(AbstractHttpConfigurer::disable) // NOSONAR as we use stateless apis
+                .httpBasic(AbstractHttpConfigurer::disable)
                 .exceptionHandling(
                         exceptionHandling ->
                                 exceptionHandling

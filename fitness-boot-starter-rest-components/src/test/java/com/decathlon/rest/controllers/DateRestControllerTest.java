@@ -66,9 +66,7 @@ import java.util.Date;
     DatesConfiguration.class,
     DateUtils.class
 })
-@TestPropertySource(
-        locations = {"classpath:application.properties", "classpath:rest.properties"},
-        properties = {"app.jackson.hibernate-module-enable=false"})
+@TestPropertySource(locations = {"classpath:application.properties", "classpath:rest.properties"})
 class DateRestControllerTest {
 
     @Autowired private MockMvc mockMvc;

@@ -36,12 +36,8 @@ public class ApiKeyRequestFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-        if (SecurityContextHolder.getContext().getAuthentication() == null) {
-            return true;
-        }
-
-        return false;
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        return SecurityContextHolder.getContext().getAuthentication() == null;
     }
 
     @Override

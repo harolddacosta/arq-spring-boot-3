@@ -2,12 +2,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <!--  <parent>-->
-  <!--    <groupId>org.springframework.boot</groupId>-->
-  <!--    <artifactId>spring-boot-starter-parent</artifactId>-->
-  <!--    <version>3.1.3</version>-->
-  <!--  </parent>-->
-
   <groupId>org.assentsoftware</groupId>
   <artifactId>spring-boot-parent</artifactId>
   <version>${revision}</version>
@@ -18,7 +12,6 @@
     <module>fitness-rest-bom</module>
     <module>fitness-rest-core</module>
     <module>fitness-boot-starter-rest-components</module>
-    <module>fitness-crud-components</module>
     <module>fitness-boot-starter-openapi</module>
     <module>fitness-boot-starter-externalized-properties</module>
     <module>fitness-boot-starter-security-oauth2-test</module>
@@ -52,12 +45,13 @@
 
     <java.version>17</java.version>
 
-    <spring-boot.version>3.1.3</spring-boot.version>
+    <spring-boot.version>3.1.5</spring-boot.version>
     <spring-cloud.version>2022.0.4</spring-cloud.version>
 
     <commons-beanutils.version>1.9.4</commons-beanutils.version>
     <embedded-postgresql.version>2.3.2</embedded-postgresql.version>
-    <h2.version>2.2.220</h2.version>
+    <hibernate.version>6.2.13.Final</hibernate.version>
+    <h2.version>2.2.224</h2.version>
     <hypersistence-utils-hibernate-62.version>3.4.3</hypersistence-utils-hibernate-62.version>
     <jackson-databind-nullable.version>0.2.6</jackson-databind-nullable.version>
     <javafaker.version>1.0.2</javafaker.version>
@@ -72,7 +66,7 @@
     <poi.version>5.2.3</poi.version>
     <problem-spring-web.version>0.29.1</problem-spring-web.version>
     <springdoc-openapi.version>2.1.0</springdoc-openapi.version>
-    <snakeyaml.version>2.0</snakeyaml.version>
+    <snakeyaml.version>2.2</snakeyaml.version>
     <swagger-annotations.version>2.2.8</swagger-annotations.version>
     <xnio.version>3.8.9.Final</xnio.version>
     <problem.version>0.27.1</problem.version>
@@ -108,7 +102,7 @@
         <!-- Import dependency management from Spring Boot -->
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-dependencies</artifactId>
-        <version>3.1.3</version>
+        <version>${spring-boot.version}</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -230,6 +224,16 @@
         <artifactId>hypersistence-utils-hibernate-62</artifactId>
         <version>${hypersistence-utils-hibernate-62.version}</version>
       </dependency>
+      <dependency>
+        <groupId>org.hibernate.orm</groupId>
+        <artifactId>hibernate-core</artifactId>
+        <version>${hibernate.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.hibernate.orm</groupId>
+        <artifactId>hibernate-jcache</artifactId>
+        <version>${hibernate.version}</version>
+      </dependency>
 
       <!-- Custom starters with pre-configured components -->
 
@@ -241,11 +245,6 @@
       <dependency>
         <groupId>org.assentsoftware</groupId>
         <artifactId>dkt-fitness-boot-starter-rest-components</artifactId>
-        <version>${revision}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.assentsoftware</groupId>
-        <artifactId>dkt-fitness-crud-components</artifactId>
         <version>${revision}</version>
       </dependency>
       <dependency>
@@ -391,7 +390,6 @@
               <featureBranchPrefix>feature/</featureBranchPrefix>
               <releaseBranchPrefix>release/</releaseBranchPrefix>
               <hotfixBranchPrefix>hotfix/</hotfixBranchPrefix>
-              <versionTagPrefix></versionTagPrefix>
             </gitFlowConfig>
           </configuration>
         </plugin>

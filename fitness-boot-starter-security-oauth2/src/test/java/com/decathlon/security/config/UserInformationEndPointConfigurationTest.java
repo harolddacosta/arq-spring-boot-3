@@ -4,7 +4,7 @@ package com.decathlon.security.config;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.client.RestTemplate;
 
-public class UserInformationEndPointConfigurationTest {
+class UserInformationEndPointConfigurationTest {
 
     @Test
     void userInfoRestTemplateConfiguration() {

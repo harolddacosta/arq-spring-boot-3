@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import java.io.Serializable;
 
 @Component
-@ConfigurationProperties(ignoreUnknownFields = true, prefix = "app")
+@ConfigurationProperties(prefix = "app")
 @Getter
 @Setter
 @ToString

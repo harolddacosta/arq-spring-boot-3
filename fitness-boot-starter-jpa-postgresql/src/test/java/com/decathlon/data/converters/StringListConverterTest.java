@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-public class StringListConverterTest {
+class StringListConverterTest {
 
     @Test
     void when_convert_to_string_ok() {

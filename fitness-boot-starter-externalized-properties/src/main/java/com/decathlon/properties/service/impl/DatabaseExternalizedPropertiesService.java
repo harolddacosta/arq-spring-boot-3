@@ -42,7 +42,6 @@ public class DatabaseExternalizedPropertiesService implements ExternalizedProper
 
     @Override
     @Transactional(
-            readOnly = false,
             propagation = Propagation.REQUIRES_NEW,
             noRollbackFor = {PropertyNotFoundException.class})
     public void createProperty(String propertyName, String propertyValue) {
@@ -56,7 +55,7 @@ public class DatabaseExternalizedPropertiesService implements ExternalizedProper
     }
 
     @Override
-    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void updatePropertyInConcurrentMode(
             String propertyName, String valueBefore, String valueAfter) {
         String currentPropertyValue = getConfigurationProperty(propertyName);
@@ -70,7 +69,7 @@ public class DatabaseExternalizedPropertiesService implements ExternalizedProper
     }
 
     @Override
-    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void updateProperty(String propertyName, String propertyValue) {
         getConfigurationProperty(propertyName);
 

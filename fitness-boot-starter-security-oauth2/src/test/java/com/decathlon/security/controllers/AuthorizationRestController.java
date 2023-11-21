@@ -23,14 +23,12 @@ public class AuthorizationRestController {
 
     @GetMapping("/public/no-jwt-needed")
     public ResponseEntity<KeyValueResponseDto> noJwtNeeded() {
-        return new ResponseEntity<KeyValueResponseDto>(
-                new KeyValueResponseDto("Authorized"), HttpStatus.OK);
+        return new ResponseEntity<>(new KeyValueResponseDto("Authorized"), HttpStatus.OK);
     }
 
     @GetMapping("/protected/by-any-rule")
     public ResponseEntity<KeyValueResponseDto> protectedByAnyRule() {
-        return new ResponseEntity<KeyValueResponseDto>(
-                new KeyValueResponseDto("Authorized"), HttpStatus.OK);
+        return new ResponseEntity<>(new KeyValueResponseDto("Authorized"), HttpStatus.OK);
     }
 
     @GetMapping("/protected/user/info")
@@ -40,37 +38,32 @@ public class AuthorizationRestController {
 
     @GetMapping("/read-only/check")
     public ResponseEntity<KeyValueResponseDto> checkScopeBasedEndpoint() {
-        return new ResponseEntity<KeyValueResponseDto>(
-                new KeyValueResponseDto("Authorized"), HttpStatus.OK);
+        return new ResponseEntity<>(new KeyValueResponseDto("Authorized"), HttpStatus.OK);
     }
 
     @GetMapping("/role-based/check")
     public ResponseEntity<KeyValueResponseDto> checkRoleBasedEndpoint() {
-        return new ResponseEntity<KeyValueResponseDto>(
-                new KeyValueResponseDto("Authorized"), HttpStatus.OK);
+        return new ResponseEntity<>(new KeyValueResponseDto("Authorized"), HttpStatus.OK);
     }
 
     @GetMapping("/method-based/check_secured_annotation")
     public ResponseEntity<KeyValueResponseDto> securedMethodBasedEndpoint() {
         defaultService.checkSecuredAnnotation();
 
-        return new ResponseEntity<KeyValueResponseDto>(
-                new KeyValueResponseDto("Authorized"), HttpStatus.OK);
+        return new ResponseEntity<>(new KeyValueResponseDto("Authorized"), HttpStatus.OK);
     }
 
     @GetMapping("/method-based/check_roles_allowed_annotation")
     public ResponseEntity<KeyValueResponseDto> rolesAllowedMethodBasedEndpoint() {
         defaultService.checkRolesAllowedAnnotation();
 
-        return new ResponseEntity<KeyValueResponseDto>(
-                new KeyValueResponseDto("Authorized"), HttpStatus.OK);
+        return new ResponseEntity<>(new KeyValueResponseDto("Authorized"), HttpStatus.OK);
     }
 
     @GetMapping("/method-based/check_preauthorize_annotation")
     public ResponseEntity<KeyValueResponseDto> preAuthorizedMethodBasedEndpoint() {
         defaultService.checkPreauthorizeAnnotation();
 
-        return new ResponseEntity<KeyValueResponseDto>(
-                new KeyValueResponseDto("Authorized"), HttpStatus.OK);
+        return new ResponseEntity<>(new KeyValueResponseDto("Authorized"), HttpStatus.OK);
     }
 }

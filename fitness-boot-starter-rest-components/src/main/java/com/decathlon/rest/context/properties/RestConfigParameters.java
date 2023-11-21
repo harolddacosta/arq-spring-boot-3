@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import java.io.Serializable;
 
 @Component
-@ConfigurationProperties(ignoreUnknownFields = true, prefix = "app")
+@ConfigurationProperties(prefix = "app")
 @Data
 public class RestConfigParameters implements Serializable {
 
@@ -25,7 +25,7 @@ public class RestConfigParameters implements Serializable {
 
         private static final long serialVersionUID = 5541880522575588387L;
 
-        private boolean hibernateModuleEnable;
+        //        private boolean hibernateModuleEnable;
     }
 
     @Data

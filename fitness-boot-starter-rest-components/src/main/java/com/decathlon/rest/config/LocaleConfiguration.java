@@ -23,7 +23,7 @@ public class LocaleConfiguration {
 
         List<Locale> supportedLocales =
                 Stream.of(restConfigParameters.getLocales().getSupportedLocales())
-                        .map(supportedLocale -> new Locale(supportedLocale))
+                        .map(Locale::new)
                         .toList();
 
         resolver.setDefaultLocale(new Locale(restConfigParameters.getLocales().getDefaultLocale()));

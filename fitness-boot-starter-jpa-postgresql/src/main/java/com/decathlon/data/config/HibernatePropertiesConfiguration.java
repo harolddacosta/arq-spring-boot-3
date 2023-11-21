@@ -43,7 +43,6 @@ public class HibernatePropertiesConfiguration {
                 jpaConfigParameters.getHibernate().getCacheRegionFactoryClass());
         props.put("hibernate.jdbc.time_zone", jpaConfigParameters.getHibernate().getTimeZone());
         props.put("hibernate.id.new_generator_mappings", "true");
-        props.put("hibernate.temp.use_jdbc_metadata_defaults", "false");
 
         if (StringUtils.isNotBlank(jpaConfigParameters.getHibernate().getColumnNamingStrategy())
                 && "snakeCase"
@@ -67,10 +66,6 @@ public class HibernatePropertiesConfiguration {
                 && !"none".equalsIgnoreCase(jpaConfigParameters.getHibernate().getHbm2ddlAuto())) {
             props.put(
                     "hibernate.hbm2ddl.auto", jpaConfigParameters.getHibernate().getHbm2ddlAuto());
-        }
-
-        if (StringUtils.isNotBlank(jpaConfigParameters.getHibernate().getDialect())) {
-            props.put("hibernate.dialect", jpaConfigParameters.getHibernate().getDialect());
         }
 
         return props;

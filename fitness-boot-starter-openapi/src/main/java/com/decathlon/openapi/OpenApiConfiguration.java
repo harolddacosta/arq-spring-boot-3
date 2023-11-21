@@ -8,8 +8,6 @@ import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
-import io.swagger.v3.oas.models.security.OAuthFlow;
-import io.swagger.v3.oas.models.security.OAuthFlows;
 import io.swagger.v3.oas.models.security.Scopes;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
@@ -22,6 +20,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+
+import java.util.Arrays;
 
 @Configuration
 @ComponentScan("com.decathlon.openapi")
@@ -41,19 +41,10 @@ public class OpenApiConfiguration {
             havingValue = "true")
     OpenAPI customOpenAPI(
             @Value("${springdoc.version}") String appVersion,
-            @Value("${spring.security.oauth2.client.access-token-uri}") String tokenUrl,
-            @Value("${spring.security.oauth2.client.authorization-url}") String authorizationUrl,
-            @Value("${app.swagger.server-path}") String swaggerServerPath) {
+            @Value("${springdoc.api-title}") String apiTitle,
+            @Value("${app.swagger.server-paths}") String[] swaggerServerPath) {
         Scopes scopes = new Scopes();
         scopes.addString("read", "apis");
-
-        OAuthFlow AuthorizationFlow = new OAuthFlow();
-        AuthorizationFlow.setTokenUrl(tokenUrl);
-        AuthorizationFlow.setScopes(scopes);
-        AuthorizationFlow.setAuthorizationUrl(authorizationUrl);
-
-        OAuthFlows authFlows = new OAuthFlows();
-        authFlows.setAuthorizationCode(AuthorizationFlow);
 
         SecurityRequirement securityRequirement = new SecurityRequirement();
         securityRequirement.addList("ApiKeyAuth", "[read]");
@@ -71,21 +62,21 @@ public class OpenApiConfiguration {
                         .scheme("bearer")
                         .bearerFormat("JWT");
 
-        return new OpenAPI()
-                .addServersItem(new Server().url(swaggerServerPath))
-                .components(
+        OpenAPI openAPI = new OpenAPI();
+        Arrays.asList(swaggerServerPath)
+                .forEach(
+                        path -> {
+                            openAPI.addServersItem(new Server().url(path));
+                        });
+
+        return openAPI.components(
                         new Components()
-                                .addSecuritySchemes(
-                                        "OAuth2",
-                                        new SecurityScheme()
-                                                .type(SecurityScheme.Type.OAUTH2)
-                                                .flows(authFlows))
                                 .addSecuritySchemes("ApiKeyAuth", apiKeyScheme)
-                                .addSecuritySchemes("jwt", bearerSchema))
+                                .addSecuritySchemes("JWT", bearerSchema))
                 .addSecurityItem(securityRequirement)
                 .info(
                         new Info()
-                                .title("Rest Service API")
+                                .title(apiTitle)
                                 .version(appVersion)
                                 .license(
                                         new License()

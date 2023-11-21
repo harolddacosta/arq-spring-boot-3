@@ -33,7 +33,7 @@ class JPAExceptionMappingTest {
 
     @Autowired private ObjectMapper objectMapper;
 
-    private Faker faker = new Faker(new Locale("es", "ES"));
+    private final Faker faker = new Faker(new Locale("es", "ES"));
 
     @Test
     void error_when_identity_document_exists_on_second_save() throws Exception {

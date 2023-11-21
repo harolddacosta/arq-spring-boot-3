@@ -6,7 +6,7 @@ import org.springframework.test.web.servlet.request.RequestPostProcessor;
 
 public class BearerTokenRequestPostProcessor implements RequestPostProcessor {
 
-    private String token;
+    private final String token;
 
     public BearerTokenRequestPostProcessor(String token) {
         this.token = token;

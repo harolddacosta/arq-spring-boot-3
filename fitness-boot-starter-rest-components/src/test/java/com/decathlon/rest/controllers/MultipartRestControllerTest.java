@@ -29,9 +29,7 @@ import java.io.IOException;
     LocaleConfiguration.class,
     JsonConfiguration.class
 })
-@TestPropertySource(
-        locations = {"classpath:application.properties", "classpath:rest.properties"},
-        properties = {"app.jackson.hibernate-module-enable=false"})
+@TestPropertySource(locations = {"classpath:application.properties", "classpath:rest.properties"})
 class MultipartRestControllerTest {
 
     @Autowired private MockMvc mockMvc;

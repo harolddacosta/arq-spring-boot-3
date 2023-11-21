@@ -22,7 +22,6 @@ public class MultipartRestController {
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<KeyValueResponseDto> languageHeaderResponse(
             @RequestPart MultipartFile document) {
-        return new ResponseEntity<KeyValueResponseDto>(
-                new KeyValueResponseDto("done"), HttpStatus.OK);
+        return new ResponseEntity<>(new KeyValueResponseDto("done"), HttpStatus.OK);
     }
 }

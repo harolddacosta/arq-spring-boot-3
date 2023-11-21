@@ -23,10 +23,7 @@ public class AuthenticatedUserAuditor implements AuditorAware<String> {
                 SecurityContextHolder.getContext().getAuthentication().getClass());
 
         if (SecurityContextHolder.getContext().getAuthentication()
-                instanceof JwtAuthenticationToken) {
-            JwtAuthenticationToken jwtAuthenticationToken =
-                    ((JwtAuthenticationToken)
-                            SecurityContextHolder.getContext().getAuthentication());
+                instanceof JwtAuthenticationToken jwtAuthenticationToken) {
 
             if (jwtAuthenticationToken.getTokenAttributes().containsKey(claimForAuditing)) {
                 return Optional.of(

@@ -35,7 +35,7 @@ import java.util.Locale;
 @Slf4j
 public class SimpleController {
 
-    private Faker faker = new Faker(new Locale("es", "ES"));
+    private final Faker faker = new Faker(new Locale("es", "ES"));
 
     private final RestTemplate restTemplate;
 

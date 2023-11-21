@@ -28,9 +28,7 @@ class DecathlonOxylaneRolesConverterTest {
                 new DecathlonOxylaneRolesConverter("decathlon") {
                     @Override
                     public Collection<? extends GrantedAuthority> extractResourceRoles(Jwt source) {
-                        List<SimpleGrantedAuthority> roles = new ArrayList<>();
-
-                        return roles;
+                        return new ArrayList<SimpleGrantedAuthority>();
                     }
                 };
     }

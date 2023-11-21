@@ -23,9 +23,7 @@ import org.springframework.test.web.servlet.MvcResult;
 
 @WebMvcTest(controllers = {AcceptTypesController.class})
 @Import({RestConfigParameters.class, JsonConfiguration.class})
-@TestPropertySource(
-        locations = {"classpath:application.properties", "classpath:rest.properties"},
-        properties = {"app.jackson.hibernate-module-enable=false"})
+@TestPropertySource(locations = {"classpath:application.properties", "classpath:rest.properties"})
 class AcceptTypesControllerTest {
 
     @Autowired private MockMvc mockMvc;

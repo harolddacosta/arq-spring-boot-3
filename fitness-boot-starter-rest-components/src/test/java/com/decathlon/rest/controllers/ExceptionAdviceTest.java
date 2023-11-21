@@ -319,9 +319,7 @@ class ExceptionAdviceTest {
                 catchThrowableOfType(
                         () ->
                                 restTemplate.postForEntity(
-                                        uri,
-                                        new HttpEntity<ValidationAnnotatedDto>(body),
-                                        KeyValueResponseDto.class),
+                                        uri, new HttpEntity<>(body), KeyValueResponseDto.class),
                         DefaultProblem.class);
 
         assertThat(exception.getTitle()).isEqualTo("Constraint Violation");
@@ -349,9 +347,7 @@ class ExceptionAdviceTest {
                 catchThrowableOfType(
                         () ->
                                 restTemplate.postForEntity(
-                                        uri,
-                                        new HttpEntity<ValidationAnnotatedDto>(body),
-                                        KeyValueResponseDto.class),
+                                        uri, new HttpEntity<>(body), KeyValueResponseDto.class),
                         DefaultProblem.class);
 
         assertThat(exception.getTitle()).isEqualTo("Constraint Violation");
@@ -385,9 +381,7 @@ class ExceptionAdviceTest {
                 catchThrowableOfType(
                         () ->
                                 restTemplate.postForEntity(
-                                        uri,
-                                        new HttpEntity<ValidationAnnotatedDto>(body),
-                                        KeyValueResponseDto.class),
+                                        uri, new HttpEntity<>(body), KeyValueResponseDto.class),
                         DefaultProblem.class);
 
         assertThat(exception.getTitle()).isEqualTo("Constraint Violation");
@@ -418,9 +412,7 @@ class ExceptionAdviceTest {
                 catchThrowableOfType(
                         () ->
                                 restTemplate.postForEntity(
-                                        uri,
-                                        new HttpEntity<ValidationAnnotatedDto>(body),
-                                        KeyValueResponseDto.class),
+                                        uri, new HttpEntity<>(body), KeyValueResponseDto.class),
                         DefaultProblem.class);
 
         assertThat(exception.getTitle()).isEqualTo("Constraint Violation");
@@ -449,9 +441,7 @@ class ExceptionAdviceTest {
                 catchThrowableOfType(
                         () ->
                                 restTemplate.postForEntity(
-                                        uri,
-                                        new HttpEntity<ValidationAnnotatedDto>(body),
-                                        KeyValueResponseDto.class),
+                                        uri, new HttpEntity<>(body), KeyValueResponseDto.class),
                         DefaultProblem.class);
 
         assertThat(exception.getTitle()).isEqualTo("Constraint Violation");

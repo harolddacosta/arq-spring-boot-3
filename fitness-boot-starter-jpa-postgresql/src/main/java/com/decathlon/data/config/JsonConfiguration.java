@@ -29,8 +29,6 @@ import java.util.List;
 @EnableAutoConfiguration(exclude = ErrorMvcAutoConfiguration.class)
 public class JsonConfiguration {
 
-    //    @Autowired private JPAConfigParameters jpaConfigParameters;
-
     @Bean
     @Primary
     Jackson2ObjectMapperBuilder jackson2ObjectMapperBuilder() {
@@ -49,14 +47,4 @@ public class JsonConfiguration {
 
         return builder;
     }
-
-    // private void checkHibernateModuleIsPresent(List<Module> modules) {
-    // if (jpaConfigParameters.getJackson().isHibernateModuleEnable()) {
-    // Hibernate5Module hibernate5Module = new Hibernate5Module();
-    // hibernate5Module.configure(
-    // Feature.SERIALIZE_IDENTIFIER_FOR_LAZY_NOT_LOADED_OBJECTS, true);
-    //
-    // modules.add(hibernate5Module);
-    // }
-    // }
 }

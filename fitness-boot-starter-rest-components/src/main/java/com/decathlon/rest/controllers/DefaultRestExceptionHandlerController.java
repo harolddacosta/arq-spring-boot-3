@@ -20,7 +20,6 @@ import org.zalando.problem.ProblemBuilder;
 import org.zalando.problem.spring.web.advice.AdviceTrait;
 
 @RestControllerAdvice
-@SuppressWarnings({"squid:S1166"})
 @RequiredArgsConstructor
 @Slf4j
 @Order(-100)
@@ -56,7 +55,7 @@ public class DefaultRestExceptionHandlerController implements AdviceTrait {
             translateFieldErrors(exception);
         }
 
-        ProblemBuilder problemBuilder =
+        final ProblemBuilder problemBuilder =
                 Problem.builder()
                         .withTitle(exception.getTitle())
                         .withStatus(exception.getStatus())

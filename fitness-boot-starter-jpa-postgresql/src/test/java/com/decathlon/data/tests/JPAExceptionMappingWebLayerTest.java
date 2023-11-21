@@ -42,7 +42,7 @@ class JPAExceptionMappingWebLayerTest {
 
     @MockBean private PersonService personService;
 
-    private Faker faker = new Faker(new Locale("es", "ES"));
+    private final Faker faker = new Faker(new Locale("es", "ES"));
 
     @Test
     void error_when_service_is_not_available() throws Exception {

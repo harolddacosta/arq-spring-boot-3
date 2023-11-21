@@ -34,15 +34,14 @@ import java.util.List;
 @SpringBootTest(classes = {SecurityServicesApplication.class})
 class UserInformationServiceTest {
 
-    private RestTemplate restTemplate;
     private MockRestServiceServer mockServer;
-    private ObjectMapper mapper = new ObjectMapper();
+    private final ObjectMapper mapper = new ObjectMapper();
 
     @InjectMocks private UserInformationService userInformationService;
 
     @BeforeEach
     void init() {
-        this.restTemplate = new RestTemplate();
+        RestTemplate restTemplate = new RestTemplate();
         restTemplate.setErrorHandler(new OAuth2ErrorResponseErrorHandler());
         restTemplate.setMessageConverters(getJsonMessageConverters());
 

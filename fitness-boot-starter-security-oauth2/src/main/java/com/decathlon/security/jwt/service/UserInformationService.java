@@ -24,9 +24,6 @@ public class UserInformationService {
 
         this.userInfoUri = userInfoUri;
         this.restTemplate = restTemplate;
-        // this.restTemplate = new RestTemplate();
-        // restTemplate.setErrorHandler(new OAuth2ErrorResponseErrorHandler());
-        // restTemplate.setMessageConverters(getJsonMessageConverters());
     }
 
     @Cacheable(key = "#sub", cacheNames = "userInformation")

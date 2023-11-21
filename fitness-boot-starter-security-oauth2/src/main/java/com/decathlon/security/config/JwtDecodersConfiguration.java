@@ -102,8 +102,7 @@ public class JwtDecodersConfiguration {
             OAuth2ResourceServerProperties properties,
             @Value("${spring.security.oauth2.resourceserver.jwt.audience:#{null}}") String audience,
             @Value("${spring.security.oauth2.resourceserver.jwt.secret-key}") String secretKey,
-            ClaimsConverter claimsConverter)
-            throws Exception {
+            ClaimsConverter claimsConverter) {
         NimbusJwtDecoder jwtDecoder =
                 NimbusJwtDecoder.withSecretKey(new SecretKeySpec(secretKey.getBytes(), "AES"))
                         .build();
@@ -142,8 +141,7 @@ public class JwtDecodersConfiguration {
     private PublicKey getPublicKeyInPemFormat(OAuth2ResourceServerProperties properties)
             throws InvalidKeySpecException, JoseException, IOException {
         RsaKeyUtil rsaKeyUtil = new RsaKeyUtil();
-        PublicKey publicKey = rsaKeyUtil.fromPemEncoded(properties.getJwt().readPublicKey());
 
-        return publicKey;
+        return rsaKeyUtil.fromPemEncoded(properties.getJwt().readPublicKey());
     }
 }

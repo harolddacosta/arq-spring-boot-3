@@ -24,15 +24,4 @@ public class SecurityOAuth2Configuration {
             @Value("${app.security.claim-for-auditing:#{null}}") String claimForAuditing) {
         return new AuthenticatedUserAuditor(claimForAuditing);
     }
-
-    //    @Bean
-    //    EvaluationContextExtension securityExtension() {
-    //        return new SecurityEvaluationContextExtension();
-    //    }
-
-    //    @Bean
-    //    public DelegatingSecurityContextAsyncTaskExecutor taskExecutor(
-    //            ThreadPoolTaskExecutor delegate) {
-    //        return new DelegatingSecurityContextAsyncTaskExecutor(delegate);
-    //    }
 }

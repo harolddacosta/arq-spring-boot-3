@@ -194,11 +194,7 @@ public class AuditableAspect {
         Optional<Entry<String, Object>> property =
                 annotationPropertiesToCheck.entrySet().stream().findFirst();
 
-        if (!property.isPresent()) {
-            return false;
-        }
-
-        return hasValuesInProperties(property.get());
+        return property.filter(this::hasValuesInProperties).isPresent();
     }
 
     private boolean hasValuesInProperties(Map.Entry<String, Object> mapElement) {
@@ -208,11 +204,7 @@ public class AuditableAspect {
             return true;
         }
 
-        if (mapElement.getValue() instanceof String
-                && StringUtils.isNotBlank((String) mapElement.getValue())) {
-            return true;
-        }
-
-        return false;
+        return mapElement.getValue() instanceof String
+                && StringUtils.isNotBlank((String) mapElement.getValue());
     }
 }

@@ -1,7 +1,6 @@
 /* Decathlon (C)2023 */
 package com.decathlon.data.mappers.decorators;
 
-import com.decathlon.core.reflect.FieldConverter;
 import com.decathlon.data.domain.Persona;
 import com.decathlon.data.dto.PersonDto;
 import com.decathlon.data.mappers.PersonMapper;
@@ -18,9 +17,6 @@ public abstract class PersonMapperDecorator extends PersonMapper {
     @Override
     public Persona patchDtoIntoEntity(PersonDto personDto, Persona persona) {
         delegate.patchDtoIntoEntity(personDto, persona);
-
-        FieldConverter fieldConverter = new FieldConverter();
-        fieldConverter.replace(persona);
 
         return persona;
     }

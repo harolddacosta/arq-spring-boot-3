@@ -50,7 +50,7 @@ public class CustomResponseErrorHandler extends DefaultResponseErrorHandler {
         super.handleError(response);
     }
 
-    private void handleCustomException(Problem exception) throws IOException {
+    private void handleCustomException(Problem exception) {
         ProblemBuilder problemBuilder = Problem.builder();
 
         if (exception.getParameters() != null && !exception.getParameters().isEmpty()) {
@@ -59,12 +59,7 @@ public class CustomResponseErrorHandler extends DefaultResponseErrorHandler {
                 buildAndThrowLogicException(exception);
             }
 
-            exception
-                    .getParameters()
-                    .forEach(
-                            (k, v) -> {
-                                problemBuilder.with(k, v);
-                            });
+            exception.getParameters().forEach((k, v) -> problemBuilder.with(k, v));
         }
 
         throw problemBuilder

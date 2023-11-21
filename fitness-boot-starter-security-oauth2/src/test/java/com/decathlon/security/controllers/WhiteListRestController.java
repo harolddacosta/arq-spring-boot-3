@@ -19,7 +19,7 @@ public class WhiteListRestController {
             value = "/swagger-ui.html",
             produces = {MediaType.TEXT_HTML_VALUE})
     public ResponseEntity<String> noJwtNeeded(HttpServletResponse response) {
-        return new ResponseEntity<String>(
+        return new ResponseEntity<>(
                 "<!DOCTYPE html>\n"
                         + "<html lang=\"en\">\n"
                         + "  <head>\n"

@@ -40,13 +40,13 @@ class LoggingTest {
     @Autowired private TestRestTemplate restTemplate;
 
     @Spy
-    private CorrelationMDCInjectionFilter correlationMDCInjectionFilter =
+    private final CorrelationMDCInjectionFilter correlationMDCInjectionFilter =
             new CorrelationMDCInjectionFilter(new DefaultCorrelationId());
 
-    private Faker faker = new Faker(new Locale("es", "ES"));
+    private final Faker faker = new Faker(new Locale("es", "ES"));
 
     @Test
-    void error_when_identity_document_exists_on_second_save() throws Exception {
+    void error_when_identity_document_exists_on_second_save() {
         PersonDto entityToSave = ObjectsBuilderUtils.createFullPersonDto(faker);
 
         HttpEntity<PersonDto> requestEntity = new HttpEntity<>(entityToSave);

@@ -20,8 +20,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.zalando.problem.Problem;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.text.ParseException;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -33,7 +32,7 @@ class ExceptionUtilsTest {
     @Autowired private ObjectMapper mappingJackson2HttpMessageConverter;
 
     @Test
-    void test_problem_json_mapping() throws IOException, ParseException {
+    void test_problem_json_mapping() throws IOException {
         for (int fileIndex = 1; fileIndex <= 7; fileIndex++) {
             String jsonErrorResponse =
                     new String(
@@ -49,7 +48,7 @@ class ExceptionUtilsTest {
                             "Bad Request",
                             null,
                             jsonErrorResponse.getBytes(),
-                            Charset.forName("UTF-8"));
+                            StandardCharsets.UTF_8);
 
             Optional<Problem> errorResponse =
                     ExceptionUtils.convertFromHttpClientErrorException(
@@ -85,7 +84,7 @@ class ExceptionUtilsTest {
     }
 
     @Test
-    void test_problem_json_mapping_bytes() throws IOException, ParseException {
+    void test_problem_json_mapping_bytes() throws IOException {
         for (int fileIndex = 1; fileIndex <= 7; fileIndex++) {
             String jsonErrorResponse =
                     new String(
@@ -101,7 +100,7 @@ class ExceptionUtilsTest {
                             "Bad Request",
                             null,
                             jsonErrorResponse.getBytes(),
-                            Charset.forName("UTF-8"));
+                            StandardCharsets.UTF_8);
 
             Optional<Problem> errorResponse =
                     ExceptionUtils.convertFromHttpClientErrorException(
@@ -137,7 +136,7 @@ class ExceptionUtilsTest {
     }
 
     @Test
-    void test_problem_json_mapping_bytes_error() throws IOException, ParseException {
+    void test_problem_json_mapping_bytes_error() throws IOException {
         String jsonErrorResponse =
                 new String(
                         getClass()
@@ -151,7 +150,7 @@ class ExceptionUtilsTest {
                         "Bad Request",
                         null,
                         jsonErrorResponse.getBytes(),
-                        Charset.forName("UTF-8"));
+                        StandardCharsets.UTF_8);
 
         Optional<LogicException> errorResponse =
                 ExceptionUtils.convertFromHttpClientErrorException(
@@ -163,7 +162,7 @@ class ExceptionUtilsTest {
     }
 
     @Test
-    void test_problem_json_mapping_error() throws IOException, ParseException {
+    void test_problem_json_mapping_error() throws IOException {
         String jsonErrorResponse =
                 new String(
                         getClass()
@@ -177,7 +176,7 @@ class ExceptionUtilsTest {
                         "Bad Request",
                         null,
                         jsonErrorResponse.getBytes(),
-                        Charset.forName("UTF-8"));
+                        StandardCharsets.UTF_8);
 
         Optional<NullPointerException> errorResponse =
                 ExceptionUtils.convertFromHttpClientErrorException(
