@@ -24,8 +24,6 @@ public class RestConfigParameters implements Serializable {
     public static class JacksonProperties implements Serializable {
 
         private static final long serialVersionUID = 5541880522575588387L;
-
-        //        private boolean hibernateModuleEnable;
     }
 
     @Data
