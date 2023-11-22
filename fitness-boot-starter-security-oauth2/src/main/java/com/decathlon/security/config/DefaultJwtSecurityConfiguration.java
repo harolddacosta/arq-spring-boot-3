@@ -80,10 +80,9 @@ public class DefaultJwtSecurityConfiguration {
                         requests -> {
                             Arrays.asList(AUTH_WHITELIST)
                                     .forEach(
-                                            authUrl -> {
-                                                requests.requestMatchers(mvc.pattern(authUrl))
-                                                        .permitAll();
-                                            });
+                                            authUrl ->
+                                                    requests.requestMatchers(mvc.pattern(authUrl))
+                                                            .permitAll());
 
                             requests.requestMatchers(EndpointRequest.to(HealthEndpoint.class))
                                     .permitAll();

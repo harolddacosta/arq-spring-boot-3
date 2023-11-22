@@ -64,10 +64,7 @@ public class OpenApiConfiguration {
 
         OpenAPI openAPI = new OpenAPI();
         Arrays.asList(swaggerServerPath)
-                .forEach(
-                        path -> {
-                            openAPI.addServersItem(new Server().url(path));
-                        });
+                .forEach(path -> openAPI.addServersItem(new Server().url(path)));
 
         return openAPI.components(
                         new Components()

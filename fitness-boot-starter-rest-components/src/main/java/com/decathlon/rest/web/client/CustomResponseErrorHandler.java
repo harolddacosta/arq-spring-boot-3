@@ -59,7 +59,7 @@ public class CustomResponseErrorHandler extends DefaultResponseErrorHandler {
                 buildAndThrowLogicException(exception);
             }
 
-            exception.getParameters().forEach((k, v) -> problemBuilder.with(k, v));
+            exception.getParameters().forEach(problemBuilder::with);
         }
 
         throw problemBuilder

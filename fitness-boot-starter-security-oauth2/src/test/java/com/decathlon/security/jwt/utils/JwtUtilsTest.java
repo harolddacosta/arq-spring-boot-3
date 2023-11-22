@@ -39,16 +39,14 @@ class JwtUtilsTest {
     void when_RootCenterId_exists() {
         Long authenticationToken = JwtUtils.getRootCenterId();
 
-        assertThat(authenticationToken).isNotNull();
-        assertThat(authenticationToken).isEqualTo(1);
+        assertThat(authenticationToken).isNotNull().isEqualTo(1);
     }
 
     @Test
     void when_CountryCode_exists() {
         String authenticationToken = JwtUtils.getCountryCode();
 
-        assertThat(authenticationToken).isNotNull();
-        assertThat(authenticationToken).isEqualTo("ES");
+        assertThat(authenticationToken).isNotNull().isEqualTo("ES");
     }
 
     @Test
@@ -63,8 +61,7 @@ class JwtUtilsTest {
     void when_CustomClaim_exists() {
         String authenticationToken = JwtUtils.getCustomClaim("sub");
 
-        assertThat(authenticationToken).isNotNull();
-        assertThat(authenticationToken).isEqualTo("rachel");
+        assertThat(authenticationToken).isNotNull().isEqualTo("rachel");
     }
 
     @Test
