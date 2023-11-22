@@ -35,7 +35,6 @@ public class JsonConfiguration {
         Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder();
         List<Module> modules = new ArrayList<>();
 
-        // checkHibernateModuleIsPresent(modules);
         modules.add(new ProblemModule());
         modules.add(new ConstraintViolationProblemModule());
         modules.add(new JavaTimeModule());

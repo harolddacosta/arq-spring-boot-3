@@ -34,7 +34,7 @@ public class ResourceRolesConverter implements Converter<Jwt, AbstractAuthentica
 
         Collection<GrantedAuthority> authorities =
                 Stream.concat(
-                                !convertedRoles.isEmpty()
+                                convertedRoles != null && !convertedRoles.isEmpty()
                                         ? convertedRoles.stream()
                                         : Stream.empty(),
                                 extractResourceRoles(source, resourceId).stream())

@@ -35,7 +35,7 @@ public abstract class DecathlonOxylaneRolesConverter
 
         Collection<GrantedAuthority> authorities =
                 Stream.concat(
-                                !convertedRoles.isEmpty()
+                                convertedRoles != null && !convertedRoles.isEmpty()
                                         ? convertedRoles.stream()
                                         : Stream.empty(),
                                 extractResourceRoles(source).stream())
