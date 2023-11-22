@@ -41,14 +41,13 @@ public class DefaultJwtSecurityConfiguration {
     };
 
     @Autowired private SecurityProblemSupport problemSupport;
+    @Autowired private ObjectMapper mapper;
 
     @Value("${spring.security.oauth2.resourceserver.jwt.resource-access-name}")
     protected String resourceAccessName;
 
     @Value("${app.security.api-key:#{null}}")
     private String apiKey;
-
-    @Autowired private ObjectMapper mapper;
 
     @Bean
     MvcRequestMatcher.Builder mvc(HandlerMappingIntrospector introspector) {

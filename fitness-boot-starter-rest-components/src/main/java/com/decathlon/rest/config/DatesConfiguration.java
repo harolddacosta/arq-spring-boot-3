@@ -3,7 +3,8 @@ package com.decathlon.rest.config;
 
 import com.decathlon.rest.context.properties.RestConfigParameters;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.Formatter;
@@ -18,9 +19,10 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 @Configuration
+@RequiredArgsConstructor
 public class DatesConfiguration {
 
-    @Autowired private RestConfigParameters restConfigParameters;
+    private final RestConfigParameters restConfigParameters;
 
     @Bean
     Formatter<LocalDate> localDateFormatter() {

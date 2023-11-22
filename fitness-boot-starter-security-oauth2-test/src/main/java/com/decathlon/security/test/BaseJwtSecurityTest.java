@@ -5,7 +5,7 @@ import com.decathlon.security.test.web.servlet.request.BearerTokenRequestPostPro
 
 import org.springframework.beans.factory.annotation.Value;
 
-class BaseJwtSecurityTest {
+public class BaseJwtSecurityTest {
 
     @Value("${spring.security.oauth2.resourceserver.jwt.secret-key}")
     protected String secretKey;

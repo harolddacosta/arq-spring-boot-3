@@ -12,8 +12,9 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
+import lombok.RequiredArgsConstructor;
+
 import org.openapitools.jackson.nullable.JsonNullableModule;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -26,9 +27,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Configuration
+@RequiredArgsConstructor
 public class JsonConfiguration {
 
-    @Autowired private RestConfigParameters restConfigParameters;
+    private final RestConfigParameters restConfigParameters;
 
     @Bean
     @Primary

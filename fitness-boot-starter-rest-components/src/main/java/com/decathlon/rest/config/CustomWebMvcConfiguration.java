@@ -3,8 +3,9 @@ package com.decathlon.rest.config;
 
 import com.decathlon.rest.context.properties.RestConfigParameters;
 
+import lombok.RequiredArgsConstructor;
+
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConfiguration;
 import org.springframework.context.annotation.Configuration;
@@ -16,9 +17,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @EnableAutoConfiguration(exclude = ErrorMvcAutoConfiguration.class)
+@RequiredArgsConstructor
 public class CustomWebMvcConfiguration implements WebMvcConfigurer {
 
-    @Autowired private RestConfigParameters restConfigParameters;
+    private final RestConfigParameters restConfigParameters;
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
