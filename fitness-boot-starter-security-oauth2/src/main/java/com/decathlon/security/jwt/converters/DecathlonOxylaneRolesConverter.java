@@ -28,6 +28,8 @@ public abstract class DecathlonOxylaneRolesConverter
 
     protected final String resourceId;
 
+    public abstract Collection<SimpleGrantedAuthority> extractResourceRoles(final Jwt source);
+
     @Override
     public AbstractAuthenticationToken convert(final Jwt source) {
         Collection<GrantedAuthority> convertedRoles =
@@ -69,30 +71,4 @@ public abstract class DecathlonOxylaneRolesConverter
 
         return Collections.emptySet();
     }
-
-    public abstract Collection<? extends GrantedAuthority> extractResourceRoles(final Jwt source);
-
-    //    private void getClientCredentials() {
-    // OAuth2AuthorizeRequest authorizeRequest =
-    // OAuth2AuthorizeRequest.withClientRegistrationId(resourceId)
-    // .principal(
-    // new AnonymousAuthenticationToken(
-    // "okta",
-    // new User("Decathlon", "****",
-    // Collections.emptyList()),
-    // List.of(new
-    // SimpleGrantedAuthority("ROLE_COLLECT_JWT"))))
-    // .build();
-    // OAuth2AuthorizedClient authorizedClient =
-    // this.authorizedClientManager.authorize(authorizeRequest);
-    //
-    // OAuth2AccessToken accessToken = authorizedClient.getAccessToken();
-    //
-    // log.info("TOKEN:{}", accessToken.getTokenValue());
-
-    // Jwt source = Jwt.withTokenValue(accessToken.getTokenValue()).build();
-
-    // RestTemplate rest = new RestTemplate();
-    // rest.set
-    //    }
 }

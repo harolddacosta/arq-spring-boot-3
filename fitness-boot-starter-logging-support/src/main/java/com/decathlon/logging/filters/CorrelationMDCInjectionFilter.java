@@ -17,6 +17,8 @@ import org.zalando.logbook.CorrelationId;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 @RequiredArgsConstructor
 public class CorrelationMDCInjectionFilter implements Filter {
@@ -60,7 +62,7 @@ public class CorrelationMDCInjectionFilter implements Filter {
     }
 
     public boolean extractPrincipalInfo(Principal principal) {
-        MDC.put(CORRELATION_ID, correlationId.generate(null));
+        MDC.put(CORRELATION_ID, generate());
 
         return registerUsername(principal.getName());
     }
@@ -78,5 +80,11 @@ public class CorrelationMDCInjectionFilter implements Filter {
         }
 
         return false;
+    }
+
+    public String generate() {
+        final Random random = ThreadLocalRandom.current();
+        // set most significant bit to produce fixed length string
+        return Long.toHexString(random.nextLong() | Long.MIN_VALUE);
     }
 }
