@@ -198,13 +198,10 @@ public class AuditableAspect {
     }
 
     private boolean hasValuesInProperties(Map.Entry<String, Object> mapElement) {
-        if (mapElement.getValue() instanceof String[]
-                && mapElement.getValue() != null
-                && ((String[]) mapElement.getValue()).length > 0) {
+        if (mapElement.getValue() instanceof String[] values && values.length > 0) {
             return true;
         }
 
-        return mapElement.getValue() instanceof String
-                && StringUtils.isNotBlank((String) mapElement.getValue());
+        return mapElement.getValue() instanceof String value && StringUtils.isNotBlank(value);
     }
 }
