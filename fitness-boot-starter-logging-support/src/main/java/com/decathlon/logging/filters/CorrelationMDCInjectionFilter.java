@@ -17,8 +17,7 @@ import org.zalando.logbook.CorrelationId;
 
 import java.io.IOException;
 import java.security.Principal;
-import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
+import java.security.SecureRandom;
 
 @RequiredArgsConstructor
 public class CorrelationMDCInjectionFilter implements Filter {
@@ -83,7 +82,7 @@ public class CorrelationMDCInjectionFilter implements Filter {
     }
 
     public String generate() {
-        final Random random = ThreadLocalRandom.current();
+        SecureRandom random = new SecureRandom();
         // set most significant bit to produce fixed length string
         return Long.toHexString(random.nextLong() | Long.MIN_VALUE);
     }
