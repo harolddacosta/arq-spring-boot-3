@@ -16,8 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 @Getter
-public class LogicException
-        extends AbstractThrowableProblem { // NOSONAR as is ok to extends AbstractThrowableProblem
+public class LogicException extends AbstractThrowableProblem { // NOSONAR
 
     private static final long serialVersionUID = -5898235054808091141L;
 

@@ -316,7 +316,7 @@ class ExceptionAdviceTest {
         ValidationAnnotatedDto body = new ValidationAnnotatedDto();
 
         DefaultProblem exception =
-                catchThrowableOfType(
+                catchThrowableOfType( // NOSONAR
                         () ->
                                 restTemplate.postForEntity(
                                         uri, new HttpEntity<>(body), KeyValueResponseDto.class),
@@ -344,7 +344,7 @@ class ExceptionAdviceTest {
         body.setName("123");
 
         DefaultProblem exception =
-                catchThrowableOfType(
+                catchThrowableOfType( // NOSONAR
                         () ->
                                 restTemplate.postForEntity(
                                         uri, new HttpEntity<>(body), KeyValueResponseDto.class),
@@ -378,7 +378,7 @@ class ExceptionAdviceTest {
         Locale.setDefault(new Locale("en", "EN"));
 
         DefaultProblem exception =
-                catchThrowableOfType(
+                catchThrowableOfType( // NOSONAR
                         () ->
                                 restTemplate.postForEntity(
                                         uri, new HttpEntity<>(body), KeyValueResponseDto.class),
@@ -409,7 +409,7 @@ class ExceptionAdviceTest {
         ValidationAnnotatedDto body = new ValidationAnnotatedDto();
 
         DefaultProblem exception =
-                catchThrowableOfType(
+                catchThrowableOfType( // NOSONAR
                         () ->
                                 restTemplate.postForEntity(
                                         uri, new HttpEntity<>(body), KeyValueResponseDto.class),
@@ -438,7 +438,7 @@ class ExceptionAdviceTest {
         body.setName("123");
 
         DefaultProblem exception =
-                catchThrowableOfType(
+                catchThrowableOfType( // NOSONAR
                         () ->
                                 restTemplate.postForEntity(
                                         uri, new HttpEntity<>(body), KeyValueResponseDto.class),
