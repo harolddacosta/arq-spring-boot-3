@@ -26,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.zalando.problem.Problem;
 import org.zalando.problem.Status;
 
+import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -36,7 +37,12 @@ public class ExceptionHandlingRestController {
 
     @GetMapping("/logic-exception")
     public ResponseEntity<String> logicException() {
-        throw new LogicException("Exception title", "Exception detail", "error.logic-exception");
+        throw new LogicException(
+                "Exception title",
+                "Exception detail",
+                "error.logic-exception",
+                URI.create("www.google.com"),
+                2000);
     }
 
     @GetMapping("/logic-exception-key-parameters")
@@ -45,7 +51,9 @@ public class ExceptionHandlingRestController {
                 "Exception title",
                 "Exception detail",
                 "error.logic-exception",
-                List.of("param1", "param2"));
+                List.of("param1", "param2"),
+                URI.create("www.google.com"),
+                2000);
     }
 
     @GetMapping("/logic-exception-key-parameters-and-violations")
@@ -59,7 +67,9 @@ public class ExceptionHandlingRestController {
                 "Exception detail",
                 Arrays.asList(fer),
                 "error.logic-exception",
-                List.of("param1", "param2"));
+                List.of("param1", "param2"),
+                URI.create("www.google.com"),
+                2000);
     }
 
     @GetMapping("/logic-exception-fields")
@@ -69,13 +79,22 @@ public class ExceptionHandlingRestController {
                         "FieldError title", "FieldError detail", "error.field.logic-exception");
 
         throw new LogicException(
-                "Exception title", "Exception detail", Arrays.asList(fer), "error.logic-exception");
+                "Exception title",
+                "Exception detail",
+                Arrays.asList(fer),
+                "error.logic-exception",
+                URI.create("www.google.com"),
+                2000);
     }
 
     @GetMapping("/logic-exception-translated")
     public ResponseEntity<String> logicExceptionTranslated() {
         throw new LogicException(
-                "Exception title", "Exception detail", "error.logic-exception-translated");
+                "Exception title",
+                "Exception detail",
+                "error.logic-exception-translated",
+                URI.create("www.google.com"),
+                2000);
     }
 
     @GetMapping("/logic-exception-translated-fields")
@@ -90,7 +109,9 @@ public class ExceptionHandlingRestController {
                 "Exception title",
                 "Exception detail",
                 Arrays.asList(fer),
-                "error.logic-exception-translated");
+                "error.logic-exception-translated",
+                URI.create("www.google.com"),
+                2000);
     }
 
     @GetMapping("/missing-param")

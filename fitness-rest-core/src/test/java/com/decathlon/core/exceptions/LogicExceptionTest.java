@@ -18,7 +18,9 @@ class LogicExceptionTest {
                 new LogicException(
                         "Property not found",
                         "Please add the required Property",
-                        "property.not.found");
+                        "property.not.found",
+                        null,
+                        200);
 
         assertEquals("Property not found", exception.getTitle());
         assertEquals("Please add the required Property", exception.getDetail());
@@ -37,7 +39,9 @@ class LogicExceptionTest {
                         "Property not found",
                         "Please add the required Property",
                         List.of(errorResource),
-                        "property.not.found");
+                        "property.not.found",
+                        null,
+                        200);
 
         assertEquals("Property not found", exception.getTitle());
         assertEquals("Please add the required Property", exception.getDetail());
@@ -53,10 +57,9 @@ class LogicExceptionTest {
                         "Property not found",
                         "Please add the required Property",
                         "property.not.found",
-                        List.of("property.1", "property.2", "property.3"));
-
-        exception.setUri(URI.create("www.google.com"));
-        exception.setCode(2000);
+                        List.of("property.1", "property.2", "property.3"),
+                        URI.create("www.google.com"),
+                        2000);
 
         assertEquals("Property not found", exception.getTitle());
         assertEquals("Please add the required Property", exception.getDetail());
@@ -78,10 +81,9 @@ class LogicExceptionTest {
                         "Please add the required Property",
                         List.of(errorResource),
                         "property.not.found",
-                        List.of("property.1", "property.2", "property.3"));
-
-        exception.setUri(URI.create("www.google.com"));
-        exception.setCode(2000);
+                        List.of("property.1", "property.2", "property.3"),
+                        URI.create("www.google.com"),
+                        2000);
 
         assertEquals("Property not found", exception.getTitle());
         assertEquals("Please add the required Property", exception.getDetail());

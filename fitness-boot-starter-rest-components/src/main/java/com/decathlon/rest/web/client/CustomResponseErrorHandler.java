@@ -72,26 +72,29 @@ public class CustomResponseErrorHandler extends DefaultResponseErrorHandler {
     }
 
     private void buildAndThrowLogicException(Problem problem) {
-        LogicException exception = getExactLogicExceptionType(problem);
+        URI uri = null;
+        int code = 0;
 
         if (problem.getParameters().get("url") != null) {
-            exception.setUri(URI.create((String) problem.getParameters().get("url")));
+            uri = URI.create((String) problem.getParameters().get("url"));
         }
 
         if (problem.getParameters().get(KEY_FRONT_END_CODE) != null) {
-            exception.setCode((int) problem.getParameters().get(KEY_FRONT_END_CODE));
+            code = (int) problem.getParameters().get(KEY_FRONT_END_CODE);
         }
 
-        throw exception;
+        throw getExactLogicExceptionType(problem, uri, code);
     }
 
     @SuppressWarnings("unchecked")
-    private LogicException getExactLogicExceptionType(Problem problem) {
+    private LogicException getExactLogicExceptionType(Problem problem, URI uri, int code) {
         LogicException exception =
                 new LogicException(
                         problem.getTitle(),
                         problem.getDetail(),
-                        (String) problem.getParameters().get("key"));
+                        (String) problem.getParameters().get("key"),
+                        uri,
+                        code);
 
         if (problem.getParameters().get(KEY_FOR_KEY_PARAMETERS) != null
                 && problem.getParameters().get(KEY_VIOLATIONS) != null) {
@@ -104,7 +107,9 @@ public class CustomResponseErrorHandler extends DefaultResponseErrorHandler {
                                             problem.getParameters().get(KEY_VIOLATIONS),
                                     FieldErrorResource.class),
                             (String) problem.getParameters().get("key"),
-                            (List<String>) problem.getParameters().get(KEY_FOR_KEY_PARAMETERS));
+                            (List<String>) problem.getParameters().get(KEY_FOR_KEY_PARAMETERS),
+                            uri,
+                            code);
         } else if (problem.getParameters().get(KEY_FOR_KEY_PARAMETERS) == null
                 && problem.getParameters().get(KEY_VIOLATIONS) != null) {
             exception =
@@ -115,7 +120,9 @@ public class CustomResponseErrorHandler extends DefaultResponseErrorHandler {
                                     (ArrayList<LinkedHashMap<String, String>>)
                                             problem.getParameters().get(KEY_VIOLATIONS),
                                     FieldErrorResource.class),
-                            (String) problem.getParameters().get("key"));
+                            (String) problem.getParameters().get("key"),
+                            uri,
+                            code);
         } else if (problem.getParameters().get(KEY_FOR_KEY_PARAMETERS) != null
                 && problem.getParameters().get(KEY_VIOLATIONS) == null) {
             exception =
@@ -123,7 +130,9 @@ public class CustomResponseErrorHandler extends DefaultResponseErrorHandler {
                             problem.getTitle(),
                             problem.getDetail(),
                             (String) problem.getParameters().get("key"),
-                            (List<String>) problem.getParameters().get(KEY_FOR_KEY_PARAMETERS));
+                            (List<String>) problem.getParameters().get(KEY_FOR_KEY_PARAMETERS),
+                            uri,
+                            code);
         }
 
         return exception;
