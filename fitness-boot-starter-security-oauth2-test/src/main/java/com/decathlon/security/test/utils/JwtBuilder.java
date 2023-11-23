@@ -51,11 +51,8 @@ public class JwtBuilder {
     private String[] audienceRoles;
     private String[] authorizedRoles;
     private String[] scope;
-    private String sid;
     private boolean emailVerified;
     private String userName;
-    private String name;
-    private String preferredUsername;
     private String givenName;
     private String familyName;
     private String countryCode;
@@ -235,6 +232,9 @@ public class JwtBuilder {
 
     @SuppressWarnings("unchecked")
     public String build() {
+        String preferredUsername;
+        String name;
+        String sid;
         try {
             JWSSigner signer = new MACSigner(secretKey);
 
