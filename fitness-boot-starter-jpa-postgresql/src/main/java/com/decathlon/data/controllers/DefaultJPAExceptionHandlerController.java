@@ -71,11 +71,6 @@ public class DefaultJPAExceptionHandlerController implements AdviceTrait {
                                         + "' but not found the description for the constraint in the resource bundle")
                         .with(PROBLEM_CONSTRAINT_KEY, "exception.constraint.translation.undefined");
             }
-        } else {
-            problemBuilder
-                    .withDetail(
-                            "Data constraint violation: not found the description for the constraint")
-                    .with(PROBLEM_CONSTRAINT_KEY, "exception.constraint.undefined");
         }
 
         return create(problemBuilder.build(), request);

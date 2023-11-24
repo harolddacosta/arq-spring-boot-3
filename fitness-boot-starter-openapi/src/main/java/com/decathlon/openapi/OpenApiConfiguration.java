@@ -37,8 +37,8 @@ public class OpenApiConfiguration {
     @ConditionalOnProperty(
             prefix = "app",
             name = "open-api-bean.enabled",
-            matchIfMissing = true,
-            havingValue = "true")
+            havingValue = "true",
+            matchIfMissing = true)
     OpenAPI customOpenAPI(
             @Value("${springdoc.version}") String appVersion,
             @Value("${springdoc.api-title}") String apiTitle,

@@ -1,7 +1,7 @@
 /* Decathlon (C)2023 */
-package com.decathlon.logging;
+package com.decathlon.openapi;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class LoggingApplication {}
+public class OpenApiApplication {}
