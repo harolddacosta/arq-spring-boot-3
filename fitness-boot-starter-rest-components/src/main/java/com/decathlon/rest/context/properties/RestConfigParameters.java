@@ -15,16 +15,9 @@ public class RestConfigParameters implements Serializable {
 
     private static final long serialVersionUID = 695255049263841719L;
 
-    private JacksonProperties jackson;
     private DatesProperties dates;
     private CorsProperties cors;
     private LocaleProperties locales;
-
-    @Data
-    public static class JacksonProperties implements Serializable {
-
-        private static final long serialVersionUID = 5541880522575588387L;
-    }
 
     @Data
     public static class DatesProperties implements Serializable {

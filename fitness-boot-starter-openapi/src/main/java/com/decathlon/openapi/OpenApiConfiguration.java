@@ -42,7 +42,7 @@ public class OpenApiConfiguration {
     OpenAPI customOpenAPI(
             @Value("${springdoc.version}") String appVersion,
             @Value("${springdoc.api-title}") String apiTitle,
-            @Value("${app.swagger.server-paths}") String[] swaggerServerPath) {
+            @Value("${app.swagger.server-paths}") String[] swaggerServerPaths) {
         Scopes scopes = new Scopes();
         scopes.addString("read", "apis");
 
@@ -63,7 +63,7 @@ public class OpenApiConfiguration {
                         .bearerFormat("JWT");
 
         OpenAPI openAPI = new OpenAPI();
-        Arrays.asList(swaggerServerPath)
+        Arrays.asList(swaggerServerPaths)
                 .forEach(path -> openAPI.addServersItem(new Server().url(path)));
 
         return openAPI.components(

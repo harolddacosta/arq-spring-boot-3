@@ -17,7 +17,6 @@ import lombok.RequiredArgsConstructor;
 import org.openapitools.jackson.nullable.JsonNullableModule;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.zalando.problem.jackson.ProblemModule;
 import org.zalando.problem.violations.ConstraintViolationProblemModule;
@@ -33,7 +32,6 @@ public class JsonConfiguration {
     private final RestConfigParameters restConfigParameters;
 
     @Bean
-    @Primary
     Jackson2ObjectMapperBuilder jackson2ObjectMapperBuilder() {
         Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder();
         List<Module> modules = new ArrayList<>();

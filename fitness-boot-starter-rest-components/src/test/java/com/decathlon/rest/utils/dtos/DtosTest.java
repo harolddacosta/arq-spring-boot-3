@@ -64,17 +64,6 @@ class DtosTest {
     }
 
     @Test
-    void test_JacksonProperties_BeanVerifier() {
-        BeanVerifier.forClass(RestConfigParameters.JacksonProperties.class)
-                .editSettings()
-                .setDefaultIterations(1)
-                .edited()
-                .verifyGettersAndSetters()
-                .verifyEqualsAndHashCode()
-                .verifyToString();
-    }
-
-    @Test
     void test_LocaleProperties_BeanVerifier() {
         BeanVerifier.forClass(RestConfigParameters.LocaleProperties.class)
                 .editSettings()
