@@ -11,10 +11,6 @@
   <artifactId>dkt-fitness-boot-starter-externalized-properties</artifactId>
   <packaging>jar</packaging>
 
-  <properties>
-    <sonar.coverage.exclusions>src/main/java/com/decathlon/properties/ExternalizedPropertiesConfiguration.java</sonar.coverage.exclusions>
-  </properties>
-
   <dependencies>
     <dependency>
       <groupId>org.springframework.boot</groupId>

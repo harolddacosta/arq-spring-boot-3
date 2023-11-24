@@ -9,7 +9,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.decathlon.data.JPAIntegrationApplication;
 import com.decathlon.data.dto.PersonDto;
 import com.decathlon.data.utils.ObjectsBuilderUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -25,7 +24,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.Locale;
 import java.util.UUID;
 
-@SpringBootTest(classes = JPAIntegrationApplication.class)
+@SpringBootTest
 @AutoConfigureMockMvc
 class JPAExceptionMappingTest {
 

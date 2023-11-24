@@ -44,20 +44,4 @@ public class ObjectsBuilderUtils {
 
         return personDto;
     }
-
-    public static PersonDto createMinimalPersonDto(Faker faker) {
-        PersonDto personDto = new PersonDto();
-        personDto.setName(faker.name().firstName());
-        personDto.setLastName(faker.name().lastName() + " " + faker.name().lastName());
-        personDto.setIdentityDocumentTypeId(1L);
-        personDto.setIdentityDocument(
-                RandomStringUtils.randomAlphanumeric(1)
-                        + "-"
-                        + RandomStringUtils.randomNumeric(14));
-        personDto.setMobilePhone(faker.phoneNumber().cellPhone());
-        personDto.setAddressLine1(faker.address().fullAddress());
-        personDto.setPostalCodeId(faker.random().nextInt(1, 14665).longValue()); // 1476L
-
-        return personDto;
-    }
 }
