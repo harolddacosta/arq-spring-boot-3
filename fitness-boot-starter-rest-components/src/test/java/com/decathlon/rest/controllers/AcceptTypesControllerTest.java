@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
+import com.decathlon.rest.config.CustomWebMvcConfiguration;
 import com.decathlon.rest.config.JsonConfiguration;
 import com.decathlon.rest.context.properties.RestConfigParameters;
 
@@ -22,7 +23,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 @WebMvcTest(controllers = {AcceptTypesController.class})
-@Import({RestConfigParameters.class, JsonConfiguration.class})
+@Import({RestConfigParameters.class, JsonConfiguration.class, CustomWebMvcConfiguration.class})
 @TestPropertySource(locations = {"classpath:application.properties", "classpath:rest.properties"})
 class AcceptTypesControllerTest {
 
@@ -88,7 +89,7 @@ class AcceptTypesControllerTest {
 
     @Test
     void when_coming_from_spa_app() throws Exception {
-        String jsonRequest = "{\"local_date_time_field\":\"2020-11-27T23:00:00.000Z\"}";
+        String jsonRequest = "{\"local_date_time_field\":\"27/11/2020T23:00:00.000Z\"}";
 
         mockMvc.perform(
                         post("/api/v1/types-handler/from-spa")
@@ -98,7 +99,7 @@ class AcceptTypesControllerTest {
                 .andDo(print())
                 .andExpect(header().string("Content-Type", "application/json;charset=UTF-8"))
                 .andExpect(header().string("Location", "/api/v1/types-handler/from-spa/1"))
-                .andExpect(jsonPath("$.local_date_time_field", is("2020-11-27T23:00:00.000Z")));
+                .andExpect(jsonPath("$.local_date_time_field", is("27/11/2020T23:00:00.000Z")));
     }
 
     @Test
