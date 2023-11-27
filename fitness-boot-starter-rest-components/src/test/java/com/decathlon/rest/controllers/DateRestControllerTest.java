@@ -67,7 +67,7 @@ import java.util.Date;
     DatesConfiguration.class,
     DateUtils.class
 })
-@TestPropertySource(locations = {"classpath:application.properties", "classpath:rest.properties"})
+@TestPropertySource(locations = {"classpath:rest.properties", "classpath:application.properties"})
 class DateRestControllerTest {
 
     @Autowired private MockMvc mockMvc;

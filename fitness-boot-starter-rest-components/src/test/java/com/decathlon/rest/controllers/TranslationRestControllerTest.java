@@ -26,7 +26,7 @@ import org.springframework.test.web.servlet.MockMvc;
     LocaleConfiguration.class,
     JsonConfiguration.class
 })
-@TestPropertySource(locations = {"classpath:application.properties", "classpath:rest.properties"})
+@TestPropertySource(locations = {"classpath:rest.properties", "classpath:application.properties"})
 class TranslationRestControllerTest {
 
     @Autowired private MockMvc mockMvc;

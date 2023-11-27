@@ -39,7 +39,7 @@ import java.util.Locale;
     JsonConfiguration.class,
     CustomWebMvcConfiguration.class
 })
-@TestPropertySource(locations = {"classpath:application.properties", "classpath:rest.properties"})
+@TestPropertySource(locations = {"classpath:rest.properties", "classpath:application.properties"})
 class ExceptionHandlingRestControllerTest {
 
     @Autowired private MockMvc mockMvc;

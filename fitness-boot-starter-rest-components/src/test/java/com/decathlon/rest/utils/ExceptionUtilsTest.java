@@ -30,7 +30,7 @@ import java.util.Optional;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {RestServicesConfiguration.class})
-@TestPropertySource(locations = {"classpath:application.properties", "classpath:rest.properties"})
+@TestPropertySource(locations = {"classpath:rest.properties", "classpath:application.properties"})
 @Slf4j
 class ExceptionUtilsTest {
 

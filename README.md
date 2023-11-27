@@ -382,7 +382,6 @@ This module is responsible of :
 | org.zalando							| **jackson-datatype-problem** |
 | org.flywaydb							| **flyway-core** |
 | com.fasterxml.jackson.datatype	| **jackson-datatype-jsr310** |
-| io.hypersistence					| **hypersistence-utils-hibernate-62** |
 
 #### Usage
 
@@ -518,21 +517,23 @@ This properties are present at module level, so you can replace them by project 
 | spring.flyway.repair							| **false**	| When a database history needs to be repaired (cause of hash changed in a flyway script), set this flag to true, and take it back again in the next deployment |
 | spring.flyway.locations						| **classpath:flyway**		| Sets the default location to **src/main/resources/flyway** |
 | spring.flyway.table								| **flyway_schema_history**	| This is the same default value as flyway, only to know you can change it here |
-| app.hibernate.hbm2ddl-auto						| **none**						| Mapped to __"hibernate.hbm2ddl.auto"__ hibernate property |
-| app.hibernate.order-updates					| **true**						| Mapped to __"hibernate.order_updates"__ hibernate property |
-| app.hibernate.jdbc-batch-versioned-data		| **true**						| Mapped to __"hibernate.jdbc.batch_versioned_data"__ hibernate property |
-| app.hibernate.default-batch-fetch-size		| **16**						| Mapped to __"hibernate.default_batch_fetch_size"__ hibernate property |
-| app.hibernate.cache-use-second-level-cache	| **true**						| Mapped to __"hibernate.cache.use_second_level_cache"__ hibernate property |
-| app.hibernate.cache-use-query-cache			| **true**						| Mapped to __"hibernate.cache.use_query_cache"__ hibernate property |
-| app.hibernate.connection-autocommit			| **false**					| Mapped to __"hibernate.connection.autocommit"__ hibernate property |
-| app.hibernate.jdbc-batch-size					| **25**						| Mapped to __"hibernate.jdbc.batch_size"__ hibernate property |
-| app.hibernate.show-sql							| **false**					| Mapped to __"hibernate.show_sql"__ hibernate property |
-| app.hibernate.format-sql						| **true**						| Mapped to __"hibernate.format_sql"__ hibernate property |
-| app.hibernate.cache-region-factory-class		| **org.hibernate.cache.jcache.internal.JCacheRegionFactory**	| Mapped to __"hibernate.cache.region.factory_class"__ hibernate property |
-| app.hibernate.time-zone						| **UTC**						| Mapped to __"hibernate.jdbc.time_zone"__ hibernate property |
-| app.hibernate.column-naming-strategy			| **camelCase**				| Values: __camelCase, snakeCase__. Column naming strategy for columns, eg. a column named "lastName" in @Entity will become "last_name" in database if this property is set as "snakeCase" otherwise, will remain as "lastName", mapped to __"hibernate.physical_naming_strategy"__ hibernate property |
-| app.hibernate.sequence-naming-strategy		| **default**					| Values: __default, suffix-id-seq__ for databases where the sequence name ends like "sequence_name_**id_seq**", mapped to __"hibernate.id.db_structure_naming_strategy"__ hibernate property |
-| **hibernate.id.new_generator_mappings** (hardcoded)	| **true**				| Hibernate prefers using the “seqhilo” generator by default, which is not an intuitive assumption since many might expect the raw “sequence” generator (always calling the database sequence for every new identifier value). Property set harcoded in the module, can't be changed by properties |
+| spring.jackson.property-naming-strategy		| com.fasterxml.jackson.databind.PropertyNamingStrategy.SnakeCaseStrategy | One of the constants on Jackson's PropertyNamingStrategies. Can also be a fully-qualified class name of a PropertyNamingStrategy implementation.
+| spring.jackson.default-property-inclusion	| non-null | Controls the inclusion of properties during serialization. Configured with one of the values in Jackson's JsonInclude.Include enumeration.
+| spring.jackson.serialization.write-dates-as-timestamps	| false | Jackson on/off features that affect the way Java objects are serialized.
+| spring.jpa.hibernate.ddl-auto						| **none**		| DDL mode. This is actually a shortcut for the "hibernate.hbm2ddl.auto" property. |
+| spring.jpa.hibernate.naming.physical-strategy	| **org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy**	| Fully qualified name of the physical naming strategy. |
+| spring.jpa.properties.hibernate.order_updates	| **true**						| See Hibernate documentation |
+| spring.jpa.properties.hibernate.jdbc.batch_versioned_data		| **true**						| See Hibernate documentation |
+| spring.jpa.properties.hibernate.default_batch_fetch_size		| **16**						| See Hibernate documentation |
+| spring.jpa.properties.hibernate.cache.use_second_level_cache	| **true**						| See Hibernate documentation |
+| spring.jpa.properties.hibernate.cache.use_query_cache			| **true**						| See Hibernate documentation |
+| spring.jpa.properties.hibernate.connection.autocommit			| **false**					| See Hibernate documentation |
+| spring.jpa.properties.hibernate.jdbc.batch_size					| **25**						| See Hibernate documentation |
+| spring.jpa.properties.hibernate.show_sql							| **false**					| See Hibernate documentation |
+| spring.jpa.properties.hibernate.format_sql						| **true**						| See Hibernate documentation |
+| spring.jpa.properties.hibernate.cache.region.factory_class		| **org.hibernate.cache.jcache.internal.JCacheRegionFactory** | See Hibernate documentation |
+| spring.jpa.properties.hibernate.jdbc.time_zone					| **UTC**						| See Hibernate documentation |
+| spring.jpa.properties.hibernate.id.db_structure_naming_strategy	| **not set**					| Values:com.decathlon.data.strategies.SuffixIdSeqNamingStrategy when need to add id_seq at the end |
 
 ### dkt-fitness-boot-starter-logging-support
 
@@ -746,7 +747,6 @@ REST module with multiple preconfigured properties for use in building microserv
 - __Server compression__ enabled by default
 - __Multipart file size__ preconfigured
 - Multiple actuator endpoints visible
-- __Date format__ to use throughout the app
 
 #### Libraries included in the module
 
@@ -772,6 +772,189 @@ Simply add the dependency in the project and you will have it working.
 </dependency>
 ```
 
+##### Api Endpoint
+
+There is a `ping endpoint` defined in `http(s)://\<server\>/\<context\>/v1/ping`
+
+Note: this endpoint is exactly produced by the **Actuator Ping endpoint**
+
+##### Cors configuration
+
+The cors is configured under the properties in `application.properties`:
+
+```properties
+- app.cors.path=/**
+- app.cors.allowed-origins=*
+- app.cors.allowed-headers=*
+- app.cors.allowed-methods=*
+```
+
+##### Content negotiation parameter
+
+Whether a request parameter ("format" by default) should be used to determine the requested media type. For this option to work you must register media type mappings. eg
+
+If you call an endpoint with the format parameter:
+
+`/api/v1/types-handler?param=text/plain`
+
+It will respond with `text/plain` content header, see below:
+
+```java
+@Test
+void ok_for_text_plain_format_parameter() throws Exception {
+	MvcResult textPlainResult =
+			mockMvc.perform(
+							get("/api/v1/types-handler")
+									.param("format", MediaType.TEXT_PLAIN_VALUE))
+					.andDo(print())
+					.andExpect(header().string("Content-Type", "text/plain;charset=UTF-8"))
+					.andReturn();
+	assertEquals("Prueba de string", textPlainResult.getResponse().getContentAsString());
+}
+```
+
+##### Centralized dates configuration
+
+All the dates for:
+
+- URL query parameters
+- Json body
+
+The date types configured are for those declared as:
+
+- `java.time.LocalDate`
+- `java.time.LocalDateTime`
+- `java.util.Date`
+
+Will be parsed using the configuration defined in `application.properties`:
+
+```properties
+app.dates.date-time-format=yyyy-MM-dd'T'HH:mm:ss.SSS'Z'
+app.dates.date-format=dd/MM/yyyy
+```
+
+Also, the format used to write back the json fields that use dates, will be the ones previously configured
+
+###### `DateUtils` utility class
+
+There is an __utility class__ to parse dates programatically name `DateUtils` that you can inject anywhere:
+
+```java
+String dateToString(Date date);
+
+Date stringToDate(String date) throws ParseException;
+
+String localDateToString(LocalDate date);
+
+LocalDate stringToLocalDate(String date);
+
+String localDateTimeToString(LocalDateTime date);
+
+LocalDateTime stringToLocalDateTime(String date) throws ParseException;
+```
+
+##### LocaleResolver for `Accept-Language` header
+
+Under the folder i18n where are defined the messages for translation:
+- messages_ca.properties
+- messages_en.properties
+- messages_es.properties
+- messages_fr.properties
+- messages_pt.properties
+- messages.properties
+
+With the properties defined in `application.properties` you can define how many languages you will have and the one that is the language by default
+
+```properties
+app.locales.default-locale=es
+app.locales.supported-locales=es,fr,en,pt,ca
+```
+
+###### `Translator` component
+
+There is a component called `Translator` that can be injected anywhere and with the api:
+
+```java
+String toLocale(String msg);
+
+String toLocale(String msg, Locale locale);
+
+String toLocale(String msg, Object[] args);
+
+String toLocale(String msg, Object[] args, Locale locale);
+```
+
+This component will take care of translate the message in the language sent in the `Accept-Language` header without the need to capture it in the request, a test can clarify how to use it:
+
+```java
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/api/v1/language-test")
+public class TranslationRestController {
+
+	private final Translator translator;
+
+	@GetMapping
+	public ResponseEntity<KeyValueResponseDto> languageHeaderResponse() {
+		return new ResponseEntity<>(
+				new KeyValueResponseDto(translator.toLocale("msg.translated")), HttpStatus.OK);
+	}
+}
+```
+
+```java
+@Test
+void when_locale_es() throws Exception {
+	mockMvc.perform(
+					get("/api/v1/language-test")
+							.characterEncoding("utf-8")
+							.header("Accept-Language", "es"))
+			.andExpect(status().isOk())
+			.andDo(print())
+			.andExpect(jsonPath("$.value", is("Mensaje traducido")));
+}
+
+@Test
+void when_locale_en() throws Exception {
+	mockMvc.perform(
+					get("/api/v1/language-test")
+							.characterEncoding("utf-8")
+							.header("Accept-Language", "en"))
+			.andExpect(status().isOk())
+			.andDo(print())
+			.andExpect(jsonPath("$.value", is("Message translated")));
+}
+```
+##### Handlers for RestTemplate component
+
+If you need to do calls to others endpoints using `RestTemplate` you can configure it to:
+
+- Pass the `Accept-Language` header in the call (`LocaleHeaderInterceptor` class)
+- Attach a `ResponseErrorHandler` to parse and throw `LogicException` (`CustomResponseErrorHandler` class)
+
+A high performance configuration for a RestTemplate could be like this:
+
+```java
+@Configuration
+public class RestTemplateConfiguration {
+
+	@Bean
+	RestTemplate restTemplate(
+			MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter) {
+		RestTemplate restTemplate = new RestTemplate();
+
+		restTemplate.setErrorHandler(
+				new CustomResponseErrorHandler(
+						mappingJackson2HttpMessageConverter.getObjectMapper()));
+		restTemplate.getInterceptors().add(new LocaleHeaderInterceptor());
+		restTemplate.setRequestFactory(
+				new BufferingClientHttpRequestFactory(new SimpleClientHttpRequestFactory()));
+
+		return restTemplate;
+	}
+}
+
+```
 
 #### Default properties
 
@@ -792,6 +975,10 @@ This properties are present at module level, so you can replace them by project 
 | management.endpoint.health.show-details				| **always** | When to show full health details. |
 | management.endpoint.health.probes.enabled			| **true** | Whether to enable liveness and readiness probes. |
 | management.info.env.enabled							| **true** | Whether to enable environment info. |
+| spring.jackson.property-naming-strategy				| com.fasterxml.jackson.databind.PropertyNamingStrategy.SnakeCaseStrategy | Set json bodies to use snake_case properties naming |
+| spring.jackson.default-property-inclusion			| non-null		| Only retrieve json with non-null properties
+| spring.jackson.serialization.write-dates-as-timestamps	| false		| Must be deactivated in order to use the dates |
+| spring.jackson.date-format | ${app.dates.date-time-format}		| set the format for json date properties |
 | app.dates.date-time-format								| **yyyy-MM-dd'T'HH:mm:ss.SSS'Z'** | The date time format to use in json bodies and request params |
 | app.dates.date-format									| **dd/MM/yyyy** | The date format to use in json bodies and request params |
 | app.cors.path											| __\/\*\*__ | Cors applied in the established path |

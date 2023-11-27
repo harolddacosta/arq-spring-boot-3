@@ -33,7 +33,7 @@ import java.util.concurrent.atomic.AtomicInteger;
     DatesConfiguration.class,
     DateUtils.class
 })
-@TestPropertySource(locations = {"classpath:application.properties", "classpath:rest.properties"})
+@TestPropertySource(locations = {"classpath:rest.properties", "classpath:application.properties"})
 @Slf4j
 class JsonBenchmarkTest {
 
