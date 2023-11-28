@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
-public class AuthenticatedUserAuditor implements AuditorAware<String> {
+public final class AuthenticatedUserAuditor implements AuditorAware<String> {
 
     private final String claimForAuditing;
 

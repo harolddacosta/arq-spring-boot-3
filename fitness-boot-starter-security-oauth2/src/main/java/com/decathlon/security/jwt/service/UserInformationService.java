@@ -5,6 +5,8 @@ import static org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED;
 
 import com.decathlon.security.jwt.model.UserInformation;
 
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -14,17 +16,11 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
-public class UserInformationService {
+@RequiredArgsConstructor
+public final class UserInformationService {
 
     private final String userInfoUri;
     private final RestTemplate restTemplate;
-
-    public UserInformationService(String userInfoUri, RestTemplate restTemplate) {
-        super();
-
-        this.userInfoUri = userInfoUri;
-        this.restTemplate = restTemplate;
-    }
 
     @Cacheable(key = "#sub", cacheNames = "userInformation")
     public UserInformation getUserInformation(final String sub, final String token) {

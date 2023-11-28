@@ -45,7 +45,7 @@ class JPAExceptionMappingTest {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .characterEncoding("UTF-8"))
                 .andDo(print())
-                .andExpect(header().string("Content-Type", "application/json"))
+                .andExpect(header().string("Content-Type", "application/json;charset=UTF-8"))
                 .andExpect(status().isCreated());
 
         mockMvc.perform(
@@ -54,7 +54,8 @@ class JPAExceptionMappingTest {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .characterEncoding("UTF-8"))
                 .andDo(print())
-                .andExpect(header().string("Content-Type", "application/problem+json"))
+                .andExpect(
+                        header().string("Content-Type", "application/problem+json;charset=UTF-8"))
                 .andExpect(jsonPath("$.title", is("Conflict")))
                 .andExpect(jsonPath("$.status", is(409)))
                 .andExpect(
@@ -79,7 +80,7 @@ class JPAExceptionMappingTest {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .characterEncoding("UTF-8"))
                 .andDo(print())
-                .andExpect(header().string("Content-Type", "application/json"))
+                .andExpect(header().string("Content-Type", "application/json;charset=UTF-8"))
                 .andExpect(jsonPath("$.code", is("same code")))
                 .andExpect(status().isCreated());
 
@@ -91,7 +92,8 @@ class JPAExceptionMappingTest {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .characterEncoding("UTF-8"))
                 .andDo(print())
-                .andExpect(header().string("Content-Type", "application/problem+json"))
+                .andExpect(
+                        header().string("Content-Type", "application/problem+json;charset=UTF-8"))
                 .andExpect(jsonPath("$.title", is("Conflict")))
                 .andExpect(jsonPath("$.status", is(409)))
                 .andExpect(
@@ -117,7 +119,7 @@ class JPAExceptionMappingTest {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .characterEncoding("UTF-8"))
                 .andDo(print())
-                .andExpect(header().string("Content-Type", "application/json"))
+                .andExpect(header().string("Content-Type", "application/json;charset=UTF-8"))
                 .andExpect(status().isCreated());
 
         entityToSave.setIdentityDocument(UUID.randomUUID().toString().substring(0, 16));
@@ -128,7 +130,8 @@ class JPAExceptionMappingTest {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .characterEncoding("UTF-8"))
                 .andDo(print())
-                .andExpect(header().string("Content-Type", "application/problem+json"))
+                .andExpect(
+                        header().string("Content-Type", "application/problem+json;charset=UTF-8"))
                 .andExpect(jsonPath("$.title", is("Conflict")))
                 .andExpect(jsonPath("$.status", is(409)))
                 .andExpect(
@@ -143,7 +146,8 @@ class JPAExceptionMappingTest {
     void error_get_not_found_entity() throws Exception {
         mockMvc.perform(get("/api/v1/persons/{id}", 123L).characterEncoding("UTF-8"))
                 .andDo(print())
-                .andExpect(header().string("Content-Type", "application/problem+json"))
+                .andExpect(
+                        header().string("Content-Type", "application/problem+json;charset=UTF-8"))
                 .andExpect(jsonPath("$.title", is("Not Found")))
                 .andExpect(status().isNotFound());
     }

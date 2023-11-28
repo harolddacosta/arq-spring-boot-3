@@ -48,16 +48,18 @@ public class OpenApiConfiguration {
 
         SecurityRequirement securityRequirement = new SecurityRequirement();
         securityRequirement.addList("ApiKeyAuth", "[read]");
-        securityRequirement.addList("jwt", "[read]");
+        securityRequirement.addList("JWT", "[read]");
 
         SecurityScheme apiKeyScheme =
                 new SecurityScheme()
+                        .name("ApiKeyAuth")
                         .type(SecurityScheme.Type.APIKEY)
                         .in(In.HEADER)
                         .name("X-API-KEY");
 
         SecurityScheme bearerSchema =
                 new SecurityScheme()
+                        .name("JWT")
                         .type(SecurityScheme.Type.HTTP)
                         .scheme("bearer")
                         .bearerFormat("JWT");

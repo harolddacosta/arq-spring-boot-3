@@ -5,8 +5,6 @@ import com.decathlon.security.jwt.converters.ResourceRolesConverter;
 
 import lombok.extern.slf4j.Slf4j;
 
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -15,7 +13,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
 
 @Configuration
-@EnableAutoConfiguration(exclude = ErrorMvcAutoConfiguration.class)
 @Slf4j
 public class JwtSecurityConfiguration extends DefaultJwtSecurityConfiguration {
 
