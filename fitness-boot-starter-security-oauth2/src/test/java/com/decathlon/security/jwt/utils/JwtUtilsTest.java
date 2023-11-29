@@ -13,10 +13,12 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
+import org.springframework.test.context.TestPropertySource;
 
 @WebMvcTest(controllers = {AuthorizationRestController.class})
 @Import({DefaultService.class, SecurityOAuth2Configuration.class})
-@WithMockedUser
+@WithMockedUser(aud = "test")
+@TestPropertySource(properties = {"spring.security.oauth2.resourceserver.jwt.audiences=test"})
 class JwtUtilsTest {
 
     @Test

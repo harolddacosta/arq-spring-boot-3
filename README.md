@@ -504,6 +504,85 @@ In the table, an array with values `["value1", "value2", "value3"]` will be repr
 
 And when you get it from the database you will have a `List<String>` array back.
 
+##### Defining right entities to work with __Hibernate__
+
+The best way to define a super class with commons fields for all entities is this:
+
+```java
+@MappedSuperclass
+@SuperBuilder
+@EntityListeners({AuditingEntityListener.class})
+@ToString(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+public abstract class BaseEntity
+        implements Identifiable, Versionable, Auditable, java.io.Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    @Version
+    @Column(columnDefinition = "bigint default 0")
+    @EqualsAndHashCode.Include
+    @ToString.Include
+    private long version;
+
+    @Column(updatable = false)
+    @CreatedDate
+    private LocalDateTime createdDate;
+
+    @Column @LastModifiedDate private LocalDateTime lastModifiedDate;
+
+    @Column(updatable = false)
+    @CreatedBy
+    private String createdBy;
+
+    @Column @LastModifiedBy private String lastModifiedBy;
+}
+
+```
+
+and the child ones inheriting from above like this:
+
+```java
+@Entity
+@SuperBuilder
+@ToString(onlyExplicitlyIncluded = true, callSuper = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@Table(name = "cities")
+public class CityEntity extends BaseEntity {
+
+    @Serial private static final long serialVersionUID = -3448643327251187713L;
+
+    @Id
+    @GenericGenerator(
+            name = "cities_seq_name",
+            strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator",
+            parameters = {
+                @Parameter(name = "sequence_name", value = "cities_id_seq"),
+                @Parameter(name = "increment_size", value = "1")
+            })
+    @GeneratedValue(generator = "cities_seq_name")
+    @Column(nullable = false, unique = true)
+    @EqualsAndHashCode.Include
+    @ToString.Include
+    private Long id;
+
+    @Column(nullable = false, unique = true)
+    private String name;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "city")
+    private Set<PostalCodeEntity> postalCodes;
+}
+
+```
+as you can see, you delegate the ID to the children classes to have control over the sequences
 
 #### Default properties
 
@@ -987,3 +1066,196 @@ This properties are present at module level, so you can replace them by project 
 | app.cors.allowed-methods								| __*__ | Methods allowed '*' for all. |
 | app.locales.default-locale								| **es** | Default language to use |
 | app.locales.supported-locales							| **es,fr,en,pt,ca** | Set of languages allowed |
+
+### dkt-fitness-boot-starter-security-oauth2
+
+This module brings the security configuration to the project, a JWT based security is preconfigured to be used with the followings features:
+
+- 
+
+#### Libraries included in the module
+
+| Group | Artifact |
+| ----- | -------- |
+| org.springframework.boot	| spring-boot-starter-json |
+| org.springframework.boot	| spring-boot-starter-validation |
+| org.springframework.boot	| spring-boot-starter-actuator |
+| org.apache.commons			| commons-lang3 |
+| org.glassfish.jaxb 			| jaxb-runtime |
+| org.zalando					| problem-spring-web |
+| org.zalando 					| jackson-datatype-problem |
+| org.openapitools 			| jackson-databind-nullable |
+
+#### Usage
+
+Simply add the dependency in the project and you will have it working.
+
+```xml
+<dependency>
+	<groupId>com.decathlon</groupId>
+	<artifactId>dkt-fitness-boot-starter-security-oauth2</artifactId>
+</dependency>
+```
+
+##### Securing endpoints
+
+The most easy way to securize endpoints with this starter is defining a configuration class like this:
+
+```java
+@Configuration
+public class JwtSecurityConfiguration extends DefaultJwtSecurityConfiguration {
+
+    @Bean
+    SecurityFilterChain configureSecurityFilterChain(
+            HttpSecurity http, MvcRequestMatcher.Builder mvc) throws Exception {
+        super.preconfigureSecurityFilterChain(http, mvc);
+
+        http.authorizeHttpRequests(authz -> authz.anyRequest().authenticated());
+
+        return http.build();
+    }
+}
+```
+
+The `super.preconfigureSecurityFilterChain(http, mvc)` statement preconfigures the `HttpSecurity` as follows:
+
+```java
+@Import(SecurityProblemSupport.class)
+public class DefaultJwtSecurityConfiguration {
+
+    private static final String[] AUTH_WHITELIST = {
+        "/v2/api-docs",
+        "/configuration/**",
+        "/swagger-resources/**",
+        "/swagger-ui.html",
+        "/webjars/**",
+        "/api-docs/**",
+        "/performance-monitor/**",
+        "/swagger-ui/**",
+        "/v3/**",
+        "/v1/ping"
+    };
+
+    @Autowired private SecurityProblemSupport problemSupport;
+    @Autowired private ObjectMapper mapper;
+
+    @Value("${spring.security.oauth2.resourceserver.jwt.resource-access-name}")
+    protected String resourceAccessName;
+
+    @Value("${app.security.api-key:#{null}}")
+    private String apiKey;
+
+    @Bean
+    MvcRequestMatcher.Builder mvc(HandlerMappingIntrospector introspector) {
+        return new MvcRequestMatcher.Builder(introspector);
+    }
+
+    protected final HttpSecurity preconfigureSecurityFilterChain(
+            HttpSecurity http, MvcRequestMatcher.Builder mvc) throws Exception {
+        http.cors(withDefaults())
+                .csrf(AbstractHttpConfigurer::disable) // NOSONAR as we use stateless apis
+                .httpBasic(AbstractHttpConfigurer::disable)
+                .exceptionHandling(
+                        exceptionHandling ->
+                                exceptionHandling
+                                        .authenticationEntryPoint(problemSupport)
+                                        .accessDeniedHandler(problemSupport))
+                .oauth2ResourceServer(
+                        oauth2 ->
+                                oauth2.jwt(
+                                        jwt ->
+                                                jwt.jwtAuthenticationConverter(
+                                                        new ResourceRolesConverter(
+                                                                resourceAccessName))))
+                .sessionManagement(
+                        sessionManagement ->
+                                sessionManagement.sessionCreationPolicy(
+                                        SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(
+                        requests -> {
+                            Arrays.asList(AUTH_WHITELIST)
+                                    .forEach(
+                                            authUrl ->
+                                                    requests.requestMatchers(mvc.pattern(authUrl))
+                                                            .permitAll());
+
+                            requests.requestMatchers(EndpointRequest.to(HealthEndpoint.class))
+                                    .permitAll();
+                        });
+
+        if (StringUtils.isNotBlank(apiKey)) {
+            http.addFilterAfter(
+                    new ApiKeyRequestFilter(apiKey, mapper), BearerTokenAuthenticationFilter.class);
+        }
+
+        return http;
+    }
+}
+```
+
+With the following features:
+- Configure `SecurityProblemSupport` from Zalando for a right JSON authentication response
+- Enable __CORS__
+- Disable __csrf__
+- Disable __basic authentication__
+- Permit all for __Swagger resources__ so it does not need any authentication to be visible
+- Enable a ApiKeyRequestFilter if this is defined in the `application.properties`
+- Defines a simple `ResourceRolesConverter` to extract roles from a specific claim hierarchy
+
+##### Auditing JPA entities
+
+If you have the JPA starter added to the project, then you can audit the users who modify records in the database, columns annotated with @CreatedBy and @LastModifiedBy are populated with the name of the principal that created or last modified the entity. The information comes from SecurityContext‘s Authentication instance. If we want to customize values that are set to the annotated fields, we can implement the AuditorAware<T> interface (remember to add `@EntityListeners(AuditingEntityListener.class)` annotation to entities:
+
+```java
+@Entity
+@EntityListeners(AuditingEntityListener.class)
+public class Bar {
+    
+    //...
+    
+    @Column(name = "created_by")
+    @CreatedBy
+    private String createdBy;
+
+    @Column(name = "modified_by")
+    @LastModifiedBy
+    private String modifiedBy;
+    
+    //...
+    
+}
+```
+
+You need to create a configuration class as:
+
+```java
+@Configuration
+@EnableJpaAuditing(auditorAwareRef = "auditorAware")
+public class AuditingConfiguration {}
+```
+
+Using the property `app.security.claim-for-auditing` from the `application.properties` you can select the __claim__ from `JWT` you want to use to save in the `@CreatedBy` and `@LastModifiedBy` fields, by default the one used is `preferred_username`
+
+If you want to use a different auditor than the one that extracts claims for a JWT, you can declare a Bean like this:
+
+
+```java
+@Bean
+AuditorAware<String> customAuditorAware() {
+    return new CustomAuthenticatedUserAuditor();
+}
+```
+
+and change this in the `@EnableJpaAuditing(auditorAwareRef = "customAuditorAware")` annotation.
+
+##### Cors configuration
+
+The cors is configured under the properties in `application.properties`:
+
+```properties
+- app.cors.path=/**
+- app.cors.allowed-origins=*
+- app.cors.allowed-headers=*
+- app.cors.allowed-methods=*
+```
+

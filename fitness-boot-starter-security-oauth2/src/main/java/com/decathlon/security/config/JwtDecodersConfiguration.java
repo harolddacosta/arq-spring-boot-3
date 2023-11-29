@@ -44,7 +44,7 @@ import javax.crypto.spec.SecretKeySpec;
 @RequiredArgsConstructor
 public class JwtDecodersConfiguration {
 
-    private final OAuth2ResourceServerProperties.Jwt properties;
+    private final OAuth2ResourceServerProperties properties;
 
     @Bean
     @ConditionalOnProperty(
@@ -53,7 +53,7 @@ public class JwtDecodersConfiguration {
             havingValue = "jwk")
     JwtDecoder certUriDecoder(ClaimsConverter claimsConverter) {
         NimbusJwtDecoder jwtDecoder =
-                NimbusJwtDecoder.withJwkSetUri(properties.getJwkSetUri()).build();
+                NimbusJwtDecoder.withJwkSetUri(properties.getJwt().getJwkSetUri()).build();
 
         configureDecoder(jwtDecoder, claimsConverter);
 
@@ -81,7 +81,9 @@ public class JwtDecodersConfiguration {
         } else {
             jwtDecoder =
                     NimbusJwtDecoder.withPublicKey(
-                                    (RSAPublicKey) getPublicKey(properties.getPublicKeyLocation()))
+                                    (RSAPublicKey)
+                                            getPublicKey(
+                                                    properties.getJwt().getPublicKeyLocation()))
                             .build();
         }
 
@@ -115,7 +117,7 @@ public class JwtDecodersConfiguration {
         List<OAuth2TokenValidator<Jwt>> validators = new ArrayList<>();
         validators.add(new JwtTimestampValidator());
 
-        List<String> audiences = properties.getAudiences();
+        List<String> audiences = properties.getJwt().getAudiences();
         if (!CollectionUtils.isEmpty(audiences)) {
             validators.add(
                     new JwtClaimValidator<List<String>>(
@@ -142,6 +144,6 @@ public class JwtDecodersConfiguration {
             throws InvalidKeySpecException, JoseException, IOException {
         RsaKeyUtil rsaKeyUtil = new RsaKeyUtil();
 
-        return rsaKeyUtil.fromPemEncoded(properties.readPublicKey());
+        return rsaKeyUtil.fromPemEncoded(properties.getJwt().readPublicKey());
     }
 }
