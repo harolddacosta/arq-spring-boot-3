@@ -28,6 +28,9 @@ import java.util.Arrays;
 @PropertySource("classpath:openapi.properties")
 public class OpenApiConfiguration {
 
+    private static final String SECURITY_SCHEMA_NAME_JWT = "JWT";
+    private static final String SECURITY_SCHEMA_NAME_API_KEY_AUTH = "ApiKeyAuth";
+
     @Bean
     ModelResolver modelResolver(ObjectMapper objectMapper) {
         return new ModelResolver(objectMapper);
@@ -47,22 +50,22 @@ public class OpenApiConfiguration {
         scopes.addString("read", "apis");
 
         SecurityRequirement securityRequirement = new SecurityRequirement();
-        securityRequirement.addList("ApiKeyAuth", "[read]");
-        securityRequirement.addList("JWT", "[read]");
+        securityRequirement.addList(SECURITY_SCHEMA_NAME_API_KEY_AUTH, "[read]");
+        securityRequirement.addList(SECURITY_SCHEMA_NAME_JWT, "[read]");
 
         SecurityScheme apiKeyScheme =
                 new SecurityScheme()
-                        .name("ApiKeyAuth")
+                        .name(SECURITY_SCHEMA_NAME_API_KEY_AUTH)
                         .type(SecurityScheme.Type.APIKEY)
                         .in(In.HEADER)
                         .name("X-API-KEY");
 
         SecurityScheme bearerSchema =
                 new SecurityScheme()
-                        .name("JWT")
+                        .name(SECURITY_SCHEMA_NAME_JWT)
                         .type(SecurityScheme.Type.HTTP)
                         .scheme("bearer")
-                        .bearerFormat("JWT");
+                        .bearerFormat(SECURITY_SCHEMA_NAME_JWT);
 
         OpenAPI openAPI = new OpenAPI();
         Arrays.asList(swaggerServerPaths)
@@ -70,8 +73,8 @@ public class OpenApiConfiguration {
 
         return openAPI.components(
                         new Components()
-                                .addSecuritySchemes("ApiKeyAuth", apiKeyScheme)
-                                .addSecuritySchemes("JWT", bearerSchema))
+                                .addSecuritySchemes(SECURITY_SCHEMA_NAME_API_KEY_AUTH, apiKeyScheme)
+                                .addSecuritySchemes(SECURITY_SCHEMA_NAME_JWT, bearerSchema))
                 .addSecurityItem(securityRequirement)
                 .info(
                         new Info()

@@ -18,16 +18,16 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-class DecathlonOxylaneRolesConverterTest {
+class AbstractRolesConverterTest {
 
-    DecathlonOxylaneRolesConverter decathlonOxylaneRolesConverter;
+    AbstractRolesConverter decathlonOxylaneRolesConverter;
 
     @BeforeEach
     void setup() {
         decathlonOxylaneRolesConverter =
-                new DecathlonOxylaneRolesConverter("decathlon") {
+                new AbstractRolesConverter("decathlon") {
                     @Override
-                    public ArrayList<SimpleGrantedAuthority> extractResourceRoles(Jwt source) {
+                    public ArrayList<SimpleGrantedAuthority> extractAdditionalRoles(Jwt source) {
                         return new ArrayList<SimpleGrantedAuthority>();
                     }
                 };

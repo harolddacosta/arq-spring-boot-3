@@ -8,7 +8,7 @@ import static org.springframework.test.web.client.match.MockRestRequestMatchers.
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withStatus;
 
 import com.decathlon.security.SecurityServicesApplication;
-import com.decathlon.security.jwt.model.UserInformation;
+import com.decathlon.security.jwt.model.UserInformationDetails;
 import com.decathlon.security.jwt.service.UserInformationService;
 import com.decathlon.security.test.utils.JwtBuilder;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -55,7 +55,7 @@ class UserInformationServiceTest {
 
     @Test
     void when_is_public_access() throws Exception {
-        UserInformation userInformation = new UserInformation();
+        UserInformationDetails userInformation = new UserInformationDetails();
         userInformation.setFamilyName("Da Costa");
 
         mockServer
@@ -79,7 +79,7 @@ class UserInformationServiceTest {
 
     @Test
     void when_is_public_access_error() throws Exception {
-        UserInformation userInformation = new UserInformation();
+        UserInformationDetails userInformation = new UserInformationDetails();
         userInformation.setFamilyName("Da Costa");
 
         mockServer

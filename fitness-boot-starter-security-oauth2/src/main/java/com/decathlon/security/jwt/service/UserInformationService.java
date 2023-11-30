@@ -3,7 +3,7 @@ package com.decathlon.security.jwt.service;
 
 import static org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED;
 
-import com.decathlon.security.jwt.model.UserInformation;
+import com.decathlon.security.jwt.model.UserInformationDetails;
 
 import lombok.RequiredArgsConstructor;
 
@@ -23,7 +23,7 @@ public final class UserInformationService {
     private final RestTemplate restTemplate;
 
     @Cacheable(key = "#sub", cacheNames = "userInformation")
-    public UserInformation getUserInformation(final String sub, final String token) {
+    public UserInformationDetails getUserInformation(final String sub, final String token) {
         final MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
         final HttpHeaders headers = new HttpHeaders();
         headers.setContentType(APPLICATION_FORM_URLENCODED);
@@ -33,7 +33,7 @@ public final class UserInformationService {
                 new HttpEntity<>(map, headers);
         try {
             return restTemplate.postForObject(
-                    userInfoUri, userInformationRequest, UserInformation.class);
+                    userInfoUri, userInformationRequest, UserInformationDetails.class);
         } catch (HttpClientErrorException.Unauthorized e) {
             throw new AccessDeniedException(
                     "Calling user-info endpoint with unauthorized/expired credentials");

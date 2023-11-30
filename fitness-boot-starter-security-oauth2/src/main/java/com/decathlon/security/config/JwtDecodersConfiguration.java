@@ -34,6 +34,7 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -120,9 +121,12 @@ public class JwtDecodersConfiguration {
         List<String> audiences = properties.getJwt().getAudiences();
         if (!CollectionUtils.isEmpty(audiences)) {
             validators.add(
-                    new JwtClaimValidator<List<String>>(
+                    new JwtClaimValidator<>(
                             JwtClaimNames.AUD,
-                            aud -> aud != null && !Collections.disjoint(aud, audiences)));
+                            aud ->
+                                    aud != null
+                                            && !Collections.disjoint(
+                                                    (Collection<?>) aud, audiences)));
         }
 
         jwtDecoder.setJwtValidator(new DelegatingOAuth2TokenValidator<>(validators));

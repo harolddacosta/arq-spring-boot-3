@@ -519,27 +519,27 @@ The best way to define a super class with commons fields for all entities is thi
 @Getter
 @Setter
 public abstract class BaseEntity
-        implements Identifiable, Versionable, Auditable, java.io.Serializable {
+		implements Identifiable, Versionable, Auditable, java.io.Serializable {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    @Version
-    @Column(columnDefinition = "bigint default 0")
-    @EqualsAndHashCode.Include
-    @ToString.Include
-    private long version;
+	@Version
+	@Column(columnDefinition = "bigint default 0")
+	@EqualsAndHashCode.Include
+	@ToString.Include
+	private long version;
 
-    @Column(updatable = false)
-    @CreatedDate
-    private LocalDateTime createdDate;
+	@Column(updatable = false)
+	@CreatedDate
+	private LocalDateTime createdDate;
 
-    @Column @LastModifiedDate private LocalDateTime lastModifiedDate;
+	@Column @LastModifiedDate private LocalDateTime lastModifiedDate;
 
-    @Column(updatable = false)
-    @CreatedBy
-    private String createdBy;
+	@Column(updatable = false)
+	@CreatedBy
+	private String createdBy;
 
-    @Column @LastModifiedBy private String lastModifiedBy;
+	@Column @LastModifiedBy private String lastModifiedBy;
 }
 
 ```
@@ -558,27 +558,27 @@ and the child ones inheriting from above like this:
 @Table(name = "cities")
 public class CityEntity extends BaseEntity {
 
-    @Serial private static final long serialVersionUID = -3448643327251187713L;
+	@Serial private static final long serialVersionUID = -3448643327251187713L;
 
-    @Id
-    @GenericGenerator(
-            name = "cities_seq_name",
-            strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator",
-            parameters = {
-                @Parameter(name = "sequence_name", value = "cities_id_seq"),
-                @Parameter(name = "increment_size", value = "1")
-            })
-    @GeneratedValue(generator = "cities_seq_name")
-    @Column(nullable = false, unique = true)
-    @EqualsAndHashCode.Include
-    @ToString.Include
-    private Long id;
+	@Id
+	@GenericGenerator(
+			name = "cities_seq_name",
+			strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator",
+			parameters = {
+				@Parameter(name = "sequence_name", value = "cities_id_seq"),
+				@Parameter(name = "increment_size", value = "1")
+			})
+	@GeneratedValue(generator = "cities_seq_name")
+	@Column(nullable = false, unique = true)
+	@EqualsAndHashCode.Include
+	@ToString.Include
+	private Long id;
 
-    @Column(nullable = false, unique = true)
-    private String name;
+	@Column(nullable = false, unique = true)
+	private String name;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "city")
-    private Set<PostalCodeEntity> postalCodes;
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "city")
+	private Set<PostalCodeEntity> postalCodes;
 }
 
 ```
@@ -1071,20 +1071,29 @@ This properties are present at module level, so you can replace them by project 
 
 This module brings the security configuration to the project, a JWT based security is preconfigured to be used with the followings features:
 
-- 
+- Cors configuration
+- Decoders configuration for customize JWT roles definition
+- Preconfigured JSON responses with Zalando library
+- API Key filtering
+- JPA Auditing
+- Audiences definition in `application.properties`
+
 
 #### Libraries included in the module
 
 | Group | Artifact |
 | ----- | -------- |
-| org.springframework.boot	| spring-boot-starter-json |
-| org.springframework.boot	| spring-boot-starter-validation |
-| org.springframework.boot	| spring-boot-starter-actuator |
-| org.apache.commons			| commons-lang3 |
-| org.glassfish.jaxb 			| jaxb-runtime |
-| org.zalando					| problem-spring-web |
-| org.zalando 					| jackson-datatype-problem |
-| org.openapitools 			| jackson-databind-nullable |
+| org.springframework.boot		| spring-boot-starter-security |
+| org.springframework.boot		| spring-boot-starter-oauth2-resource-server |
+| org.springframework.boot		| spring-boot-starter-actuator |
+| org.springframework.security	| spring-security-oauth2-client |
+| org.springframework.data 		| spring-data-commons |
+| org.apache.commons				| commons-lang3 |
+| jakarta.servlet 				| jakarta.servlet-api |
+| org.bitbucket.b_c 				| jose4j |
+| org.zalando 						| problem-spring-web |
+| org.zalando 						| jackson-datatype-problem |
+| com.fasterxml.jackson.datatype	| jackson-datatype-jsr310 |
 
 #### Usage
 
@@ -1105,15 +1114,15 @@ The most easy way to securize endpoints with this starter is defining a configur
 @Configuration
 public class JwtSecurityConfiguration extends DefaultJwtSecurityConfiguration {
 
-    @Bean
-    SecurityFilterChain configureSecurityFilterChain(
-            HttpSecurity http, MvcRequestMatcher.Builder mvc) throws Exception {
-        super.preconfigureSecurityFilterChain(http, mvc);
+	@Bean
+	SecurityFilterChain configureSecurityFilterChain(
+			HttpSecurity http, MvcRequestMatcher.Builder mvc) throws Exception {
+		super.preconfigureSecurityFilterChain(http, mvc);
 
-        http.authorizeHttpRequests(authz -> authz.anyRequest().authenticated());
+		http.authorizeHttpRequests(authz -> authz.anyRequest().authenticated());
 
-        return http.build();
-    }
+		return http.build();
+	}
 }
 ```
 
@@ -1123,73 +1132,73 @@ The `super.preconfigureSecurityFilterChain(http, mvc)` statement preconfigures t
 @Import(SecurityProblemSupport.class)
 public class DefaultJwtSecurityConfiguration {
 
-    private static final String[] AUTH_WHITELIST = {
-        "/v2/api-docs",
-        "/configuration/**",
-        "/swagger-resources/**",
-        "/swagger-ui.html",
-        "/webjars/**",
-        "/api-docs/**",
-        "/performance-monitor/**",
-        "/swagger-ui/**",
-        "/v3/**",
-        "/v1/ping"
-    };
+	private static final String[] AUTH_WHITELIST = {
+		"/v2/api-docs",
+		"/configuration/**",
+		"/swagger-resources/**",
+		"/swagger-ui.html",
+		"/webjars/**",
+		"/api-docs/**",
+		"/performance-monitor/**",
+		"/swagger-ui/**",
+		"/v3/**",
+		"/v1/ping"
+	};
 
-    @Autowired private SecurityProblemSupport problemSupport;
-    @Autowired private ObjectMapper mapper;
+	@Autowired private SecurityProblemSupport problemSupport;
+	@Autowired private ObjectMapper mapper;
 
-    @Value("${spring.security.oauth2.resourceserver.jwt.resource-access-name}")
-    protected String resourceAccessName;
+	@Value("${spring.security.oauth2.resourceserver.jwt.resource-access-name}")
+	protected String resourceAccessName;
 
-    @Value("${app.security.api-key:#{null}}")
-    private String apiKey;
+	@Value("${app.security.api-key:#{null}}")
+	private String apiKey;
 
-    @Bean
-    MvcRequestMatcher.Builder mvc(HandlerMappingIntrospector introspector) {
-        return new MvcRequestMatcher.Builder(introspector);
-    }
+	@Bean
+	MvcRequestMatcher.Builder mvc(HandlerMappingIntrospector introspector) {
+		return new MvcRequestMatcher.Builder(introspector);
+	}
 
-    protected final HttpSecurity preconfigureSecurityFilterChain(
-            HttpSecurity http, MvcRequestMatcher.Builder mvc) throws Exception {
-        http.cors(withDefaults())
-                .csrf(AbstractHttpConfigurer::disable) // NOSONAR as we use stateless apis
-                .httpBasic(AbstractHttpConfigurer::disable)
-                .exceptionHandling(
-                        exceptionHandling ->
-                                exceptionHandling
-                                        .authenticationEntryPoint(problemSupport)
-                                        .accessDeniedHandler(problemSupport))
-                .oauth2ResourceServer(
-                        oauth2 ->
-                                oauth2.jwt(
-                                        jwt ->
-                                                jwt.jwtAuthenticationConverter(
-                                                        new ResourceRolesConverter(
-                                                                resourceAccessName))))
-                .sessionManagement(
-                        sessionManagement ->
-                                sessionManagement.sessionCreationPolicy(
-                                        SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(
-                        requests -> {
-                            Arrays.asList(AUTH_WHITELIST)
-                                    .forEach(
-                                            authUrl ->
-                                                    requests.requestMatchers(mvc.pattern(authUrl))
-                                                            .permitAll());
+	protected final HttpSecurity preconfigureSecurityFilterChain(
+			HttpSecurity http, MvcRequestMatcher.Builder mvc) throws Exception {
+		http.cors(withDefaults())
+				.csrf(AbstractHttpConfigurer::disable) // NOSONAR as we use stateless apis
+				.httpBasic(AbstractHttpConfigurer::disable)
+				.exceptionHandling(
+						exceptionHandling ->
+								exceptionHandling
+										.authenticationEntryPoint(problemSupport)
+										.accessDeniedHandler(problemSupport))
+				.oauth2ResourceServer(
+						oauth2 ->
+								oauth2.jwt(
+										jwt ->
+												jwt.jwtAuthenticationConverter(
+														new ResourceRolesConverter(
+																resourceAccessName))))
+				.sessionManagement(
+						sessionManagement ->
+								sessionManagement.sessionCreationPolicy(
+										SessionCreationPolicy.STATELESS))
+				.authorizeHttpRequests(
+						requests -> {
+							Arrays.asList(AUTH_WHITELIST)
+									.forEach(
+											authUrl ->
+													requests.requestMatchers(mvc.pattern(authUrl))
+															.permitAll());
 
-                            requests.requestMatchers(EndpointRequest.to(HealthEndpoint.class))
-                                    .permitAll();
-                        });
+							requests.requestMatchers(EndpointRequest.to(HealthEndpoint.class))
+									.permitAll();
+						});
 
-        if (StringUtils.isNotBlank(apiKey)) {
-            http.addFilterAfter(
-                    new ApiKeyRequestFilter(apiKey, mapper), BearerTokenAuthenticationFilter.class);
-        }
+		if (StringUtils.isNotBlank(apiKey)) {
+			http.addFilterAfter(
+					new ApiKeyRequestFilter(apiKey, mapper), BearerTokenAuthenticationFilter.class);
+		}
 
-        return http;
-    }
+		return http;
+	}
 }
 ```
 
@@ -1210,19 +1219,19 @@ If you have the JPA starter added to the project, then you can audit the users w
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 public class Bar {
-    
-    //...
-    
-    @Column(name = "created_by")
-    @CreatedBy
-    private String createdBy;
 
-    @Column(name = "modified_by")
-    @LastModifiedBy
-    private String modifiedBy;
-    
-    //...
-    
+	//...
+
+	@Column(name = "created_by")
+	@CreatedBy
+	private String createdBy;
+
+	@Column(name = "modified_by")
+	@LastModifiedBy
+	private String modifiedBy;
+
+	//...
+
 }
 ```
 
@@ -1242,7 +1251,7 @@ If you want to use a different auditor than the one that extracts claims for a J
 ```java
 @Bean
 AuditorAware<String> customAuditorAware() {
-    return new CustomAuthenticatedUserAuditor();
+	return new CustomAuthenticatedUserAuditor();
 }
 ```
 
@@ -1258,4 +1267,30 @@ The cors is configured under the properties in `application.properties`:
 - app.cors.allowed-headers=*
 - app.cors.allowed-methods=*
 ```
+#### Default properties
 
+This properties are present at module level, so you can replace them by project values specifically
+
+| Property | Default value | Description |
+| -------- | ------------- | -----------
+| spring.security.oauth2.resourceserver.jwt.resource-access-name	| **account**		| Resource inside JWT where to extract roles, only for Keycloak JWT definition |
+| spring.security.oauth2.resourceserver.jwt.audiences					| **empty**		| If you need to add audience validation for JWT, set a value here |
+| spring.security.oauth2.resourceserver.jwt.decoder-type				| **secretKey**	| Possible values are, **default, secretKey, publicKey, jwk** |
+| spring.security.oauth2.resourceserver.jwt.issuer-uri				| **empty**		| Set a value when jwt.decoder-type is **default** see [documentation](https://docs.spring.io/spring-security/reference/servlet/oauth2/resource-server/jwt.html) |
+| spring.security.oauth2.resourceserver.jwt.secret-key				| **QzPuxfiQlsZyddSNQPjL8cr3mod4D89j**	| To use when jwt.decoder-type is **secretKey** |
+| spring.security.oauth2.resourceserver.jwt.public-key-type			| **pem**			| To use when jwt.decoder-type is **publicKey** and the format of the public key is PEM with **-----BEGIN PUBLIC KEY-----** format, otherwise left this field empty |
+| spring.security.oauth2.resourceserver.jwt.public-key-location		| **empty**		| Location of the public key when jwt.decoder-type is **publicKey**	|
+| spring.security.oauth2.resourceserver.jwt.jwk-set-uri				| **empty**		| URL of the certs when when jwt.decoder-type is **jwk** see [documentation](https://docs.spring.io/spring-security/reference/servlet/oauth2/resource-server/jwt.html) |
+| spring.security.oauth2.client.provider.decathlon.user-info-uri	| **empty**		| URL of the userinfo when when jwt.decoder-type is **jwk** see [documentation](https://docs.spring.io/spring-security/reference/servlet/oauth2/resource-server/jwt.html) |
+| spring.web.resources.add-mappings						| **false** | Whether to enable default resource handling. |
+| spring.mvc.throw-exception-if-no-handler-found		| **true** | Whether a "NoHandlerFoundException" should be thrown if no Handler was found to process a request. |
+| server.servlet.encoding.force							| **true** | Whether to force the encoding to the configured charset on HTTP requests and responses. |
+| spring.jackson.property-naming-strategy				| com.fasterxml.jackson.databind.PropertyNamingStrategy.SnakeCaseStrategy | Set json bodies to use snake_case properties naming |
+| spring.jackson.default-property-inclusion			| non-null		| Only retrieve json with non-null properties
+| spring.jackson.serialization.write-dates-as-timestamps	| false		| Must be deactivated in order to use the dates |
+| app.cors.path											| __\/\*\*__ | Cors applied in the established path |
+| app.cors.allowed-origins								| __*__ | Origins allowed '*' for all. |
+| app.cors.allowed-headers								| __*__ | Headers allowed '*' for all. |
+| app.cors.allowed-methods								| __*__ | Methods allowed '*' for all. |
+| app.security.api-key									| __empty__ | When defined, the API Key filter will be activated to check for an `X-API-KEY` header with this value |
+| app.security.claim-for-auditing						| __preferred_username__ | Claim inside the JWT to get when set the `@CreatedBy` and `@ModifiedBy` annotations |

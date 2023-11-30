@@ -15,7 +15,7 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserInformation implements Serializable {
+public class UserInformationDetails implements Serializable {
 
     private static final long serialVersionUID = -8610496656497346777L;
 
