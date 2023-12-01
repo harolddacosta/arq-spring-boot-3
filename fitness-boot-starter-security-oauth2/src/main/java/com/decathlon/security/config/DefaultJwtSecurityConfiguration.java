@@ -7,6 +7,8 @@ import com.decathlon.security.jwt.converters.ResourceRolesConverter;
 import com.decathlon.security.web.filter.ApiKeyRequestFilter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import lombok.extern.slf4j.Slf4j;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,6 +27,7 @@ import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 import java.util.Arrays;
 
 @Import(SecurityProblemSupport.class)
+@Slf4j
 public class DefaultJwtSecurityConfiguration {
 
     private static final String[] AUTH_WHITELIST = {
@@ -88,6 +91,8 @@ public class DefaultJwtSecurityConfiguration {
                         });
 
         if (StringUtils.isNotBlank(apiKey)) {
+            log.info("ApiKeyRequestFilter enabled");
+
             http.addFilterAfter(
                     new ApiKeyRequestFilter(apiKey, mapper), BearerTokenAuthenticationFilter.class);
         }
