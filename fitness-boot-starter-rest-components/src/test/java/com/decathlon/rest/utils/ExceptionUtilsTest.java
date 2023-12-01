@@ -10,11 +10,14 @@ import com.decathlon.core.response.FieldErrorResource;
 import com.decathlon.rest.RestServicesConfiguration;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import lombok.extern.slf4j.Slf4j;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.client.HttpClientErrorException;
 import org.zalando.problem.Problem;
@@ -27,6 +30,8 @@ import java.util.Optional;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {RestServicesConfiguration.class})
+@TestPropertySource(locations = {"classpath:rest.properties", "classpath:application.properties"})
+@Slf4j
 class ExceptionUtilsTest {
 
     @Autowired private ObjectMapper mappingJackson2HttpMessageConverter;
@@ -72,6 +77,8 @@ class ExceptionUtilsTest {
                         Arrays.asList(
                                 mappingJackson2HttpMessageConverter.readValue(
                                         fieldsErrorsString, FieldErrorResource[].class));
+
+                log.debug("FieldErrorsResource:{}", fieldErrorsResource.get(0));
 
                 assertEquals("FieldError title", fieldErrorsResource.get(0).getTitle());
                 assertEquals(

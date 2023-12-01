@@ -11,10 +11,6 @@
   <artifactId>dkt-fitness-boot-starter-openapi</artifactId>
   <packaging>jar</packaging>
 
-  <properties>
-    <sonar.coverage.exclusions>src/main/java/com/decathlon/openapi/OpenApiConfiguration.java</sonar.coverage.exclusions>
-  </properties>
-
   <dependencies>
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -27,6 +23,12 @@
     <dependency>
       <groupId>org.openapitools</groupId>
       <artifactId>jackson-databind-nullable</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 </project>

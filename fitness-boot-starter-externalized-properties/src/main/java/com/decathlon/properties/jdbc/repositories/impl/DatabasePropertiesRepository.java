@@ -23,7 +23,8 @@ import javax.sql.DataSource;
 @ConditionalOnProperty(
         prefix = "app",
         value = "database.configurations-table.enabled",
-        havingValue = "true")
+        havingValue = "true",
+        matchIfMissing = true)
 @Slf4j
 public class DatabasePropertiesRepository implements PropertiesRepository {
 

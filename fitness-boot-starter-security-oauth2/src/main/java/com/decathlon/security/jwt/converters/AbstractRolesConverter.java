@@ -20,7 +20,7 @@ import java.util.stream.Stream;
 
 @Slf4j
 @RequiredArgsConstructor
-public abstract class DecathlonOxylaneRolesConverter
+public abstract class AbstractRolesConverter
         implements Converter<Jwt, AbstractAuthenticationToken> {
 
     private final JwtGrantedAuthoritiesConverter defaultGrantedAuthoritiesConverter =
@@ -28,7 +28,7 @@ public abstract class DecathlonOxylaneRolesConverter
 
     protected final String resourceId;
 
-    public abstract Collection<SimpleGrantedAuthority> extractResourceRoles(final Jwt source);
+    public abstract Collection<SimpleGrantedAuthority> extractAdditionalRoles(final Jwt source);
 
     @Override
     public AbstractAuthenticationToken convert(final Jwt source) {
@@ -40,7 +40,7 @@ public abstract class DecathlonOxylaneRolesConverter
                                 convertedRoles != null && !convertedRoles.isEmpty()
                                         ? convertedRoles.stream()
                                         : Stream.empty(),
-                                extractResourceRoles(source).stream())
+                                extractAdditionalRoles(source).stream())
                         .collect(Collectors.toSet());
 
         authorities =
@@ -56,8 +56,8 @@ public abstract class DecathlonOxylaneRolesConverter
 
     @SuppressWarnings("unchecked")
     private static Collection<? extends GrantedAuthority> extractResourceRoles(
-            final Jwt source, final String resourceId) {
-        Map<String, Object> resourceAccess = source.getClaim("resource_access");
+            final Jwt jwt, final String resourceId) {
+        Map<String, Object> resourceAccess = jwt.getClaim("resource_access");
         Map<String, Object> resource;
         Collection<String> resourceRoles;
 

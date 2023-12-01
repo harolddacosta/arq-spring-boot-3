@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.text.ParseException;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -39,7 +40,7 @@ public class DateRestController {
         DatesDto dateDto = new DatesDto();
         dateDto.setLocalDateField(LocalDate.of(2020, 10, 21));
         dateDto.setLocalDateTimeField(LocalDateTime.of(2020, 10, 21, 10, 00, 50));
-        dateDto.setOldDateField(new Date(120, 10, 21, 10, 00, 50));
+        dateDto.setOldDateField(Date.from(Instant.parse("2020-10-21T10:00:50.000Z")));
 
         if (addNullableValue) {
             dateDto.setName("Harold");

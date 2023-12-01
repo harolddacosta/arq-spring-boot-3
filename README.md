@@ -382,7 +382,6 @@ This module is responsible of :
 | org.zalando							| **jackson-datatype-problem** |
 | org.flywaydb							| **flyway-core** |
 | com.fasterxml.jackson.datatype	| **jackson-datatype-jsr310** |
-| io.hypersistence					| **hypersistence-utils-hibernate-62** |
 
 #### Usage
 
@@ -505,6 +504,85 @@ In the table, an array with values `["value1", "value2", "value3"]` will be repr
 
 And when you get it from the database you will have a `List<String>` array back.
 
+##### Defining right entities to work with __Hibernate__
+
+The best way to define a super class with commons fields for all entities is this:
+
+```java
+@MappedSuperclass
+@SuperBuilder
+@EntityListeners({AuditingEntityListener.class})
+@ToString(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+public abstract class BaseEntity
+		implements Identifiable, Versionable, Auditable, java.io.Serializable {
+
+	private static final long serialVersionUID = 1L;
+
+	@Version
+	@Column(columnDefinition = "bigint default 0")
+	@EqualsAndHashCode.Include
+	@ToString.Include
+	private long version;
+
+	@Column(updatable = false)
+	@CreatedDate
+	private LocalDateTime createdDate;
+
+	@Column @LastModifiedDate private LocalDateTime lastModifiedDate;
+
+	@Column(updatable = false)
+	@CreatedBy
+	private String createdBy;
+
+	@Column @LastModifiedBy private String lastModifiedBy;
+}
+
+```
+
+and the child ones inheriting from above like this:
+
+```java
+@Entity
+@SuperBuilder
+@ToString(onlyExplicitlyIncluded = true, callSuper = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@Table(name = "cities")
+public class CityEntity extends BaseEntity {
+
+	@Serial private static final long serialVersionUID = -3448643327251187713L;
+
+	@Id
+	@GenericGenerator(
+			name = "cities_seq_name",
+			strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator",
+			parameters = {
+				@Parameter(name = "sequence_name", value = "cities_id_seq"),
+				@Parameter(name = "increment_size", value = "1")
+			})
+	@GeneratedValue(generator = "cities_seq_name")
+	@Column(nullable = false, unique = true)
+	@EqualsAndHashCode.Include
+	@ToString.Include
+	private Long id;
+
+	@Column(nullable = false, unique = true)
+	private String name;
+
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "city")
+	private Set<PostalCodeEntity> postalCodes;
+}
+
+```
+as you can see, you delegate the ID to the children classes to have control over the sequences
 
 #### Default properties
 
@@ -518,21 +596,23 @@ This properties are present at module level, so you can replace them by project 
 | spring.flyway.repair							| **false**	| When a database history needs to be repaired (cause of hash changed in a flyway script), set this flag to true, and take it back again in the next deployment |
 | spring.flyway.locations						| **classpath:flyway**		| Sets the default location to **src/main/resources/flyway** |
 | spring.flyway.table								| **flyway_schema_history**	| This is the same default value as flyway, only to know you can change it here |
-| app.hibernate.hbm2ddl-auto						| **none**						| Mapped to __"hibernate.hbm2ddl.auto"__ hibernate property |
-| app.hibernate.order-updates					| **true**						| Mapped to __"hibernate.order_updates"__ hibernate property |
-| app.hibernate.jdbc-batch-versioned-data		| **true**						| Mapped to __"hibernate.jdbc.batch_versioned_data"__ hibernate property |
-| app.hibernate.default-batch-fetch-size		| **16**						| Mapped to __"hibernate.default_batch_fetch_size"__ hibernate property |
-| app.hibernate.cache-use-second-level-cache	| **true**						| Mapped to __"hibernate.cache.use_second_level_cache"__ hibernate property |
-| app.hibernate.cache-use-query-cache			| **true**						| Mapped to __"hibernate.cache.use_query_cache"__ hibernate property |
-| app.hibernate.connection-autocommit			| **false**					| Mapped to __"hibernate.connection.autocommit"__ hibernate property |
-| app.hibernate.jdbc-batch-size					| **25**						| Mapped to __"hibernate.jdbc.batch_size"__ hibernate property |
-| app.hibernate.show-sql							| **false**					| Mapped to __"hibernate.show_sql"__ hibernate property |
-| app.hibernate.format-sql						| **true**						| Mapped to __"hibernate.format_sql"__ hibernate property |
-| app.hibernate.cache-region-factory-class		| **org.hibernate.cache.jcache.internal.JCacheRegionFactory**	| Mapped to __"hibernate.cache.region.factory_class"__ hibernate property |
-| app.hibernate.time-zone						| **UTC**						| Mapped to __"hibernate.jdbc.time_zone"__ hibernate property |
-| app.hibernate.column-naming-strategy			| **camelCase**				| Values: __camelCase, snakeCase__. Column naming strategy for columns, eg. a column named "lastName" in @Entity will become "last_name" in database if this property is set as "snakeCase" otherwise, will remain as "lastName", mapped to __"hibernate.physical_naming_strategy"__ hibernate property |
-| app.hibernate.sequence-naming-strategy		| **default**					| Values: __default, suffix-id-seq__ for databases where the sequence name ends like "sequence_name_**id_seq**", mapped to __"hibernate.id.db_structure_naming_strategy"__ hibernate property |
-| **hibernate.id.new_generator_mappings** (hardcoded)	| **true**				| Hibernate prefers using the “seqhilo” generator by default, which is not an intuitive assumption since many might expect the raw “sequence” generator (always calling the database sequence for every new identifier value). Property set harcoded in the module, can't be changed by properties |
+| spring.jackson.property-naming-strategy		| com.fasterxml.jackson.databind.PropertyNamingStrategy.SnakeCaseStrategy | One of the constants on Jackson's PropertyNamingStrategies. Can also be a fully-qualified class name of a PropertyNamingStrategy implementation.
+| spring.jackson.default-property-inclusion	| non-null | Controls the inclusion of properties during serialization. Configured with one of the values in Jackson's JsonInclude.Include enumeration.
+| spring.jackson.serialization.write-dates-as-timestamps	| false | Jackson on/off features that affect the way Java objects are serialized.
+| spring.jpa.hibernate.ddl-auto						| **none**		| DDL mode. This is actually a shortcut for the "hibernate.hbm2ddl.auto" property. |
+| spring.jpa.hibernate.naming.physical-strategy	| **org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy**	| Fully qualified name of the physical naming strategy. |
+| spring.jpa.properties.hibernate.order_updates	| **true**						| See Hibernate documentation |
+| spring.jpa.properties.hibernate.jdbc.batch_versioned_data		| **true**						| See Hibernate documentation |
+| spring.jpa.properties.hibernate.default_batch_fetch_size		| **16**						| See Hibernate documentation |
+| spring.jpa.properties.hibernate.cache.use_second_level_cache	| **true**						| See Hibernate documentation |
+| spring.jpa.properties.hibernate.cache.use_query_cache			| **true**						| See Hibernate documentation |
+| spring.jpa.properties.hibernate.connection.autocommit			| **false**					| See Hibernate documentation |
+| spring.jpa.properties.hibernate.jdbc.batch_size					| **25**						| See Hibernate documentation |
+| spring.jpa.properties.hibernate.show_sql							| **false**					| See Hibernate documentation |
+| spring.jpa.properties.hibernate.format_sql						| **true**						| See Hibernate documentation |
+| spring.jpa.properties.hibernate.cache.region.factory_class		| **org.hibernate.cache.jcache.internal.JCacheRegionFactory** | See Hibernate documentation |
+| spring.jpa.properties.hibernate.jdbc.time_zone					| **UTC**						| See Hibernate documentation |
+| spring.jpa.properties.hibernate.id.db_structure_naming_strategy	| **not set**					| Values:com.decathlon.data.strategies.SuffixIdSeqNamingStrategy when need to add id_seq at the end |
 
 ### dkt-fitness-boot-starter-logging-support
 
@@ -746,7 +826,6 @@ REST module with multiple preconfigured properties for use in building microserv
 - __Server compression__ enabled by default
 - __Multipart file size__ preconfigured
 - Multiple actuator endpoints visible
-- __Date format__ to use throughout the app
 
 #### Libraries included in the module
 
@@ -772,6 +851,189 @@ Simply add the dependency in the project and you will have it working.
 </dependency>
 ```
 
+##### Api Endpoint
+
+There is a `ping endpoint` defined in `http(s)://\<server\>/\<context\>/v1/ping`
+
+Note: this endpoint is exactly produced by the **Actuator Ping endpoint**
+
+##### Cors configuration
+
+The cors is configured under the properties in `application.properties`:
+
+```properties
+- app.cors.path=/**
+- app.cors.allowed-origins=*
+- app.cors.allowed-headers=*
+- app.cors.allowed-methods=*
+```
+
+##### Content negotiation parameter
+
+Whether a request parameter ("format" by default) should be used to determine the requested media type. For this option to work you must register media type mappings. eg
+
+If you call an endpoint with the format parameter:
+
+`/api/v1/types-handler?param=text/plain`
+
+It will respond with `text/plain` content header, see below:
+
+```java
+@Test
+void ok_for_text_plain_format_parameter() throws Exception {
+	MvcResult textPlainResult =
+			mockMvc.perform(
+							get("/api/v1/types-handler")
+									.param("format", MediaType.TEXT_PLAIN_VALUE))
+					.andDo(print())
+					.andExpect(header().string("Content-Type", "text/plain;charset=UTF-8"))
+					.andReturn();
+	assertEquals("Prueba de string", textPlainResult.getResponse().getContentAsString());
+}
+```
+
+##### Centralized dates configuration
+
+All the dates for:
+
+- URL query parameters
+- Json body
+
+The date types configured are for those declared as:
+
+- `java.time.LocalDate`
+- `java.time.LocalDateTime`
+- `java.util.Date`
+
+Will be parsed using the configuration defined in `application.properties`:
+
+```properties
+app.dates.date-time-format=yyyy-MM-dd'T'HH:mm:ss.SSS'Z'
+app.dates.date-format=dd/MM/yyyy
+```
+
+Also, the format used to write back the json fields that use dates, will be the ones previously configured
+
+###### `DateUtils` utility class
+
+There is an __utility class__ to parse dates programatically name `DateUtils` that you can inject anywhere:
+
+```java
+String dateToString(Date date);
+
+Date stringToDate(String date) throws ParseException;
+
+String localDateToString(LocalDate date);
+
+LocalDate stringToLocalDate(String date);
+
+String localDateTimeToString(LocalDateTime date);
+
+LocalDateTime stringToLocalDateTime(String date) throws ParseException;
+```
+
+##### LocaleResolver for `Accept-Language` header
+
+Under the folder i18n where are defined the messages for translation:
+- messages_ca.properties
+- messages_en.properties
+- messages_es.properties
+- messages_fr.properties
+- messages_pt.properties
+- messages.properties
+
+With the properties defined in `application.properties` you can define how many languages you will have and the one that is the language by default
+
+```properties
+app.locales.default-locale=es
+app.locales.supported-locales=es,fr,en,pt,ca
+```
+
+###### `Translator` component
+
+There is a component called `Translator` that can be injected anywhere and with the api:
+
+```java
+String toLocale(String msg);
+
+String toLocale(String msg, Locale locale);
+
+String toLocale(String msg, Object[] args);
+
+String toLocale(String msg, Object[] args, Locale locale);
+```
+
+This component will take care of translate the message in the language sent in the `Accept-Language` header without the need to capture it in the request, a test can clarify how to use it:
+
+```java
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/api/v1/language-test")
+public class TranslationRestController {
+
+	private final Translator translator;
+
+	@GetMapping
+	public ResponseEntity<KeyValueResponseDto> languageHeaderResponse() {
+		return new ResponseEntity<>(
+				new KeyValueResponseDto(translator.toLocale("msg.translated")), HttpStatus.OK);
+	}
+}
+```
+
+```java
+@Test
+void when_locale_es() throws Exception {
+	mockMvc.perform(
+					get("/api/v1/language-test")
+							.characterEncoding("utf-8")
+							.header("Accept-Language", "es"))
+			.andExpect(status().isOk())
+			.andDo(print())
+			.andExpect(jsonPath("$.value", is("Mensaje traducido")));
+}
+
+@Test
+void when_locale_en() throws Exception {
+	mockMvc.perform(
+					get("/api/v1/language-test")
+							.characterEncoding("utf-8")
+							.header("Accept-Language", "en"))
+			.andExpect(status().isOk())
+			.andDo(print())
+			.andExpect(jsonPath("$.value", is("Message translated")));
+}
+```
+##### Handlers for RestTemplate component
+
+If you need to do calls to others endpoints using `RestTemplate` you can configure it to:
+
+- Pass the `Accept-Language` header in the call (`LocaleHeaderInterceptor` class)
+- Attach a `ResponseErrorHandler` to parse and throw `LogicException` (`CustomResponseErrorHandler` class)
+
+A high performance configuration for a RestTemplate could be like this:
+
+```java
+@Configuration
+public class RestTemplateConfiguration {
+
+	@Bean
+	RestTemplate restTemplate(
+			MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter) {
+		RestTemplate restTemplate = new RestTemplate();
+
+		restTemplate.setErrorHandler(
+				new CustomResponseErrorHandler(
+						mappingJackson2HttpMessageConverter.getObjectMapper()));
+		restTemplate.getInterceptors().add(new LocaleHeaderInterceptor());
+		restTemplate.setRequestFactory(
+				new BufferingClientHttpRequestFactory(new SimpleClientHttpRequestFactory()));
+
+		return restTemplate;
+	}
+}
+
+```
 
 #### Default properties
 
@@ -792,6 +1054,10 @@ This properties are present at module level, so you can replace them by project 
 | management.endpoint.health.show-details				| **always** | When to show full health details. |
 | management.endpoint.health.probes.enabled			| **true** | Whether to enable liveness and readiness probes. |
 | management.info.env.enabled							| **true** | Whether to enable environment info. |
+| spring.jackson.property-naming-strategy				| com.fasterxml.jackson.databind.PropertyNamingStrategy.SnakeCaseStrategy | Set json bodies to use snake_case properties naming |
+| spring.jackson.default-property-inclusion			| non-null		| Only retrieve json with non-null properties
+| spring.jackson.serialization.write-dates-as-timestamps	| false		| Must be deactivated in order to use the dates |
+| spring.jackson.date-format | ${app.dates.date-time-format}		| set the format for json date properties |
 | app.dates.date-time-format								| **yyyy-MM-dd'T'HH:mm:ss.SSS'Z'** | The date time format to use in json bodies and request params |
 | app.dates.date-format									| **dd/MM/yyyy** | The date format to use in json bodies and request params |
 | app.cors.path											| __\/\*\*__ | Cors applied in the established path |
@@ -800,3 +1066,231 @@ This properties are present at module level, so you can replace them by project 
 | app.cors.allowed-methods								| __*__ | Methods allowed '*' for all. |
 | app.locales.default-locale								| **es** | Default language to use |
 | app.locales.supported-locales							| **es,fr,en,pt,ca** | Set of languages allowed |
+
+### dkt-fitness-boot-starter-security-oauth2
+
+This module brings the security configuration to the project, a JWT based security is preconfigured to be used with the followings features:
+
+- Cors configuration
+- Decoders configuration for customize JWT roles definition
+- Preconfigured JSON responses with Zalando library
+- API Key filtering
+- JPA Auditing
+- Audiences definition in `application.properties`
+
+
+#### Libraries included in the module
+
+| Group | Artifact |
+| ----- | -------- |
+| org.springframework.boot		| spring-boot-starter-security |
+| org.springframework.boot		| spring-boot-starter-oauth2-resource-server |
+| org.springframework.boot		| spring-boot-starter-actuator |
+| org.springframework.security	| spring-security-oauth2-client |
+| org.springframework.data 		| spring-data-commons |
+| org.apache.commons				| commons-lang3 |
+| jakarta.servlet 				| jakarta.servlet-api |
+| org.bitbucket.b_c 				| jose4j |
+| org.zalando 						| problem-spring-web |
+| org.zalando 						| jackson-datatype-problem |
+| com.fasterxml.jackson.datatype	| jackson-datatype-jsr310 |
+
+#### Usage
+
+Simply add the dependency in the project and you will have it working.
+
+```xml
+<dependency>
+	<groupId>com.decathlon</groupId>
+	<artifactId>dkt-fitness-boot-starter-security-oauth2</artifactId>
+</dependency>
+```
+
+##### Securing endpoints
+
+The most easy way to securize endpoints with this starter is defining a configuration class like this:
+
+```java
+@Configuration
+public class JwtSecurityConfiguration extends DefaultJwtSecurityConfiguration {
+
+	@Bean
+	SecurityFilterChain configureSecurityFilterChain(
+			HttpSecurity http, MvcRequestMatcher.Builder mvc) throws Exception {
+		super.preconfigureSecurityFilterChain(http, mvc);
+
+		http.authorizeHttpRequests(authz -> authz.anyRequest().authenticated());
+
+		return http.build();
+	}
+}
+```
+
+The `super.preconfigureSecurityFilterChain(http, mvc)` statement preconfigures the `HttpSecurity` as follows:
+
+```java
+@Import(SecurityProblemSupport.class)
+public class DefaultJwtSecurityConfiguration {
+
+	private static final String[] AUTH_WHITELIST = {
+		"/v2/api-docs",
+		"/configuration/**",
+		"/swagger-resources/**",
+		"/swagger-ui.html",
+		"/webjars/**",
+		"/api-docs/**",
+		"/performance-monitor/**",
+		"/swagger-ui/**",
+		"/v3/**",
+		"/v1/ping"
+	};
+
+	@Autowired private SecurityProblemSupport problemSupport;
+	@Autowired private ObjectMapper mapper;
+
+	@Value("${spring.security.oauth2.resourceserver.jwt.resource-access-name}")
+	protected String resourceAccessName;
+
+	@Value("${app.security.api-key:#{null}}")
+	private String apiKey;
+
+	@Bean
+	MvcRequestMatcher.Builder mvc(HandlerMappingIntrospector introspector) {
+		return new MvcRequestMatcher.Builder(introspector);
+	}
+
+	protected final HttpSecurity preconfigureSecurityFilterChain(
+			HttpSecurity http, MvcRequestMatcher.Builder mvc) throws Exception {
+		http.cors(withDefaults())
+				.csrf(AbstractHttpConfigurer::disable) // NOSONAR as we use stateless apis
+				.httpBasic(AbstractHttpConfigurer::disable)
+				.exceptionHandling(
+						exceptionHandling ->
+								exceptionHandling
+										.authenticationEntryPoint(problemSupport)
+										.accessDeniedHandler(problemSupport))
+				.oauth2ResourceServer(
+						oauth2 ->
+								oauth2.jwt(
+										jwt ->
+												jwt.jwtAuthenticationConverter(
+														new ResourceRolesConverter(
+																resourceAccessName))))
+				.sessionManagement(
+						sessionManagement ->
+								sessionManagement.sessionCreationPolicy(
+										SessionCreationPolicy.STATELESS))
+				.authorizeHttpRequests(
+						requests -> {
+							Arrays.asList(AUTH_WHITELIST)
+									.forEach(
+											authUrl ->
+													requests.requestMatchers(mvc.pattern(authUrl))
+															.permitAll());
+
+							requests.requestMatchers(EndpointRequest.to(HealthEndpoint.class))
+									.permitAll();
+						});
+
+		if (StringUtils.isNotBlank(apiKey)) {
+			http.addFilterAfter(
+					new ApiKeyRequestFilter(apiKey, mapper), BearerTokenAuthenticationFilter.class);
+		}
+
+		return http;
+	}
+}
+```
+
+With the following features:
+- Configure `SecurityProblemSupport` from Zalando for a right JSON authentication response
+- Enable __CORS__
+- Disable __csrf__
+- Disable __basic authentication__
+- Permit all for __Swagger resources__ so it does not need any authentication to be visible
+- Enable a ApiKeyRequestFilter if this is defined in the `application.properties`
+- Defines a simple `ResourceRolesConverter` to extract roles from a specific claim hierarchy
+
+##### Auditing JPA entities
+
+If you have the JPA starter added to the project, then you can audit the users who modify records in the database, columns annotated with @CreatedBy and @LastModifiedBy are populated with the name of the principal that created or last modified the entity. The information comes from SecurityContext‘s Authentication instance. If we want to customize values that are set to the annotated fields, we can implement the AuditorAware<T> interface (remember to add `@EntityListeners(AuditingEntityListener.class)` annotation to entities:
+
+```java
+@Entity
+@EntityListeners(AuditingEntityListener.class)
+public class Bar {
+
+	//...
+
+	@Column(name = "created_by")
+	@CreatedBy
+	private String createdBy;
+
+	@Column(name = "modified_by")
+	@LastModifiedBy
+	private String modifiedBy;
+
+	//...
+
+}
+```
+
+You need to create a configuration class as:
+
+```java
+@Configuration
+@EnableJpaAuditing(auditorAwareRef = "auditorAware")
+public class AuditingConfiguration {}
+```
+
+Using the property `app.security.claim-for-auditing` from the `application.properties` you can select the __claim__ from `JWT` you want to use to save in the `@CreatedBy` and `@LastModifiedBy` fields, by default the one used is `preferred_username`
+
+If you want to use a different auditor than the one that extracts claims for a JWT, you can declare a Bean like this:
+
+
+```java
+@Bean
+AuditorAware<String> customAuditorAware() {
+	return new CustomAuthenticatedUserAuditor();
+}
+```
+
+and change this in the `@EnableJpaAuditing(auditorAwareRef = "customAuditorAware")` annotation.
+
+##### Cors configuration
+
+The cors is configured under the properties in `application.properties`:
+
+```properties
+- app.cors.path=/**
+- app.cors.allowed-origins=*
+- app.cors.allowed-headers=*
+- app.cors.allowed-methods=*
+```
+#### Default properties
+
+This properties are present at module level, so you can replace them by project values specifically
+
+| Property | Default value | Description |
+| -------- | ------------- | -----------
+| spring.security.oauth2.resourceserver.jwt.resource-access-name	| **account**		| Resource inside JWT where to extract roles, only for Keycloak JWT definition |
+| spring.security.oauth2.resourceserver.jwt.audiences					| **empty**		| If you need to add audience validation for JWT, set a value here |
+| spring.security.oauth2.resourceserver.jwt.decoder-type				| **secretKey**	| Possible values are, **default, secretKey, publicKey, jwk** |
+| spring.security.oauth2.resourceserver.jwt.issuer-uri				| **empty**		| Set a value when jwt.decoder-type is **default** see [documentation](https://docs.spring.io/spring-security/reference/servlet/oauth2/resource-server/jwt.html) |
+| spring.security.oauth2.resourceserver.jwt.secret-key				| **QzPuxfiQlsZyddSNQPjL8cr3mod4D89j**	| To use when jwt.decoder-type is **secretKey** |
+| spring.security.oauth2.resourceserver.jwt.public-key-type			| **pem**			| To use when jwt.decoder-type is **publicKey** and the format of the public key is PEM with **-----BEGIN PUBLIC KEY-----** format, otherwise left this field empty |
+| spring.security.oauth2.resourceserver.jwt.public-key-location		| **empty**		| Location of the public key when jwt.decoder-type is **publicKey**	|
+| spring.security.oauth2.resourceserver.jwt.jwk-set-uri				| **empty**		| URL of the certs when when jwt.decoder-type is **jwk** see [documentation](https://docs.spring.io/spring-security/reference/servlet/oauth2/resource-server/jwt.html) |
+| spring.security.oauth2.client.provider.decathlon.user-info-uri	| **empty**		| URL of the userinfo when when jwt.decoder-type is **jwk** see [documentation](https://docs.spring.io/spring-security/reference/servlet/oauth2/resource-server/jwt.html) |
+| spring.web.resources.add-mappings						| **false** | Whether to enable default resource handling. |
+| spring.mvc.throw-exception-if-no-handler-found		| **true** | Whether a "NoHandlerFoundException" should be thrown if no Handler was found to process a request. |
+| server.servlet.encoding.force							| **true** | Whether to force the encoding to the configured charset on HTTP requests and responses. |
+| spring.jackson.property-naming-strategy				| com.fasterxml.jackson.databind.PropertyNamingStrategy.SnakeCaseStrategy | Set json bodies to use snake_case properties naming |
+| spring.jackson.default-property-inclusion			| non-null		| Only retrieve json with non-null properties
+| spring.jackson.serialization.write-dates-as-timestamps	| false		| Must be deactivated in order to use the dates |
+| app.cors.path											| __\/\*\*__ | Cors applied in the established path |
+| app.cors.allowed-origins								| __*__ | Origins allowed '*' for all. |
+| app.cors.allowed-headers								| __*__ | Headers allowed '*' for all. |
+| app.cors.allowed-methods								| __*__ | Methods allowed '*' for all. |
+| app.security.api-key									| __empty__ | When defined, the API Key filter will be activated to check for an `X-API-KEY` header with this value |
+| app.security.claim-for-auditing						| __preferred_username__ | Claim inside the JWT to get when set the `@CreatedBy` and `@ModifiedBy` annotations |

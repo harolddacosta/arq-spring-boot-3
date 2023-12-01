@@ -31,9 +31,9 @@ import java.time.LocalDateTime;
         name = "persona",
         schema = "public",
         uniqueConstraints = {
-            @UniqueConstraint(columnNames = {"cedula_persona"}),
-            @UniqueConstraint(columnNames = {"codigo_persona"}),
-            @UniqueConstraint(columnNames = {"numero_msas"})
+            @UniqueConstraint(columnNames = {"cedulaPersona"}),
+            @UniqueConstraint(columnNames = {"codigoPersona"}),
+            @UniqueConstraint(columnNames = {"numeroMsas"})
         })
 @ToString(onlyExplicitlyIncluded = true)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
@@ -54,138 +54,116 @@ public class Persona implements java.io.Serializable {
             })
     @GeneratedValue(generator = "persona_seq_gen")
     @Id
-    @Column(name = "id", unique = true, nullable = false)
+    @Column(unique = true, nullable = false)
     @EqualsAndHashCode.Include
     @ToString.Include
     public Long id;
 
-    @Version
-    @Column(name = "version")
-    @EqualsAndHashCode.Include
-    @ToString.Include
-    public Long version;
+    @Version @Column @EqualsAndHashCode.Include @ToString.Include public Long version;
 
-    @Column(name = "codigo_persona", nullable = false, length = 16)
+    @Column(nullable = false, length = 16)
     public String codigoPersona;
 
-    @Column(name = "cedula_persona", nullable = false, length = 64)
+    @Column(nullable = false, length = 64)
     public String cedulaPersona;
 
-    @Column(name = "nombre_persona", nullable = false, length = 64)
+    @Column(nullable = false, length = 64)
     public String nombrePersona;
 
-    @Column(name = "apellido_persona", length = 64)
+    @Column(length = 64)
     public String apellidoPersona;
 
-    @Column(name = "rif_persona", length = 64)
+    @Column(length = 64)
     public String rifPersona;
 
-    @Column(name = "numero_msas")
-    public String numeroMsas;
+    @Column public String numeroMsas;
 
-    @Column(name = "fecha_nacimiento_persona", length = 13)
+    @Column(length = 13)
     public LocalDate fechaNacimientoPersona;
 
-    @Column(name = "fecha_defuncion_persona", length = 13)
+    @Column(length = 13)
     public LocalDate fechaDefuncionPersona;
 
-    @Column(name = "fecha_vencimiento_rif", length = 13)
+    @Column(length = 13)
     public LocalDate fechaVencimientoRif;
 
-    @Column(name = "telefono_movil_persona", length = 32)
+    @Column(length = 32)
     public String telefonoMovilPersona;
 
-    @Column(name = "telefono_fijo_persona", nullable = false, length = 32)
+    @Column(nullable = false, length = 32)
     public String telefonoFijoPersona;
 
-    @Column(name = "e_mail_persona", length = 64)
+    @Column(length = 64)
     public String eMailPersona;
 
-    @Column(name = "direccion_persona", nullable = false)
+    @Column(nullable = false)
     public String direccionPersona;
 
-    @Column(name = "nombre_contacto_uno", length = 64)
+    @Column(length = 64)
     public String nombreContactoUno;
 
-    @Column(name = "telefono_contacto_uno", length = 32)
+    @Column(length = 32)
     public String telefonoContactoUno;
 
-    @Column(name = "telefono_movil_contacto_uno", length = 32)
+    @Column(length = 32)
     public String telefonoMovilContactoUno;
 
-    @Column(name = "email_contacto_uno", length = 64)
+    @Column(length = 64)
     public String emailContactoUno;
 
-    @Column(name = "parentesco_contacto_uno")
-    public String parentescoContactoUno;
+    @Column public String parentescoContactoUno;
 
-    @Column(name = "nombre_contacto_dos", length = 64)
+    @Column(length = 64)
     public String nombreContactoDos;
 
-    @Column(name = "telefono_contacto_dos", length = 32)
+    @Column(length = 32)
     public String telefonoContactoDos;
 
-    @Column(name = "telefono_movil_contacto_dos", length = 32)
+    @Column(length = 32)
     public String telefonoMovilContactoDos;
 
-    @Column(name = "email_contacto_dos", length = 64)
+    @Column(length = 64)
     public String emailContactoDos;
 
-    @Column(name = "parentesco_contacto_dos")
-    public String parentescoContactoDos;
+    @Column public String parentescoContactoDos;
 
-    @Column(name = "edad", precision = 8)
+    @Column(precision = 8)
     public Float edad;
 
-    @Column(name = "url1")
-    public String url1;
+    @Column public String url1;
 
-    @Column(name = "url1_file_name")
-    public String url1FileName;
+    @Column public String url1FileName;
 
-    @Column(name = "url1_file_size", precision = 17)
+    @Column(precision = 17)
     public Double url1FileSize;
 
-    @Column(name = "comentarios_adicionales")
-    public String comentariosAdicionales;
+    @Column public String comentariosAdicionales;
 
-    @Column(name = "nombre_doctor_referencia")
-    public String nombreDoctorReferencia;
+    @Column public String nombreDoctorReferencia;
 
-    @Column(name = "telefono_contacto_doctor_referencia", length = 32)
+    @Column(length = 32)
     public String telefonoContactoDoctorReferencia;
 
-    @Column(name = "telefono_movil_doctor_referencia", length = 32)
+    @Column(length = 32)
     public String telefonoMovilDoctorReferencia;
 
-    @Column(name = "email_doctor_referencia", length = 64)
+    @Column(length = 64)
     public String emailDoctorReferencia;
 
-    @Column(name = "lugar_nacimiento_otro", length = 128)
+    @Column(length = 128)
     public String lugarNacimientoOtro;
 
-    @Column(name = "direccion_persona_calle_avenida")
-    public String direccionPersonaCalleAvenida;
+    @Column public String direccionPersonaCalleAvenida;
 
-    @Column(name = "direccion_persona_edificio")
-    public String direccionPersonaEdificio;
+    @Column public String direccionPersonaEdificio;
 
-    @Column(name = "direccion_persona_consultorio")
-    public String direccionPersonaConsultorio;
+    @Column public String direccionPersonaConsultorio;
 
-    @CreatedBy
-    @Column(name = "usuario_creacion")
-    public String createdBy;
+    @CreatedBy @Column public String createdBy;
 
-    @CreatedDate
-    @Column(name = "fecha_creacion")
-    public LocalDateTime createdDate;
+    @CreatedDate @Column public LocalDateTime createdDate;
 
-    @LastModifiedBy
-    @Column(name = "usuario_modificacion")
-    public String lastModifiedBy;
+    @LastModifiedBy @Column public String lastModifiedBy;
 
-    @LastModifiedDate
-    @Column(name = "fecha_modificacion")
-    public LocalDateTime lastModifiedDate;
+    @LastModifiedDate @Column public LocalDateTime lastModifiedDate;
 }

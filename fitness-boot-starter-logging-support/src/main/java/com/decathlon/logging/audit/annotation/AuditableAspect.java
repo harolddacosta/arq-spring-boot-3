@@ -22,7 +22,8 @@ import java.util.Optional;
 @ConditionalOnProperty(
         prefix = "app",
         value = "logging.auditable.annotation.enabled",
-        havingValue = "true")
+        havingValue = "true",
+        matchIfMissing = true)
 @Aspect
 @RequiredArgsConstructor
 @Slf4j

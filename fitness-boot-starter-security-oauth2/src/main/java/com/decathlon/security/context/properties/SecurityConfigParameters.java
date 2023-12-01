@@ -16,15 +16,6 @@ public class SecurityConfigParameters implements Serializable {
     private static final long serialVersionUID = 695255049263841719L;
 
     private CorsProperties cors;
-    private JacksonProperties jackson;
-
-    @Data
-    public static class JacksonProperties implements Serializable {
-
-        private static final long serialVersionUID = 5541880522575588387L;
-
-        private boolean hibernateModuleEnable;
-    }
 
     @Data
     public static class CorsProperties implements Serializable {

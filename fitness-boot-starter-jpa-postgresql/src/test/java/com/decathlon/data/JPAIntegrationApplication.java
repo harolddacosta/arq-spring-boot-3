@@ -1,13 +1,9 @@
 /* Decathlon (C)2023 */
 package com.decathlon.data;
 
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 
 @SpringBootApplication
-public class JPAIntegrationApplication {
-
-    public static void main(String[] args) {
-        SpringApplication.run(JPAIntegrationApplication.class, args);
-    }
-}
+@EntityScan(basePackages = {"com.decathlon.data.domain"})
+public class JPAIntegrationApplication {}

@@ -16,8 +16,8 @@ import lombok.Data;
 import java.io.Serializable;
 import java.time.LocalDate;
 
-@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @Data
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class PersonDto implements Identifiable, Serializable {
 
     private static final long serialVersionUID = -8293952137314357678L;

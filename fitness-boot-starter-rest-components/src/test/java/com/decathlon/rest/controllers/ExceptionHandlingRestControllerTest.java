@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.decathlon.rest.config.CustomWebMvcConfiguration;
 import com.decathlon.rest.config.JsonConfiguration;
 import com.decathlon.rest.config.LocaleConfiguration;
 import com.decathlon.rest.context.i18n.Translator;
@@ -35,9 +36,10 @@ import java.util.Locale;
     RestConfigParameters.class,
     Translator.class,
     LocaleConfiguration.class,
-    JsonConfiguration.class
+    JsonConfiguration.class,
+    CustomWebMvcConfiguration.class
 })
-@TestPropertySource(locations = {"classpath:application.properties", "classpath:rest.properties"})
+@TestPropertySource(locations = {"classpath:rest.properties", "classpath:application.properties"})
 class ExceptionHandlingRestControllerTest {
 
     @Autowired private MockMvc mockMvc;

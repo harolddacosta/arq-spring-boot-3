@@ -11,10 +11,6 @@
   <artifactId>dkt-fitness-boot-starter-rest-components</artifactId>
   <packaging>jar</packaging>
 
-  <properties>
-    <sonar.coverage.exclusions>src/main/java/com/decathlon/rest/utils/MultipartUtils.java</sonar.coverage.exclusions>
-  </properties>
-
   <dependencies>
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -97,6 +93,11 @@
     <dependency>
       <groupId>com.github.meanbeanlib</groupId>
       <artifactId>meanbean</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.awaitility</groupId>
+      <artifactId>awaitility</artifactId>
       <scope>test</scope>
     </dependency>
   </dependencies>

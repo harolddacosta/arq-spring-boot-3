@@ -4,6 +4,7 @@ package com.decathlon.security.test;
 import static org.hamcrest.CoreMatchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -33,7 +34,13 @@ class SecuredEndpointsWithWebMVCSliceTest {
         this.mvc
                 .perform(get("/api/v1/public/no-jwt-needed").accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(
+                        header().stringValues(
+                                        "Vary",
+                                        "Origin",
+                                        "Access-Control-Request-Method",
+                                        "Access-Control-Request-Headers"));
     }
 
     @Test
@@ -41,7 +48,13 @@ class SecuredEndpointsWithWebMVCSliceTest {
         this.mvc
                 .perform(get("/swagger-ui.html").accept(MediaType.TEXT_HTML))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(
+                        header().stringValues(
+                                        "Vary",
+                                        "Origin",
+                                        "Access-Control-Request-Method",
+                                        "Access-Control-Request-Headers"));
     }
 
     @Test
@@ -49,7 +62,13 @@ class SecuredEndpointsWithWebMVCSliceTest {
         this.mvc
                 .perform(get("/api/v1/protected/by-any-rule").accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(
+                        header().stringValues(
+                                        "Vary",
+                                        "Origin",
+                                        "Access-Control-Request-Method",
+                                        "Access-Control-Request-Headers"));
     }
 
     @Test
@@ -57,7 +76,13 @@ class SecuredEndpointsWithWebMVCSliceTest {
         this.mvc
                 .perform(get("/api/v1/protected/by-any-rule").accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(
+                        header().stringValues(
+                                        "Vary",
+                                        "Origin",
+                                        "Access-Control-Request-Method",
+                                        "Access-Control-Request-Headers"));
     }
 
     @Test
@@ -75,7 +100,13 @@ class SecuredEndpointsWithWebMVCSliceTest {
                 .andExpect(jsonPath("$.subject").exists())
                 .andExpect(jsonPath("$.issuer").exists())
                 .andExpect(jsonPath("$.audience").exists())
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(
+                        header().stringValues(
+                                        "Vary",
+                                        "Origin",
+                                        "Access-Control-Request-Method",
+                                        "Access-Control-Request-Headers"));
     }
 
     @Test
@@ -84,7 +115,13 @@ class SecuredEndpointsWithWebMVCSliceTest {
         this.mvc
                 .perform(get("/api/v1/read-only/check").accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(
+                        header().stringValues(
+                                        "Vary",
+                                        "Origin",
+                                        "Access-Control-Request-Method",
+                                        "Access-Control-Request-Headers"));
     }
 
     @Test
@@ -93,7 +130,13 @@ class SecuredEndpointsWithWebMVCSliceTest {
         this.mvc
                 .perform(get("/api/v1/read-only/check").accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andExpect(status().isForbidden());
+                .andExpect(status().isForbidden())
+                .andExpect(
+                        header().stringValues(
+                                        "Vary",
+                                        "Origin",
+                                        "Access-Control-Request-Method",
+                                        "Access-Control-Request-Headers"));
     }
 
     @Test
@@ -102,7 +145,13 @@ class SecuredEndpointsWithWebMVCSliceTest {
         this.mvc
                 .perform(get("/api/v1/role-based/check").accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(
+                        header().stringValues(
+                                        "Vary",
+                                        "Origin",
+                                        "Access-Control-Request-Method",
+                                        "Access-Control-Request-Headers"));
     }
 
     @Test
@@ -111,7 +160,13 @@ class SecuredEndpointsWithWebMVCSliceTest {
         this.mvc
                 .perform(get("/api/v1/role-based/check").accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andExpect(status().isForbidden());
+                .andExpect(status().isForbidden())
+                .andExpect(
+                        header().stringValues(
+                                        "Vary",
+                                        "Origin",
+                                        "Access-Control-Request-Method",
+                                        "Access-Control-Request-Headers"));
     }
 
     @Test
@@ -122,7 +177,13 @@ class SecuredEndpointsWithWebMVCSliceTest {
                         get("/api/v1/method-based/check_secured_annotation")
                                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(
+                        header().stringValues(
+                                        "Vary",
+                                        "Origin",
+                                        "Access-Control-Request-Method",
+                                        "Access-Control-Request-Headers"));
     }
 
     @Test
@@ -133,7 +194,13 @@ class SecuredEndpointsWithWebMVCSliceTest {
                         get("/api/v1/method-based/check_secured_annotation")
                                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andExpect(status().isForbidden());
+                .andExpect(status().isForbidden())
+                .andExpect(
+                        header().stringValues(
+                                        "Vary",
+                                        "Origin",
+                                        "Access-Control-Request-Method",
+                                        "Access-Control-Request-Headers"));
     }
 
     @Test
@@ -144,7 +211,13 @@ class SecuredEndpointsWithWebMVCSliceTest {
                         get("/api/v1/method-based/check_roles_allowed_annotation")
                                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(
+                        header().stringValues(
+                                        "Vary",
+                                        "Origin",
+                                        "Access-Control-Request-Method",
+                                        "Access-Control-Request-Headers"));
     }
 
     @Test
@@ -155,7 +228,13 @@ class SecuredEndpointsWithWebMVCSliceTest {
                         get("/api/v1/method-based/check_roles_allowed_annotation")
                                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andExpect(status().isForbidden());
+                .andExpect(status().isForbidden())
+                .andExpect(
+                        header().stringValues(
+                                        "Vary",
+                                        "Origin",
+                                        "Access-Control-Request-Method",
+                                        "Access-Control-Request-Headers"));
     }
 
     @Test
@@ -166,7 +245,13 @@ class SecuredEndpointsWithWebMVCSliceTest {
                         get("/api/v1/method-based/check_preauthorize_annotation")
                                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(
+                        header().stringValues(
+                                        "Vary",
+                                        "Origin",
+                                        "Access-Control-Request-Method",
+                                        "Access-Control-Request-Headers"));
     }
 
     @Test
@@ -177,6 +262,12 @@ class SecuredEndpointsWithWebMVCSliceTest {
                         get("/api/v1/method-based/check_preauthorize_annotation")
                                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andExpect(status().isForbidden());
+                .andExpect(status().isForbidden())
+                .andExpect(
+                        header().stringValues(
+                                        "Vary",
+                                        "Origin",
+                                        "Access-Control-Request-Method",
+                                        "Access-Control-Request-Headers"));
     }
 }

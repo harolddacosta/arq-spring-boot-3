@@ -28,6 +28,9 @@ import java.util.Arrays;
 @PropertySource("classpath:openapi.properties")
 public class OpenApiConfiguration {
 
+    private static final String SECURITY_SCHEMA_NAME_JWT = "JWT";
+    private static final String SECURITY_SCHEMA_NAME_API_KEY_AUTH = "ApiKeyAuth";
+
     @Bean
     ModelResolver modelResolver(ObjectMapper objectMapper) {
         return new ModelResolver(objectMapper);
@@ -37,39 +40,41 @@ public class OpenApiConfiguration {
     @ConditionalOnProperty(
             prefix = "app",
             name = "open-api-bean.enabled",
-            matchIfMissing = true,
-            havingValue = "true")
+            havingValue = "true",
+            matchIfMissing = true)
     OpenAPI customOpenAPI(
             @Value("${springdoc.version}") String appVersion,
             @Value("${springdoc.api-title}") String apiTitle,
-            @Value("${app.swagger.server-paths}") String[] swaggerServerPath) {
+            @Value("${app.swagger.server-paths}") String[] swaggerServerPaths) {
         Scopes scopes = new Scopes();
         scopes.addString("read", "apis");
 
         SecurityRequirement securityRequirement = new SecurityRequirement();
-        securityRequirement.addList("ApiKeyAuth", "[read]");
-        securityRequirement.addList("jwt", "[read]");
+        securityRequirement.addList(SECURITY_SCHEMA_NAME_API_KEY_AUTH, "[read]");
+        securityRequirement.addList(SECURITY_SCHEMA_NAME_JWT, "[read]");
 
         SecurityScheme apiKeyScheme =
                 new SecurityScheme()
+                        .name(SECURITY_SCHEMA_NAME_API_KEY_AUTH)
                         .type(SecurityScheme.Type.APIKEY)
                         .in(In.HEADER)
                         .name("X-API-KEY");
 
         SecurityScheme bearerSchema =
                 new SecurityScheme()
+                        .name(SECURITY_SCHEMA_NAME_JWT)
                         .type(SecurityScheme.Type.HTTP)
                         .scheme("bearer")
-                        .bearerFormat("JWT");
+                        .bearerFormat(SECURITY_SCHEMA_NAME_JWT);
 
         OpenAPI openAPI = new OpenAPI();
-        Arrays.asList(swaggerServerPath)
+        Arrays.asList(swaggerServerPaths)
                 .forEach(path -> openAPI.addServersItem(new Server().url(path)));
 
         return openAPI.components(
                         new Components()
-                                .addSecuritySchemes("ApiKeyAuth", apiKeyScheme)
-                                .addSecuritySchemes("JWT", bearerSchema))
+                                .addSecuritySchemes(SECURITY_SCHEMA_NAME_API_KEY_AUTH, apiKeyScheme)
+                                .addSecuritySchemes(SECURITY_SCHEMA_NAME_JWT, bearerSchema))
                 .addSecurityItem(securityRequirement)
                 .info(
                         new Info()

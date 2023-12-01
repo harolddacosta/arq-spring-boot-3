@@ -43,4 +43,31 @@ class StringListConverterTest {
 
         Assertions.assertThat(stringList).contains("Priueba1", "Priueba2");
     }
+
+    @Test
+    void when_convert_to_null() {
+        StringListConverter converter = new StringListConverter();
+
+        String stringList = converter.convertToDatabaseColumn(null);
+
+        Assertions.assertThat(stringList).isNullOrEmpty();
+    }
+
+    @Test
+    void when_convert_to_empty() {
+        StringListConverter converter = new StringListConverter();
+
+        String stringList = converter.convertToDatabaseColumn(List.of());
+
+        Assertions.assertThat(stringList).isNullOrEmpty();
+    }
+
+    @Test
+    void when_convert_to_list_null() {
+        StringListConverter converter = new StringListConverter();
+
+        List<String> stringList = converter.convertToEntityAttribute(null);
+
+        Assertions.assertThat(stringList).isNullOrEmpty();
+    }
 }
