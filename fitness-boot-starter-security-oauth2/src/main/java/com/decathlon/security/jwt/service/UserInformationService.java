@@ -17,7 +17,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 @RequiredArgsConstructor
-public final class UserInformationService {
+public class UserInformationService {
 
     private final String userInfoUri;
     private final RestTemplate restTemplate;
