@@ -9,6 +9,6 @@ import org.springframework.context.annotation.PropertySource;
 @ComponentScan("com.decathlon.support.cloud")
 @PropertySource("classpath:cloud.properties")
 public class CloudConfiguration {
-    // Added comment in release
+    // Added comment in release, this code should be replicated in master and develop
 
 }
