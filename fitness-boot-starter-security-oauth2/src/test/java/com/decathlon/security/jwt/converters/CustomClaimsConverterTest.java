@@ -46,23 +46,4 @@ class CustomClaimsConverterTest {
 
         assertThat(authenticationToken).contains(Map.entry("organization", "UNKNOWN"));
     }
-
-    //    @Test
-    //    void when_grant_roles_no_scopes() {
-    //        String token =
-    //
-    // JwtBuilder.getInstance().secretKey("QzPuxfiQlsZyddSNQPjL8cr3mod4D89j").build();
-    //
-    //        Jwt tokenBuild =
-    //                Jwt.withTokenValue(token)
-    //                        .header("alg", JWSAlgorithm.HS256)
-    //                        .claim("sub", "user")
-    //                        .build();
-    //
-    //        Map<String, Object> authenticationToken = customClaimsConverter.convert(tokenBuild);
-    //
-    //        Collection<GrantedAuthority> authorities = authenticationToken.getAuthorities();
-    //
-    //        assertThat(authorities).isEmpty();
-    //    }
 }

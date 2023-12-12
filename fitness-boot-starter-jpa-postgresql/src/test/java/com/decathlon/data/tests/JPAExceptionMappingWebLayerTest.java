@@ -10,7 +10,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.decathlon.data.context.properties.JPAConfigParameters;
 import com.decathlon.data.controller.SimpleController;
 import com.decathlon.data.dto.PersonDto;
 import com.decathlon.data.manager.PersonService;
@@ -33,7 +32,7 @@ import java.util.Locale;
 import java.util.UUID;
 
 @WebMvcTest(controllers = {SimpleController.class})
-@Import({PersonMapperImpl_.class, DefaultConstraintNameResolver.class, JPAConfigParameters.class})
+@Import({PersonMapperImpl_.class, DefaultConstraintNameResolver.class})
 class JPAExceptionMappingWebLayerTest {
 
     @Autowired private MockMvc mockMvc;
@@ -42,7 +41,7 @@ class JPAExceptionMappingWebLayerTest {
 
     @MockBean private PersonService personService;
 
-    private Faker faker = new Faker(new Locale("es", "ES"));
+    private final Faker faker = new Faker(new Locale("es", "ES"));
 
     @Test
     void error_when_service_is_not_available() throws Exception {

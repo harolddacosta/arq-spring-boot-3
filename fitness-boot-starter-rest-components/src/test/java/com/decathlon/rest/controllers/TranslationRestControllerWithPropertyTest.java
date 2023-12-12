@@ -27,8 +27,8 @@ import org.springframework.test.web.servlet.MockMvc;
     JsonConfiguration.class
 })
 @TestPropertySource(
-        locations = {"classpath:application.properties", "classpath:rest.properties"},
-        properties = {"app.jackson.hibernate-module-enable=false", "app.locales.default-locale=en"})
+        locations = {"classpath:rest.properties", "classpath:application.properties"},
+        properties = {"app.locales.default-locale=en"})
 class TranslationRestControllerWithPropertyTest {
 
     @Autowired private MockMvc mockMvc;

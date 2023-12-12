@@ -3,7 +3,7 @@ package com.decathlon.core.domain.types;
 
 public interface Versionable {
 
-    Long getVersion();
+    long getVersion();
 
-    void setVersion(Long version);
+    void setVersion(long version);
 }

@@ -25,6 +25,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -66,15 +67,11 @@ import java.util.Date;
     DatesConfiguration.class,
     DateUtils.class
 })
-@TestPropertySource(
-        locations = {"classpath:application.properties", "classpath:rest.properties"},
-        properties = {"app.jackson.hibernate-module-enable=false"})
+@TestPropertySource(locations = {"classpath:rest.properties", "classpath:application.properties"})
 class DateRestControllerTest {
 
     @Autowired private MockMvc mockMvc;
-
     @Autowired private ObjectMapper objectMapper;
-
     @Autowired private DateUtils dateUtils;
 
     @Test
@@ -85,16 +82,16 @@ class DateRestControllerTest {
                         jsonPath(
                                 "$.local_date_field",
                                 is("21/10/2020"))) // Without conversion 2020-10-21
-                .andExpect(jsonPath("$.local_date_time_field", is("2020-10-21T10:00:50.000Z")))
-                .andExpect(jsonPath("$.old_date_field", is("2020-11-21T10:00:50.000Z")))
+                .andExpect(jsonPath("$.local_date_time_field", is("21/10/2020T10:00:50.000Z")))
+                .andExpect(jsonPath("$.old_date_field", is("21/10/2020T10:00:50.000Z")))
                 .andExpect(jsonPath("$.name").doesNotHaveJsonPath())
                 .andExpect(header().string("Content-Type", "application/json;charset=UTF-8"));
 
         mockMvc.perform(get("/api/v1/dates-handler").param("add_nullable_value", "true"))
                 .andDo(print())
                 .andExpect(jsonPath("$.local_date_field", is("21/10/2020")))
-                .andExpect(jsonPath("$.local_date_time_field", is("2020-10-21T10:00:50.000Z")))
-                .andExpect(jsonPath("$.old_date_field", is("2020-11-21T10:00:50.000Z")))
+                .andExpect(jsonPath("$.local_date_time_field", is("21/10/2020T10:00:50.000Z")))
+                .andExpect(jsonPath("$.old_date_field", is("21/10/2020T10:00:50.000Z")))
                 .andExpect(jsonPath("$.name", is("Harold")))
                 .andExpect(header().string("Content-Type", "application/json;charset=UTF-8"));
     }
@@ -103,8 +100,8 @@ class DateRestControllerTest {
     void when_no_formatter_date_on_post() throws Exception {
         DatesDto demoDto = new DatesDto();
         demoDto.setLocalDateField(dateUtils.stringToLocalDate("21/10/2020"));
-        demoDto.setLocalDateTimeField(dateUtils.stringToLocalDateTime("2020-11-21T10:00:50.000Z"));
-        demoDto.setOldDateField(dateUtils.stringToDate("2020-11-21T09:00:50.000Z"));
+        demoDto.setLocalDateTimeField(dateUtils.stringToLocalDateTime("21/10/2020T10:00:50.000Z"));
+        demoDto.setOldDateField(dateUtils.stringToDate("21/10/2020T09:00:50.000Z"));
 
         mockMvc.perform(
                         post("/api/v1/dates-handler")
@@ -122,7 +119,7 @@ class DateRestControllerTest {
                                 is(
                                         dateUtils.localDateTimeToString(
                                                 demoDto.getLocalDateTimeField()))))
-                .andExpect(jsonPath("$.old_date_field", is("2020-11-21T09:00:50.000Z")))
+                .andExpect(jsonPath("$.old_date_field", is("21/10/2020T09:00:50.000Z")))
                 .andExpect(jsonPath("$.name").doesNotHaveJsonPath())
                 .andExpect(header().string("Content-Type", "application/json;charset=UTF-8"));
     }
@@ -155,7 +152,7 @@ class DateRestControllerTest {
                                         dateUtils.localDateTimeToString(
                                                 demoDto.getLocalDateTimeField())))
                 .andDo(print())
-                .andExpect(jsonPath("$.local_date_time_field", is("2020-10-21T10:00:50.000Z")))
+                .andExpect(jsonPath("$.local_date_time_field", is("21/10/2020T10:00:50.000Z")))
                 // Without conversion 2020-10-21T10:00:50
                 .andExpect(header().string("Content-Type", "application/json;charset=UTF-8"));
     }
@@ -163,13 +160,13 @@ class DateRestControllerTest {
     @Test
     void when_old_date_in_parameter() throws Exception {
         DatesDto demoDto = new DatesDto();
-        demoDto.setOldDateField(new Date(120, 10, 21, 10, 00, 50));
+        demoDto.setOldDateField(Date.from(Instant.parse("2020-10-21T10:00:50.000Z")));
 
         mockMvc.perform(
                         get("/api/v1/dates-handler/date")
                                 .param("date", dateUtils.dateToString(demoDto.getOldDateField())))
                 .andDo(print())
-                .andExpect(jsonPath("$.old_date_field", is("2020-11-21T10:00:50.000Z")))
+                .andExpect(jsonPath("$.old_date_field", is("21/10/2020T10:00:50.000Z")))
                 // Without conversion 2020-11-21T09:00:50.000+0000
                 .andExpect(header().string("Content-Type", "application/json;charset=UTF-8"));
     }
@@ -182,14 +179,14 @@ class DateRestControllerTest {
             })
     void when_date_time_format_annotation_not_working(String url) throws Exception {
         DatesDto demoDto = new DatesDto();
-        demoDto.setOldDateField(new Date(120, 10, 21, 10, 00, 50));
+        demoDto.setOldDateField(Date.from(Instant.parse("2020-10-21T10:00:50.000Z")));
 
         mockMvc.perform(
                         get(url).param("date", dateUtils.dateToString(demoDto.getOldDateField()))
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .characterEncoding("UTF-8"))
                 .andDo(print())
-                .andExpect(jsonPath("$.old_date_field", is("2020-11-21T10:00:50.000Z")))
+                .andExpect(jsonPath("$.old_date_field", is("21/10/2020T10:00:50.000Z")))
                 // Without conversion 2020-11-21T09:00:50.000+0000
                 .andExpect(header().string("Content-Type", "application/json;charset=UTF-8"));
     }
@@ -197,7 +194,7 @@ class DateRestControllerTest {
     @Test
     void when_date_with_different_jsonformat_in_body() throws Exception {
         DatesDto demoDto = new DatesDto();
-        demoDto.setJsonFormatDate(new Date(120, 10, 21, 10, 00, 50));
+        demoDto.setJsonFormatDate(Date.from(Instant.parse("2020-10-21T10:00:50.000Z")));
 
         mockMvc.perform(
                         post("/api/v1/dates-handler/json-format-annotation-in-dto")
@@ -205,7 +202,7 @@ class DateRestControllerTest {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .characterEncoding("UTF-8"))
                 .andDo(print())
-                .andExpect(jsonPath("$.json_format_date", is("21.11.2020")))
+                .andExpect(jsonPath("$.json_format_date", is("21.10.2020")))
                 .andExpect(header().string("Content-Type", "application/json;charset=UTF-8"));
     }
 
@@ -227,7 +224,7 @@ class DateRestControllerTest {
     @Test
     void when_string_date_is_received_as_map() throws Exception {
         DatesDto demoDto = new DatesDto();
-        demoDto.setOldDateField(new Date(120, 10, 21, 10, 00, 50));
+        demoDto.setOldDateField(Date.from(Instant.parse("2020-10-21T10:00:50.000Z")));
 
         mockMvc.perform(
                         get("/api/v1/dates-handler/multiples-parameters-in-map")
@@ -235,14 +232,14 @@ class DateRestControllerTest {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .characterEncoding("UTF-8"))
                 .andDo(print())
-                .andExpect(jsonPath("$.old_date_field", is("2020-11-21T10:00:50.000Z")))
+                .andExpect(jsonPath("$.old_date_field", is("21/10/2020T10:00:50.000Z")))
                 // Without conversion 2020-11-21T09:00:50.000+0000
                 .andExpect(header().string("Content-Type", "application/json;charset=UTF-8"));
     }
 
     @Test
     void when_coming_from_spa_app() throws Exception {
-        String jsonRequest = "{\"local_date_time_field\":\"2020-11-27T23:00:00.000Z\"}";
+        String jsonRequest = "{\"local_date_time_field\":\"27/11/2020T23:00:00.000Z\"}";
 
         mockMvc.perform(
                         post("/api/v1/dates-handler/from-spa")
@@ -250,7 +247,7 @@ class DateRestControllerTest {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .characterEncoding("UTF-8"))
                 .andDo(print())
-                .andExpect(jsonPath("$.local_date_time_field", is("2020-11-27T23:00:00.000Z")));
+                .andExpect(jsonPath("$.local_date_time_field", is("27/11/2020T23:00:00.000Z")));
 
         jsonRequest = "{\"local_date_field\":\"21/10/1981\"}";
 

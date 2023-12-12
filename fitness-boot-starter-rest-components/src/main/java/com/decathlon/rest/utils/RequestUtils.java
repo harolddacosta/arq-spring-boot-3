@@ -26,8 +26,8 @@ public class RequestUtils {
 
         log.trace("Type of the HttpServletRequest:{}", requestAttributes);
 
-        if (requestAttributes instanceof ServletRequestAttributes) {
-            return ((ServletRequestAttributes) requestAttributes).getRequest();
+        if (requestAttributes instanceof ServletRequestAttributes servletRequestAttributes) {
+            return servletRequestAttributes.getRequest();
         }
 
         return null;

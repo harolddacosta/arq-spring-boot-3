@@ -36,6 +36,10 @@ public class SecurityEvaluationContextExtension implements EvaluationContextExte
 
         SecurityExpressionRoot securityExpression = getRootObject();
 
+        if (securityExpression == null) {
+            return properties;
+        }
+
         log.trace(
                 "Type of:{} and value:{}",
                 securityExpression.getPrincipal().getClass(),

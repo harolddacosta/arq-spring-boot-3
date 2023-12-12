@@ -6,8 +6,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.decathlon.security.test.utils.JwtBuilder;
 import com.nimbusds.jose.JWSAlgorithm;
 
-import lombok.extern.slf4j.Slf4j;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
@@ -19,7 +17,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-@Slf4j
 class ResourceRolesConverterTest {
 
     ResourceRolesConverter resourceRolesConverter;
@@ -87,23 +84,23 @@ class ResourceRolesConverterTest {
 
     @Test
     void when_grant_roles_no_scopes_no_roles_no_resource() {
-        String token =
+        final String token =
                 JwtBuilder.getInstance()
                         .secretKey("QzPuxfiQlsZyddSNQPjL8cr3mod4D89j")
                         .scope(new String[] {"profile email openid"})
                         .build();
 
-        Jwt tokenBuild =
+        final Jwt tokenBuild =
                 Jwt.withTokenValue(token)
                         .header("alg", JWSAlgorithm.HS256)
                         .claim("sub", "user")
                         .claim("resource_access", Map.of("none", Map.of("roles", List.of())))
                         .build();
 
-        AbstractAuthenticationToken authenticationToken =
+        final AbstractAuthenticationToken authenticationToken =
                 resourceRolesConverter.convert(tokenBuild);
 
-        Collection<GrantedAuthority> authorities = authenticationToken.getAuthorities();
+        final Collection<GrantedAuthority> authorities = authenticationToken.getAuthorities();
 
         assertThat(authorities).isEmpty();
     }

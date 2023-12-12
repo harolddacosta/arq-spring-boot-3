@@ -6,13 +6,11 @@ import com.decathlon.security.context.properties.SecurityConfigParameters;
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.boot.autoconfigure.web.servlet.ConditionalOnMissingFilterBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
 
 import java.util.Arrays;
 import java.util.List;
@@ -22,7 +20,7 @@ import java.util.List;
 public class DefaultCorsConfiguration {
 
     @Bean
-    @ConditionalOnMissingFilterBean(value = CorsFilter.class)
+    //    @ConditionalOnMissingFilterBean(value = CorsFilter.class)
     CorsConfigurationSource corsConfigurationSource(SecurityConfigParameters configParameters) {
         log.info("Configuring the CorsConfigurationSource as the CorsFilter is not present");
 

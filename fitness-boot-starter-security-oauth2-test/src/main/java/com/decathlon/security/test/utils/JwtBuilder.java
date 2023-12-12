@@ -46,23 +46,20 @@ public class JwtBuilder {
     private String azp;
     private String sessionState;
     private String acr;
-    private Map<String, Object> realmAccessRoles = new HashMap<>();
+    private final Map<String, Object> realmAccessRoles = new HashMap<>();
     private Map<String, Object> resourceAccessRoles = new HashMap<>();
     private String[] audienceRoles;
     private String[] authorizedRoles;
     private String[] scope;
-    private String sid;
     private boolean emailVerified;
     private String userName;
-    private String name;
-    private String preferredUsername;
     private String givenName;
     private String familyName;
     private String countryCode;
     private Long rootCenterId;
     private Long[] centersId;
 
-    private Map<String, Object> payloadClaims;
+    private final Map<String, Object> payloadClaims;
 
     private JwtBuilder() {
         // Builder class
@@ -235,6 +232,9 @@ public class JwtBuilder {
 
     @SuppressWarnings("unchecked")
     public String build() {
+        String preferredUsername;
+        String name;
+        String sid;
         try {
             JWSSigner signer = new MACSigner(secretKey);
 

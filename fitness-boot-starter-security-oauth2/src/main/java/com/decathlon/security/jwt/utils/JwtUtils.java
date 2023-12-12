@@ -39,8 +39,6 @@ public final class JwtUtils {
         List<String> centersIds =
                 getJwtAuthenticatedUser().getClaim(SecurityConstants.CLAIM_CENTERS_IDS);
 
-        //        List<Long> list = centersIds.stream().map(e -> (Long) e).toList();
-
         return centersIds.toArray(new Long[centersIds.size()]);
     }
 

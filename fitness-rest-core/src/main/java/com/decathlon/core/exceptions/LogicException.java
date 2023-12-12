@@ -4,7 +4,6 @@ package com.decathlon.core.exceptions;
 import com.decathlon.core.response.FieldErrorResource;
 
 import lombok.Getter;
-import lombok.Setter;
 
 import org.zalando.problem.AbstractThrowableProblem;
 import org.zalando.problem.Status;
@@ -17,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 @Getter
-public class LogicException extends AbstractThrowableProblem {
+public class LogicException extends AbstractThrowableProblem { // NOSONAR
 
     private static final long serialVersionUID = -5898235054808091141L;
 
@@ -32,11 +31,11 @@ public class LogicException extends AbstractThrowableProblem {
     private final List<String> translationKeyParameters;
     private final List<FieldErrorResource> fieldErrors;
 
-    @Setter private URI uri;
-    @Setter private int code;
+    private final URI uri;
+    private final int code;
     private final String time;
 
-    public LogicException(String title, String detail, String translationKey) {
+    public LogicException(String title, String detail, String translationKey, URI uri, int code) {
         super(
                 null,
                 title,
@@ -54,13 +53,17 @@ public class LogicException extends AbstractThrowableProblem {
         this.translationKeyParameters = null;
         this.fieldErrors = List.of();
         this.time = (String) getParameters().get(PARAMETER_TIME);
+        this.uri = uri;
+        this.code = code;
     }
 
     public LogicException(
             String title,
             String detail,
             String translationKey,
-            List<String> translationKeyParameters) {
+            List<String> translationKeyParameters,
+            URI uri,
+            int code) {
         super(
                 null,
                 title,
@@ -80,13 +83,17 @@ public class LogicException extends AbstractThrowableProblem {
         this.translationKeyParameters = translationKeyParameters;
         this.fieldErrors = List.of();
         this.time = (String) getParameters().get(PARAMETER_TIME);
+        this.uri = uri;
+        this.code = code;
     }
 
     public LogicException(
             String title,
             String detail,
             List<FieldErrorResource> fieldErrors,
-            String translationKey) {
+            String translationKey,
+            URI uri,
+            int code) {
         super(
                 null,
                 title,
@@ -106,6 +113,8 @@ public class LogicException extends AbstractThrowableProblem {
         this.translationKeyParameters = null;
         this.fieldErrors = Collections.unmodifiableList(fieldErrors);
         this.time = (String) getParameters().get(PARAMETER_TIME);
+        this.uri = uri;
+        this.code = code;
     }
 
     public LogicException(
@@ -113,7 +122,9 @@ public class LogicException extends AbstractThrowableProblem {
             String detail,
             List<FieldErrorResource> fieldErrors,
             String translationKey,
-            List<String> translationKeyParameters) {
+            List<String> translationKeyParameters,
+            URI uri,
+            int code) {
         super(
                 null,
                 title,
@@ -135,5 +146,7 @@ public class LogicException extends AbstractThrowableProblem {
         this.translationKeyParameters = translationKeyParameters;
         this.fieldErrors = Collections.unmodifiableList(fieldErrors);
         this.time = (String) getParameters().get(PARAMETER_TIME);
+        this.uri = uri;
+        this.code = code;
     }
 }

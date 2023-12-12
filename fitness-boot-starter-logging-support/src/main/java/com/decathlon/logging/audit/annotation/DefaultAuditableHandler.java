@@ -82,30 +82,12 @@ public class DefaultAuditableHandler implements AuditableHandler, ApplicationCon
 
         MethodSignature methodSignature = extractMethodSignature(point);
 
-        for (int argPosition = 0;
-                argPosition < methodSignature.getParameterNames().length;
-                ++argPosition) {
-            for (String parameterName : parametersBuilderNames) {
-                if (methodSignature.getParameterNames()[argPosition].equals(parameterName)) {
-                    parameterValues.add(point.getArgs()[argPosition]);
-                    parameterTypes.add(methodSignature.getParameterTypes()[argPosition]);
-                }
-            }
-        }
+        extractParameters(
+                point, parametersBuilderNames, methodSignature, parameterValues, parameterTypes);
 
-        boolean resultIsException = false;
-
-        if (methodProcessingResult != null) {
-            parameterValues.add(methodProcessingResult);
-
-            if (methodProcessingResult instanceof Throwable) {
-                parameterTypes.add(Throwable.class);
-
-                resultIsException = true;
-            } else {
-                parameterTypes.add(methodSignature.getReturnType());
-            }
-        }
+        boolean resultIsException =
+                checkMethodProcessingResult(
+                        methodProcessingResult, parameterValues, parameterTypes, methodSignature);
 
         if (!parameterValues.isEmpty()) {
             try {
@@ -246,6 +228,46 @@ public class DefaultAuditableHandler implements AuditableHandler, ApplicationCon
                     BeanUtils.getProperty(targetBeanForExtractFields, propertyMapped[1]));
         } else {
             propertiesForAudit.put(field, BeanUtils.getProperty(targetBeanForExtractFields, field));
+        }
+    }
+
+    private boolean checkMethodProcessingResult(
+            Object methodProcessingResult,
+            List<Object> parameterValues,
+            List<Class<?>> parameterTypes,
+            MethodSignature methodSignature) {
+        boolean resultIsException = false;
+
+        if (methodProcessingResult != null) {
+            parameterValues.add(methodProcessingResult);
+
+            if (methodProcessingResult instanceof Throwable) {
+                parameterTypes.add(Throwable.class);
+
+                resultIsException = true;
+            } else {
+                parameterTypes.add(methodSignature.getReturnType());
+            }
+        }
+
+        return resultIsException;
+    }
+
+    private void extractParameters(
+            ProceedingJoinPoint point,
+            String[] parametersBuilderNames,
+            MethodSignature methodSignature,
+            List<Object> parameterValues,
+            List<Class<?>> parameterTypes) {
+        for (int argPosition = 0;
+                argPosition < methodSignature.getParameterNames().length;
+                ++argPosition) {
+            for (String parameterName : parametersBuilderNames) {
+                if (methodSignature.getParameterNames()[argPosition].equals(parameterName)) {
+                    parameterValues.add(point.getArgs()[argPosition]);
+                    parameterTypes.add(methodSignature.getParameterTypes()[argPosition]);
+                }
+            }
         }
     }
 }

@@ -17,10 +17,8 @@ import org.springframework.test.context.TestPropertySource;
 
 @WebMvcTest(controllers = {AuthorizationRestController.class})
 @Import({DefaultService.class, SecurityOAuth2Configuration.class})
-@TestPropertySource(
-        locations = {"/application.properties"},
-        properties = {"app.jackson.hibernate-module-enable=false"})
-@WithMockedUser
+@WithMockedUser(aud = "test")
+@TestPropertySource(properties = {"spring.security.oauth2.resourceserver.jwt.audiences=test"})
 class JwtUtilsTest {
 
     @Test
@@ -43,16 +41,14 @@ class JwtUtilsTest {
     void when_RootCenterId_exists() {
         Long authenticationToken = JwtUtils.getRootCenterId();
 
-        assertThat(authenticationToken).isNotNull();
-        assertThat(authenticationToken).isEqualTo(1);
+        assertThat(authenticationToken).isNotNull().isEqualTo(1);
     }
 
     @Test
     void when_CountryCode_exists() {
         String authenticationToken = JwtUtils.getCountryCode();
 
-        assertThat(authenticationToken).isNotNull();
-        assertThat(authenticationToken).isEqualTo("ES");
+        assertThat(authenticationToken).isNotNull().isEqualTo("ES");
     }
 
     @Test
@@ -67,8 +63,7 @@ class JwtUtilsTest {
     void when_CustomClaim_exists() {
         String authenticationToken = JwtUtils.getCustomClaim("sub");
 
-        assertThat(authenticationToken).isNotNull();
-        assertThat(authenticationToken).isEqualTo("rachel");
+        assertThat(authenticationToken).isNotNull().isEqualTo("rachel");
     }
 
     @Test

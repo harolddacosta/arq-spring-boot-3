@@ -22,7 +22,8 @@ import java.util.Optional;
 @ConditionalOnProperty(
         prefix = "app",
         value = "logging.auditable.annotation.enabled",
-        havingValue = "true")
+        havingValue = "true",
+        matchIfMissing = true)
 @Aspect
 @RequiredArgsConstructor
 @Slf4j
@@ -194,25 +195,14 @@ public class AuditableAspect {
         Optional<Entry<String, Object>> property =
                 annotationPropertiesToCheck.entrySet().stream().findFirst();
 
-        if (!property.isPresent()) {
-            return false;
-        }
-
-        return hasValuesInProperties(property.get());
+        return property.filter(this::hasValuesInProperties).isPresent();
     }
 
     private boolean hasValuesInProperties(Map.Entry<String, Object> mapElement) {
-        if (mapElement.getValue() instanceof String[]
-                && mapElement.getValue() != null
-                && ((String[]) mapElement.getValue()).length > 0) {
+        if (mapElement.getValue() instanceof String[] values && values.length > 0) {
             return true;
         }
 
-        if (mapElement.getValue() instanceof String
-                && StringUtils.isNotBlank((String) mapElement.getValue())) {
-            return true;
-        }
-
-        return false;
+        return mapElement.getValue() instanceof String value && StringUtils.isNotBlank(value);
     }
 }

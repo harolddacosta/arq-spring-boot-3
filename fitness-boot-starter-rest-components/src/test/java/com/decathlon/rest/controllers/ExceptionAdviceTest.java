@@ -316,12 +316,10 @@ class ExceptionAdviceTest {
         ValidationAnnotatedDto body = new ValidationAnnotatedDto();
 
         DefaultProblem exception =
-                catchThrowableOfType(
+                catchThrowableOfType( // NOSONAR
                         () ->
                                 restTemplate.postForEntity(
-                                        uri,
-                                        new HttpEntity<ValidationAnnotatedDto>(body),
-                                        KeyValueResponseDto.class),
+                                        uri, new HttpEntity<>(body), KeyValueResponseDto.class),
                         DefaultProblem.class);
 
         assertThat(exception.getTitle()).isEqualTo("Constraint Violation");
@@ -346,12 +344,10 @@ class ExceptionAdviceTest {
         body.setName("123");
 
         DefaultProblem exception =
-                catchThrowableOfType(
+                catchThrowableOfType( // NOSONAR
                         () ->
                                 restTemplate.postForEntity(
-                                        uri,
-                                        new HttpEntity<ValidationAnnotatedDto>(body),
-                                        KeyValueResponseDto.class),
+                                        uri, new HttpEntity<>(body), KeyValueResponseDto.class),
                         DefaultProblem.class);
 
         assertThat(exception.getTitle()).isEqualTo("Constraint Violation");
@@ -382,12 +378,10 @@ class ExceptionAdviceTest {
         Locale.setDefault(new Locale("en", "EN"));
 
         DefaultProblem exception =
-                catchThrowableOfType(
+                catchThrowableOfType( // NOSONAR
                         () ->
                                 restTemplate.postForEntity(
-                                        uri,
-                                        new HttpEntity<ValidationAnnotatedDto>(body),
-                                        KeyValueResponseDto.class),
+                                        uri, new HttpEntity<>(body), KeyValueResponseDto.class),
                         DefaultProblem.class);
 
         assertThat(exception.getTitle()).isEqualTo("Constraint Violation");
@@ -415,12 +409,10 @@ class ExceptionAdviceTest {
         ValidationAnnotatedDto body = new ValidationAnnotatedDto();
 
         DefaultProblem exception =
-                catchThrowableOfType(
+                catchThrowableOfType( // NOSONAR
                         () ->
                                 restTemplate.postForEntity(
-                                        uri,
-                                        new HttpEntity<ValidationAnnotatedDto>(body),
-                                        KeyValueResponseDto.class),
+                                        uri, new HttpEntity<>(body), KeyValueResponseDto.class),
                         DefaultProblem.class);
 
         assertThat(exception.getTitle()).isEqualTo("Constraint Violation");
@@ -446,12 +438,10 @@ class ExceptionAdviceTest {
         body.setName("123");
 
         DefaultProblem exception =
-                catchThrowableOfType(
+                catchThrowableOfType( // NOSONAR
                         () ->
                                 restTemplate.postForEntity(
-                                        uri,
-                                        new HttpEntity<ValidationAnnotatedDto>(body),
-                                        KeyValueResponseDto.class),
+                                        uri, new HttpEntity<>(body), KeyValueResponseDto.class),
                         DefaultProblem.class);
 
         assertThat(exception.getTitle()).isEqualTo("Constraint Violation");

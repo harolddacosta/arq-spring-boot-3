@@ -26,10 +26,10 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 
 @Slf4j
-public class ApiKeyRequestFilterTest {
+class ApiKeyRequestFilterTest {
 
     @Mock
-    private ApiKeyRequestFilter apiKeyRequestFilter =
+    private final ApiKeyRequestFilter apiKeyRequestFilter =
             new ApiKeyRequestFilter("test-api-key", new ObjectMapper());
 
     @Test

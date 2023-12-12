@@ -7,7 +7,6 @@ import com.decathlon.data.transformer.ContraintsNameResolver;
 import jakarta.persistence.EntityNotFoundException;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -31,12 +30,10 @@ import java.util.Optional;
 
 @RestControllerAdvice
 @RequiredArgsConstructor
-@Slf4j
 @Order(-200)
 public class DefaultJPAExceptionHandlerController implements AdviceTrait {
 
     private static final String PROBLEM_CONSTRAINT_KEY = "constraint_key";
-    private static final String BUILDING_ERROR_RESPONSE = "Building ErrorResponse:";
 
     protected final MessageSource messageSource;
     protected final ContraintsNameResolver contraintsNameResolver;
@@ -44,8 +41,6 @@ public class DefaultJPAExceptionHandlerController implements AdviceTrait {
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<Problem> dataIntegrityViolationExceptionHandler(
             DataIntegrityViolationException exception, NativeWebRequest request) {
-        log.error(DefaultJPAExceptionHandlerController.BUILDING_ERROR_RESPONSE, exception);
-
         String rootMsg = ExceptionUtils.getRootCause(exception).getMessage();
         ProblemBuilder problemBuilder =
                 Problem.builder().withTitle("Conflict").withStatus(Status.CONFLICT);
@@ -68,7 +63,6 @@ public class DefaultJPAExceptionHandlerController implements AdviceTrait {
                 problemBuilder
                         .withDetail("Data constraint violation: '" + exceptionTranslation + "'")
                         .with(PROBLEM_CONSTRAINT_KEY, entry.get().getValue());
-
             } else {
                 problemBuilder
                         .withDetail(
@@ -77,11 +71,6 @@ public class DefaultJPAExceptionHandlerController implements AdviceTrait {
                                         + "' but not found the description for the constraint in the resource bundle")
                         .with(PROBLEM_CONSTRAINT_KEY, "exception.constraint.translation.undefined");
             }
-        } else {
-            problemBuilder
-                    .withDetail(
-                            "Data constraint violation: not found the description for the constraint")
-                    .with(PROBLEM_CONSTRAINT_KEY, "exception.constraint.undefined");
         }
 
         return create(problemBuilder.build(), request);

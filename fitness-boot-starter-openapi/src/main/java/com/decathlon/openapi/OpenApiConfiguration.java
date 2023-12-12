@@ -8,8 +8,6 @@ import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
-import io.swagger.v3.oas.models.security.OAuthFlow;
-import io.swagger.v3.oas.models.security.OAuthFlows;
 import io.swagger.v3.oas.models.security.Scopes;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
@@ -23,10 +21,15 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
+import java.util.Arrays;
+
 @Configuration
 @ComponentScan("com.decathlon.openapi")
 @PropertySource("classpath:openapi.properties")
 public class OpenApiConfiguration {
+
+    private static final String SECURITY_SCHEMA_NAME_JWT = "JWT";
+    private static final String SECURITY_SCHEMA_NAME_API_KEY_AUTH = "ApiKeyAuth";
 
     @Bean
     ModelResolver modelResolver(ObjectMapper objectMapper) {
@@ -37,55 +40,45 @@ public class OpenApiConfiguration {
     @ConditionalOnProperty(
             prefix = "app",
             name = "open-api-bean.enabled",
-            matchIfMissing = true,
-            havingValue = "true")
+            havingValue = "true",
+            matchIfMissing = true)
     OpenAPI customOpenAPI(
             @Value("${springdoc.version}") String appVersion,
-            @Value("${spring.security.oauth2.client.access-token-uri}") String tokenUrl,
-            @Value("${spring.security.oauth2.client.authorization-url}") String authorizationUrl,
-            @Value("${app.swagger.server-path}") String swaggerServerPath) {
+            @Value("${springdoc.api-title}") String apiTitle,
+            @Value("${app.swagger.server-paths}") String[] swaggerServerPaths) {
         Scopes scopes = new Scopes();
         scopes.addString("read", "apis");
 
-        OAuthFlow AuthorizationFlow = new OAuthFlow();
-        AuthorizationFlow.setTokenUrl(tokenUrl);
-        AuthorizationFlow.setScopes(scopes);
-        AuthorizationFlow.setAuthorizationUrl(authorizationUrl);
-
-        OAuthFlows authFlows = new OAuthFlows();
-        authFlows.setAuthorizationCode(AuthorizationFlow);
-
         SecurityRequirement securityRequirement = new SecurityRequirement();
-        securityRequirement.addList("ApiKeyAuth", "[read]");
-        securityRequirement.addList("jwt", "[read]");
+        securityRequirement.addList(SECURITY_SCHEMA_NAME_API_KEY_AUTH, "[read]");
+        securityRequirement.addList(SECURITY_SCHEMA_NAME_JWT, "[read]");
 
         SecurityScheme apiKeyScheme =
                 new SecurityScheme()
+                        .name(SECURITY_SCHEMA_NAME_API_KEY_AUTH)
                         .type(SecurityScheme.Type.APIKEY)
                         .in(In.HEADER)
                         .name("X-API-KEY");
 
         SecurityScheme bearerSchema =
                 new SecurityScheme()
+                        .name(SECURITY_SCHEMA_NAME_JWT)
                         .type(SecurityScheme.Type.HTTP)
                         .scheme("bearer")
-                        .bearerFormat("JWT");
+                        .bearerFormat(SECURITY_SCHEMA_NAME_JWT);
 
-        return new OpenAPI()
-                .addServersItem(new Server().url(swaggerServerPath))
-                .components(
+        OpenAPI openAPI = new OpenAPI();
+        Arrays.asList(swaggerServerPaths)
+                .forEach(path -> openAPI.addServersItem(new Server().url(path)));
+
+        return openAPI.components(
                         new Components()
-                                .addSecuritySchemes(
-                                        "OAuth2",
-                                        new SecurityScheme()
-                                                .type(SecurityScheme.Type.OAUTH2)
-                                                .flows(authFlows))
-                                .addSecuritySchemes("ApiKeyAuth", apiKeyScheme)
-                                .addSecuritySchemes("jwt", bearerSchema))
+                                .addSecuritySchemes(SECURITY_SCHEMA_NAME_API_KEY_AUTH, apiKeyScheme)
+                                .addSecuritySchemes(SECURITY_SCHEMA_NAME_JWT, bearerSchema))
                 .addSecurityItem(securityRequirement)
                 .info(
                         new Info()
-                                .title("Rest Service API")
+                                .title(apiTitle)
                                 .version(appVersion)
                                 .license(
                                         new License()

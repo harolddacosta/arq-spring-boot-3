@@ -7,12 +7,17 @@ import com.decathlon.security.jwt.converters.ResourceRolesConverter;
 import com.decathlon.security.web.filter.ApiKeyRequestFilter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import lombok.extern.slf4j.Slf4j;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
+import org.springframework.boot.actuate.health.HealthEndpoint;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.server.resource.web.authentication.BearerTokenAuthenticationFilter;
 import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
@@ -22,6 +27,7 @@ import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 import java.util.Arrays;
 
 @Import(SecurityProblemSupport.class)
+@Slf4j
 public class DefaultJwtSecurityConfiguration {
 
     private static final String[] AUTH_WHITELIST = {
@@ -32,21 +38,19 @@ public class DefaultJwtSecurityConfiguration {
         "/webjars/**",
         "/api-docs/**",
         "/performance-monitor/**",
-        "/actuator/**",
         "/swagger-ui/**",
         "/v3/**",
         "/v1/ping"
     };
 
     @Autowired private SecurityProblemSupport problemSupport;
+    @Autowired private ObjectMapper mapper;
 
     @Value("${spring.security.oauth2.resourceserver.jwt.resource-access-name}")
     protected String resourceAccessName;
 
     @Value("${app.security.api-key:#{null}}")
     private String apiKey;
-
-    @Autowired private ObjectMapper mapper;
 
     @Bean
     MvcRequestMatcher.Builder mvc(HandlerMappingIntrospector introspector) {
@@ -56,8 +60,8 @@ public class DefaultJwtSecurityConfiguration {
     protected final HttpSecurity preconfigureSecurityFilterChain(
             HttpSecurity http, MvcRequestMatcher.Builder mvc) throws Exception {
         http.cors(withDefaults())
-                .csrf(csrf -> csrf.disable()) // NOSONAR as we use stateless apis
-                .httpBasic(httpBasic -> httpBasic.disable())
+                .csrf(AbstractHttpConfigurer::disable) // NOSONAR as we use stateless apis
+                .httpBasic(AbstractHttpConfigurer::disable)
                 .exceptionHandling(
                         exceptionHandling ->
                                 exceptionHandling
@@ -78,13 +82,17 @@ public class DefaultJwtSecurityConfiguration {
                         requests -> {
                             Arrays.asList(AUTH_WHITELIST)
                                     .forEach(
-                                            authUrl -> {
-                                                requests.requestMatchers(mvc.pattern(authUrl))
-                                                        .permitAll();
-                                            });
+                                            authUrl ->
+                                                    requests.requestMatchers(mvc.pattern(authUrl))
+                                                            .permitAll());
+
+                            requests.requestMatchers(EndpointRequest.to(HealthEndpoint.class))
+                                    .permitAll();
                         });
 
         if (StringUtils.isNotBlank(apiKey)) {
+            log.info("ApiKeyRequestFilter enabled");
+
             http.addFilterAfter(
                     new ApiKeyRequestFilter(apiKey, mapper), BearerTokenAuthenticationFilter.class);
         }

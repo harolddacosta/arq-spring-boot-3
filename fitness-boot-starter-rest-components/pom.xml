@@ -3,17 +3,13 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>com.decathlon</groupId>
-    <artifactId>dkt-fitness-libs-parent</artifactId>
-    <version>1.3.0-SNAPSHOT</version>
+    <groupId>org.assentsoftware</groupId>
+    <artifactId>spring-boot-parent</artifactId>
+    <version>${revision}</version>
   </parent>
 
   <artifactId>dkt-fitness-boot-starter-rest-components</artifactId>
   <packaging>jar</packaging>
-
-  <properties>
-    <sonar.coverage.exclusions>src/main/java/com/decathlon/rest/utils/MultipartUtils.java</sonar.coverage.exclusions>
-  </properties>
 
   <dependencies>
     <dependency>
@@ -31,6 +27,10 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-configuration-processor</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-actuator</artifactId>
     </dependency>
 
     <dependency>
@@ -53,9 +53,13 @@
       <groupId>org.zalando</groupId>
       <artifactId>jackson-datatype-problem</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.openapitools</groupId>
+      <artifactId>jackson-databind-nullable</artifactId>
+    </dependency>
 
     <dependency>
-      <groupId>com.decathlon</groupId>
+      <groupId>org.assentsoftware</groupId>
       <artifactId>dkt-fitness-rest-services-commons</artifactId>
     </dependency>
 

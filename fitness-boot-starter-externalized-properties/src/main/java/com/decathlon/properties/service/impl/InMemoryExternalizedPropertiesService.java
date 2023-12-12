@@ -21,7 +21,7 @@ public class InMemoryExternalizedPropertiesService implements ExternalizedProper
 
     private final Environment env;
 
-    private Map<String, String> propertiesValues = new ConcurrentHashMap<>();
+    private final Map<String, String> propertiesValues = new ConcurrentHashMap<>();
 
     @Override
     public String getConfigurationProperty(String propertyName) {

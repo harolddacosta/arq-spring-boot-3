@@ -22,9 +22,7 @@ import java.util.Optional;
 
 @WebMvcTest(controllers = {AuthorizationRestController.class})
 @Import({DefaultService.class, SecurityOAuth2Configuration.class})
-@TestPropertySource(
-        locations = {"classpath:application.properties", "classpath:oauth.properties"},
-        properties = {"app.jackson.hibernate-module-enable=false"})
+@TestPropertySource(locations = {"classpath:application.properties", "classpath:oauth.properties"})
 @WithMockedUser
 class AuthenticatedUserAuditorTest {
 
@@ -38,7 +36,7 @@ class AuthenticatedUserAuditorTest {
     }
 
     @Test
-    void when_claim_exists() throws Exception {
+    void when_claim_exists() {
         authenticatedUserAuditor = new AuthenticatedUserAuditor("given_name");
 
         Optional<String> audit = authenticatedUserAuditor.getCurrentAuditor();
@@ -47,7 +45,7 @@ class AuthenticatedUserAuditorTest {
     }
 
     @Test
-    void when_claim_does_not_exist() throws Exception {
+    void when_claim_does_not_exist() {
         authenticatedUserAuditor = new AuthenticatedUserAuditor("no_existing_claimg");
 
         Optional<String> audit = authenticatedUserAuditor.getCurrentAuditor();
@@ -56,17 +54,17 @@ class AuthenticatedUserAuditorTest {
     }
 
     @Test
-    void when_evaluation_is_ok() throws Exception {
+    void when_evaluation_is_ok() {
         assertThat(securityEvaluationContextExtension.getExtensionId()).isEqualTo("security");
         assertThat(securityEvaluationContextExtension.getProperties())
                 .contains(Map.entry("countryCode", "ES"));
         assertThat((List<Long>) securityEvaluationContextExtension.getProperties().get("centersId"))
-                .contains(1l, 2l, 3l);
+                .contains(1L, 2L, 3L);
     }
 
     @Test
     @WithMockedUser(centersId = {})
-    void when_evaluation_is_ok_no_centers() throws Exception {
+    void when_evaluation_is_ok_no_centers() {
         assertThat(securityEvaluationContextExtension.getExtensionId()).isEqualTo("security");
         assertThat(securityEvaluationContextExtension.getProperties())
                 .contains(Map.entry("countryCode", "ES"));

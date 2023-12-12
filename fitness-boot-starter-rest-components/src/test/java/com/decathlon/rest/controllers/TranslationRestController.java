@@ -21,7 +21,7 @@ public class TranslationRestController {
 
     @GetMapping
     public ResponseEntity<KeyValueResponseDto> languageHeaderResponse() {
-        return new ResponseEntity<KeyValueResponseDto>(
+        return new ResponseEntity<>(
                 new KeyValueResponseDto(translator.toLocale("msg.translated")), HttpStatus.OK);
     }
 }

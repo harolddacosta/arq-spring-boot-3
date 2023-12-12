@@ -3,7 +3,8 @@ package com.decathlon.rest.config;
 
 import com.decathlon.rest.context.properties.RestConfigParameters;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.Formatter;
@@ -18,19 +19,19 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 @Configuration
+@RequiredArgsConstructor
 public class DatesConfiguration {
 
-    @Autowired private RestConfigParameters restConfigParameters;
+    private final RestConfigParameters restConfigParameters;
 
     @Bean
     Formatter<LocalDate> localDateFormatter() {
-        return new Formatter<LocalDate>() {
-
-            private DateTimeFormatter formatter =
+        return new Formatter<>() {
+            private final DateTimeFormatter formatter =
                     DateTimeFormatter.ofPattern(restConfigParameters.getDates().getDateFormat());
 
             @Override
-            public LocalDate parse(String text, Locale locale) throws ParseException {
+            public LocalDate parse(String text, Locale locale) {
                 return LocalDate.parse(text, formatter);
             }
 
@@ -43,14 +44,13 @@ public class DatesConfiguration {
 
     @Bean
     Formatter<LocalDateTime> localDateTimeFormatter() {
-        return new Formatter<LocalDateTime>() {
-
-            private DateTimeFormatter formatter =
+        return new Formatter<>() {
+            private final DateTimeFormatter formatter =
                     DateTimeFormatter.ofPattern(
                             restConfigParameters.getDates().getDateTimeFormat());
 
             @Override
-            public LocalDateTime parse(String text, Locale locale) throws ParseException {
+            public LocalDateTime parse(String text, Locale locale) {
                 return LocalDateTime.parse(text, formatter);
             }
 
@@ -63,9 +63,8 @@ public class DatesConfiguration {
 
     @Bean
     Formatter<Date> dateFormatter() {
-        return new Formatter<Date>() {
-
-            private SimpleDateFormat sdf =
+        return new Formatter<>() {
+            private final SimpleDateFormat sdf =
                     new SimpleDateFormat(restConfigParameters.getDates().getDateTimeFormat());
 
             @Override

@@ -12,8 +12,8 @@ public class FlywayConfiguration {
 
     public FlywayConfiguration(
             DataSource dataSource,
-            @Value("${spring.flyway.locations}") String flywayLocations,
-            @Value("${spring.flyway.table}") String table,
+            @Value("${spring.flyway.locations}") String[] flywayLocations,
+            @Value("${spring.flyway.table}") String flywayHistoryTable,
             @Value("${spring.flyway.repair}") boolean repair) {
         Flyway flyway =
                 Flyway.configure()
@@ -22,7 +22,7 @@ public class FlywayConfiguration {
                         .locations(flywayLocations)
                         .outOfOrder(true)
                         .validateMigrationNaming(true)
-                        .table(table)
+                        .table(flywayHistoryTable)
                         .load();
 
         if (repair) {

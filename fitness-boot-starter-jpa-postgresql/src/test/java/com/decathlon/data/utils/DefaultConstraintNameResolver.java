@@ -3,18 +3,15 @@ package com.decathlon.data.utils;
 
 import com.decathlon.data.transformer.ContraintsNameResolver;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Optional;
 
 @Component
 public class DefaultConstraintNameResolver implements ContraintsNameResolver {
 
-    private static Map<String, String> constraintCodeMap = new HashMap<>();
+    private static final Map<String, String> constraintCodeMap = new HashMap<>();
 
     static {
         constraintCodeMap.put(
@@ -26,13 +23,7 @@ public class DefaultConstraintNameResolver implements ContraintsNameResolver {
     }
 
     @Override
-    public Optional<Entry<String, String>> getConstraintName(String constraintMessage) {
-        if (StringUtils.isNotBlank(constraintMessage)) {
-            return constraintCodeMap.entrySet().stream()
-                    .filter(it -> constraintMessage.contains(it.getKey()))
-                    .findFirst();
-        }
-
-        return Optional.empty();
+    public Map<String, String> getConstraintCodeMap() {
+        return constraintCodeMap;
     }
 }

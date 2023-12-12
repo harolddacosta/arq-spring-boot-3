@@ -10,6 +10,8 @@ import com.decathlon.core.response.FieldErrorResource;
 import com.decathlon.rest.RestServicesConfiguration;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import lombok.extern.slf4j.Slf4j;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,21 +23,21 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.zalando.problem.Problem;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.text.ParseException;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {RestServicesConfiguration.class})
-@TestPropertySource(properties = {"app.jackson.hibernate-module-enable=false"})
+@TestPropertySource(locations = {"classpath:rest.properties", "classpath:application.properties"})
+@Slf4j
 class ExceptionUtilsTest {
 
     @Autowired private ObjectMapper mappingJackson2HttpMessageConverter;
 
     @Test
-    void test_problem_json_mapping() throws IOException, ParseException {
+    void test_problem_json_mapping() throws IOException {
         for (int fileIndex = 1; fileIndex <= 7; fileIndex++) {
             String jsonErrorResponse =
                     new String(
@@ -51,7 +53,7 @@ class ExceptionUtilsTest {
                             "Bad Request",
                             null,
                             jsonErrorResponse.getBytes(),
-                            Charset.forName("UTF-8"));
+                            StandardCharsets.UTF_8);
 
             Optional<Problem> errorResponse =
                     ExceptionUtils.convertFromHttpClientErrorException(
@@ -76,6 +78,8 @@ class ExceptionUtilsTest {
                                 mappingJackson2HttpMessageConverter.readValue(
                                         fieldsErrorsString, FieldErrorResource[].class));
 
+                log.debug("FieldErrorsResource:{}", fieldErrorsResource.get(0));
+
                 assertEquals("FieldError title", fieldErrorsResource.get(0).getTitle());
                 assertEquals(
                         "Excepcion en campo traducida", fieldErrorsResource.get(0).getDetail());
@@ -87,7 +91,7 @@ class ExceptionUtilsTest {
     }
 
     @Test
-    void test_problem_json_mapping_bytes() throws IOException, ParseException {
+    void test_problem_json_mapping_bytes() throws IOException {
         for (int fileIndex = 1; fileIndex <= 7; fileIndex++) {
             String jsonErrorResponse =
                     new String(
@@ -103,7 +107,7 @@ class ExceptionUtilsTest {
                             "Bad Request",
                             null,
                             jsonErrorResponse.getBytes(),
-                            Charset.forName("UTF-8"));
+                            StandardCharsets.UTF_8);
 
             Optional<Problem> errorResponse =
                     ExceptionUtils.convertFromHttpClientErrorException(
@@ -139,7 +143,7 @@ class ExceptionUtilsTest {
     }
 
     @Test
-    void test_problem_json_mapping_bytes_error() throws IOException, ParseException {
+    void test_problem_json_mapping_bytes_error() throws IOException {
         String jsonErrorResponse =
                 new String(
                         getClass()
@@ -153,7 +157,7 @@ class ExceptionUtilsTest {
                         "Bad Request",
                         null,
                         jsonErrorResponse.getBytes(),
-                        Charset.forName("UTF-8"));
+                        StandardCharsets.UTF_8);
 
         Optional<LogicException> errorResponse =
                 ExceptionUtils.convertFromHttpClientErrorException(
@@ -165,7 +169,7 @@ class ExceptionUtilsTest {
     }
 
     @Test
-    void test_problem_json_mapping_error() throws IOException, ParseException {
+    void test_problem_json_mapping_error() throws IOException {
         String jsonErrorResponse =
                 new String(
                         getClass()
@@ -179,7 +183,7 @@ class ExceptionUtilsTest {
                         "Bad Request",
                         null,
                         jsonErrorResponse.getBytes(),
-                        Charset.forName("UTF-8"));
+                        StandardCharsets.UTF_8);
 
         Optional<NullPointerException> errorResponse =
                 ExceptionUtils.convertFromHttpClientErrorException(

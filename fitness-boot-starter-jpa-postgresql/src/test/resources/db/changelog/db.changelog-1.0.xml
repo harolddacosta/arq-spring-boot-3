@@ -50,8 +50,8 @@
             <column name="parentesco_contacto_dos" type="VARCHAR"/>
             <column name="edad" type="FLOAT4"/>
             <column name="url1" type="VARCHAR(255)"/>
-            <column name="url1_file_name" type="VARCHAR(255)"/>
-            <column name="url1_file_size" type="FLOAT8"/>
+            <column name="url1file_name" type="VARCHAR(255)"/>
+            <column name="url1file_size" type="FLOAT8"/>
             <column name="comentarios_adicionales" type="VARCHAR"/>
             <column name="nombre_doctor_referencia" type="VARCHAR"/>
             <column name="telefono_contacto_doctor_referencia" type="VARCHAR(32)"/>
@@ -71,10 +71,10 @@
             <column name="id_pais" type="BIGINT"/>
             <column name="id_codigo_postal" type="BIGINT" />	
             <column name="id_tipo_documento_identificacion" type="BIGINT" />
-            <column defaultValue="&quot;current_user&quot;()" name="usuario_creacion" type="VARCHAR(64)"/>
-            <column defaultValueComputed="now()" name="fecha_creacion" type="TIMESTAMP WITHOUT TIME ZONE"/>
-            <column name="usuario_modificacion" type="VARCHAR(64)"/>
-            <column name="fecha_modificacion" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column defaultValue="&quot;current_user&quot;()" name="created_by" type="VARCHAR(64)"/>
+            <column defaultValueComputed="now()" name="created_date" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="last_modified_by" type="VARCHAR(64)"/>
+            <column name="last_modified_date" type="TIMESTAMP WITHOUT TIME ZONE"/>
             <column defaultValueNumeric="0" name="version" type="BIGINT">
                 <constraints nullable="false"/>
             </column>
