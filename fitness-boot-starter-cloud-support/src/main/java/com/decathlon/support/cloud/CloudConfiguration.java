@@ -8,4 +8,7 @@ import org.springframework.context.annotation.PropertySource;
 @Configuration
 @ComponentScan("com.decathlon.support.cloud")
 @PropertySource("classpath:cloud.properties")
-public class CloudConfiguration {}
+public class CloudConfiguration {
+    // Added comment in release
+
+}
