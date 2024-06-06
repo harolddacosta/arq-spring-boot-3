@@ -63,6 +63,9 @@ public class JwtDecodersBaseConfiguration {
             jwtDecoder =
                     NimbusJwtDecoder.withPublicKey((RSAPublicKey) getPublicKeyInPemFormat())
                             .build();
+        } else {
+            throw new IllegalArgumentException(
+                    "The publicKeyDecoder can't be configured as pem must be declared");
         }
 
         configureDecoder(jwtDecoder, claimsConverter);
