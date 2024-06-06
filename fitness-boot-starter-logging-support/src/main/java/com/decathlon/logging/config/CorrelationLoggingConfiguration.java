@@ -1,4 +1,4 @@
-/* Decathlon (C)2023 */
+/* AssentSoftware (C)2023 */
 package com.decathlon.logging.config;
 
 import com.decathlon.logging.filters.CorrelationMDCInjectionFilter;

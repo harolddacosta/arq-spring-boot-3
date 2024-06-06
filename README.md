@@ -76,18 +76,18 @@ For this architecture we have defined __10 (ten) modules__, each of them defined
 
 | Module  | Briefing |
 | ------ | -------- |
-| SpringWatch-rest-services-bom 								| A preconfigured POM with most of needs for a complete microservices impl |
-| SpringWatch-rest-services-commons 					| Common libraries used in most of the starters |
-| SpringWatch-boot-starter-rest-components 			| A set of preconfigured components for rest implementations |
-| SpringWatch-boot-starter-openapi						| When added, the swagger is enabled |
-| SpringWatch-boot-starter-externalized-properties	| A set of classes to allow create/read/write application properties from DB |
-| SpringWatch-boot-starter-security-oauth2-test		| Classes to use in security tests, mock users, mock jdbc, etc |
-| SpringWatch-boot-starter-security-oauth2				| A set of classes where the OAuth JWT implementation is preconfigured and ready to use  |
-| SpringWatch-boot-starter-jpa-postgresql				| Full configuration for PostgreSQL JPA |
-| SpringWatch-boot-starter-logging-support				| A preconfigured Logbook classes, plus a set of classes to do auditing using logs |
-| SpringWatch-boot-starter-cloud-support				| Cloud support to use classes like feign. |
+| spring-watch-rest-services-bom 								| A preconfigured POM with most of needs for a complete microservices impl |
+| spring-watch-rest-services-commons 					| Common libraries used in most of the starters |
+| spring-watch-boot-starter-rest-components 			| A set of preconfigured components for rest implementations |
+| spring-watch-boot-starter-openapi						| When added, the swagger is enabled |
+| spring-watch-boot-starter-externalized-properties	| A set of classes to allow create/read/write application properties from DB |
+| spring-watch-boot-starter-security-oauth2-test		| Classes to use in security tests, mock users, mock jdbc, etc |
+| spring-watch-boot-starter-security-oauth2				| A set of classes where the OAuth JWT implementation is preconfigured and ready to use  |
+| spring-watch-boot-starter-jpa-postgresql				| Full configuration for PostgreSQL JPA |
+| spring-watch-boot-starter-logging-support				| A preconfigured Logbook classes, plus a set of classes to do auditing using logs |
+| spring-watch-boot-starter-cloud-support				| Cloud support to use classes like feign. |
 
-### SpringWatch-boot-starter-cloud-support
+### spring-watch-boot-starter-cloud-support
 
 This module is responsible of cloud features like:
 - **Spring cloud config**: provides server-side and client-side support for externalized configuration in a distributed system.
@@ -109,7 +109,7 @@ Simply add the dependency in the project and you will have it working.
 ```xml
 <dependency>
 	<groupId>com.assentsoftware</groupId>
-	<artifactId>SpringWatch-boot-starter-cloud-support</artifactId>
+	<artifactId>spring-watch-boot-starter-cloud-support</artifactId>
 </dependency>
 ```
 
@@ -178,7 +178,7 @@ This properties are present at module level, so you can replace them by project 
 | spring.cloud.openfeign.client.config.default.read-timeout		| **5000** |
 | spring.cloud.openfeign.client.config.default.logger-level		| **basic** |
 
-### SpringWatch-boot-starter-externalized-properties
+### spring-watch-boot-starter-externalized-properties
 
 - This module is responsible for reading externalized properties from either a **database** or **in memory** repository.
 - The main purpose is to establish a **read/write blocking access** to properties in database when concurrent process flags needs to be read/write from different microservices.
@@ -201,7 +201,7 @@ Simply add the dependency in the project and you will have it working.
 ```xml
 <dependency>
 	<groupId>com.assentsoftware</groupId>
-	<artifactId>SpringWatch-boot-starter-externalized-properties</artifactId>
+	<artifactId>spring-watch-boot-starter-externalized-properties</artifactId>
 </dependency>
 ```
 
@@ -346,7 +346,7 @@ This properties are present at module level, so you can replace them by project 
 | app.database.configurations-table-insert					| **INSERT INTO CONFIGURATION(PROPERTY, PROPERTY_VALUE) VALUES (?,?)** |
 | app.database.configurations-table-select-for-update		| **SELECT PROPERTY_VALUE, PROPERTY FROM CONFIGURATION WHERE PROPERTY = ?** |
 
-### SpringWatch-boot-starter-jpa-postgresql
+### spring-watch-boot-starter-jpa-postgresql
 
 This module is responsible of :
 - Default **Flyway** configuration (to allow flyway execution only after Hibernate schema creation)
@@ -388,7 +388,7 @@ Simply add the dependency in the project and you will have it working.
 ```xml
 <dependency>
 	<groupId>com.assentsoftware</groupId>
-	<artifactId>SpringWatch-boot-starter-jpa-postgresql</artifactId>
+	<artifactId>spring-watch-boot-starter-jpa-postgresql</artifactId>
 </dependency>
 ```
 
@@ -612,7 +612,7 @@ This properties are present at module level, so you can replace them by project 
 | spring.jpa.properties.hibernate.jdbc.time_zone					| **UTC**						| See Hibernate documentation |
 | spring.jpa.properties.hibernate.id.db_structure_naming_strategy	| **not set**					| Values:com.assentsoftware.data.strategies.SuffixIdSeqNamingStrategy when need to add id_seq at the end |
 
-### SpringWatch-boot-starter-logging-support
+### spring-watch-boot-starter-logging-support
 
 This module is responsible of:
 - Configure `logbook` filter from zalando
@@ -634,7 +634,7 @@ Simply add the dependency in the project and you will have it working.
 ```xml
 <dependency>
 	<groupId>com.assentsoftware</groupId>
-	<artifactId>SpringWatch-boot-starter-logging-support</artifactId>
+	<artifactId>spring-watch-boot-starter-logging-support</artifactId>
 </dependency>
 ```
 
@@ -768,7 +768,7 @@ This properties are present at module level, so you can replace them by project 
 | app.logging.auditable.annotation.enabled	| **true** |
 | app.logging.correlation.filter.url		| **/\*** |
 
-### SpringWatch-boot-starter-openapi
+### spring-watch-boot-starter-openapi
 
 This module is responsible by features like:
 - **Swagger and OpenAPI**: Swagger is an open source set of rules, specifications and tools for developing and describing RESTful APIs. The Swagger framework allows developers to create interactive, machine and human-readable API documentation.
@@ -788,7 +788,7 @@ Simply add the dependency in the project and you will have it working.
 ```xml
 <dependency>
 	<groupId>com.assentsoftware</groupId>
-	<artifactId>SpringWatch-boot-starter-openapi</artifactId>
+	<artifactId>spring-watch-boot-starter-openapi</artifactId>
 </dependency>
 ```
 
@@ -808,7 +808,7 @@ This properties are present at module level, so you can replace them by project 
 | app.open-api-bean.enabled								| **true** | Enable the security schemas for the UI Page, in order to inject JWT and API Key
 | app.swagger.server-paths								| **http://localhost:8888/set-this-property-correctly/app.swagger.server-path** | Property to be replaced for the servers where the API is deployed, accept values separated by commas.
 
-### SpringWatch-boot-starter-rest-components
+### spring-watch-boot-starter-rest-components
 
 REST module with multiple preconfigured properties for use in building microservices, e.g.:
 - Correct global configuration for the format of __dates__ in parameters and body of JSON bodies, in addition to the preconfiguration of the serializers to cover all the points where dates are indicated and to be able to homogenize the formats, very flexible
@@ -845,7 +845,7 @@ Simply add the dependency in the project and you will have it working.
 ```xml
 <dependency>
 	<groupId>com.assentsoftware</groupId>
-	<artifactId>SpringWatch-boot-starter-rest-components</artifactId>
+	<artifactId>spring-watch-boot-starter-rest-components</artifactId>
 </dependency>
 ```
 
@@ -1065,7 +1065,7 @@ This properties are present at module level, so you can replace them by project 
 | app.locales.default-locale								| **es** | Default language to use |
 | app.locales.supported-locales							| **es,fr,en,pt,ca** | Set of languages allowed |
 
-### SpringWatch-boot-starter-security-oauth2
+### spring-watch-boot-starter-security-oauth2
 
 This module brings the security configuration to the project, a JWT based security is preconfigured to be used with the followings features:
 
@@ -1100,7 +1100,7 @@ Simply add the dependency in the project and you will have it working.
 ```xml
 <dependency>
 	<groupId>com.assentsoftware</groupId>
-	<artifactId>SpringWatch-boot-starter-security-oauth2</artifactId>
+	<artifactId>spring-watch-boot-starter-security-oauth2</artifactId>
 </dependency>
 ```
 

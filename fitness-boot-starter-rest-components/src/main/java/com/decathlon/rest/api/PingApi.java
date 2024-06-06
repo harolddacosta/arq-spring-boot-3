@@ -1,4 +1,4 @@
-/* Decathlon (C)2022 */
+/* AssentSoftware (C)2022 */
 package com.decathlon.rest.api;
 
 import org.springframework.boot.actuate.health.HealthComponent;

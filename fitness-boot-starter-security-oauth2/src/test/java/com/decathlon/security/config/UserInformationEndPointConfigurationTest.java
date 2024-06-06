@@ -1,4 +1,4 @@
-/* Decathlon (C)2023 */
+/* AssentSoftware (C)2023 */
 package com.decathlon.security.config;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -12,7 +12,7 @@ class UserInformationEndPointConfigurationTest {
     void userInfoRestTemplateConfiguration() {
         UserInformationEndPointConfiguration configuration =
                 new UserInformationEndPointConfiguration();
-        RestTemplate restTemplate = configuration.restTemplateForUserInfo();
+        RestTemplate restTemplate = configuration.restTemplateToUseWithJwtOperations();
         configuration.userInformationService("http://localhost:8080/user-info-uri", restTemplate);
 
         assertNotNull(restTemplate);

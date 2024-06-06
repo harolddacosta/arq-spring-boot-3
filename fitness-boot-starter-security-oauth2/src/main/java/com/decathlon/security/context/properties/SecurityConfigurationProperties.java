@@ -1,7 +1,8 @@
-/* Decathlon (C)2023 */
+/* AssentSoftware (C)2023 */
 package com.decathlon.security.context.properties;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
@@ -10,14 +11,16 @@ import java.io.Serializable;
 
 @Component
 @ConfigurationProperties(prefix = "app")
-@Data
-public class SecurityConfigParameters implements Serializable {
+@Setter
+@Getter
+public class SecurityConfigurationProperties implements Serializable {
 
     private static final long serialVersionUID = 695255049263841719L;
 
     private CorsProperties cors;
 
-    @Data
+    @Setter
+    @Getter
     public static class CorsProperties implements Serializable {
 
         private static final long serialVersionUID = -4543679911579483522L;

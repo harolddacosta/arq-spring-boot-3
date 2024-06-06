@@ -1,4 +1,4 @@
-/* Decathlon (C)2023 */
+/* AssentSoftware (C)2023 */
 package com.decathlon.data.domain;
 // Generated 10 jul. 2021 0:09:56 by Hibernate Tools 3.2.2.GA and Assent Architecture
 

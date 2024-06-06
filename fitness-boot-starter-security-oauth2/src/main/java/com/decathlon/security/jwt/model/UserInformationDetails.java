@@ -1,4 +1,4 @@
-/* Decathlon (C)2023 */
+/* AssentSoftware (C)2023 */
 package com.decathlon.security.jwt.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;

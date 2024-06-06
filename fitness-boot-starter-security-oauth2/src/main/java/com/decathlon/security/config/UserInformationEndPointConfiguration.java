@@ -1,4 +1,4 @@
-/* Decathlon (C)2023 */
+/* AssentSoftware (C)2023 */
 package com.decathlon.security.config;
 
 import com.decathlon.security.jwt.service.UserInformationService;
@@ -19,7 +19,7 @@ import java.util.List;
 public class UserInformationEndPointConfiguration {
 
     @Bean
-    RestTemplate restTemplateForUserInfo() {
+    RestTemplate restTemplateToUseWithJwtOperations() {
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.setErrorHandler(new OAuth2ErrorResponseErrorHandler());
         restTemplate.setMessageConverters(getJsonMessageConverters());
@@ -31,8 +31,8 @@ public class UserInformationEndPointConfiguration {
     UserInformationService userInformationService(
             @Value("${spring.security.oauth2.client.provider.decathlon.user-info-uri}")
                     String userInfoUri,
-            RestTemplate restTemplateForUserInfo) {
-        return new UserInformationService(userInfoUri, restTemplateForUserInfo);
+            RestTemplate restTemplateToUseWithJwtOperations) {
+        return new UserInformationService(userInfoUri, restTemplateToUseWithJwtOperations);
     }
 
     private List<HttpMessageConverter<?>> getJsonMessageConverters() {

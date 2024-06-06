@@ -1,4 +1,4 @@
-/* Decathlon (C)2023 */
+/* AssentSoftware (C)2023 */
 package com.decathlon.logging.utils;
 
 import com.decathlon.logging.dto.PersonDto;

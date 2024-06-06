@@ -1,4 +1,4 @@
-/* Decathlon (C)2023 */
+/* AssentSoftware (C)2023 */
 package com.decathlon.data.transformer;
 
 import org.apache.commons.lang3.StringUtils;

@@ -1,4 +1,4 @@
-/* Decathlon (C)2023 */
+/* AssentSoftware (C)2023 */
 package com.decathlon.rest.utils.dtos;
 
 import com.decathlon.rest.context.properties.RestConfigParameters;

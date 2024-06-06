@@ -5,8 +5,9 @@
   <groupId>org.assentsoftware</groupId>
   <artifactId>spring-boot-parent</artifactId>
   <version>${revision}</version>
+
   <packaging>pom</packaging>
-  <name>arq-spring-boot-3</name>
+  <name>spring-boot-arch</name>
 
   <modules>
     <module>fitness-rest-bom</module>
@@ -22,9 +23,9 @@
   </modules>
 
   <scm>
-    <connection>scm:git:https://github.com/EdminioPerez/arq-spring-boot-3.git</connection>
+    <connection>scm:git:https://github.com/harolddacosta/arq-spring-boot-3.git</connection>
     <tag>HEAD</tag>
-    <url>https://github.com/EdminioPerez/arq-spring-boot-3.git</url>
+    <url>https://github.com/harolddacosta/arq-spring-boot-3.git</url>
   </scm>
 
   <distributionManagement>
@@ -41,24 +42,24 @@
   </distributionManagement>
 
   <properties>
-    <revision>3.3.0-SNAPSHOT</revision>
+    <revision>3.1.0-SNAPSHOT</revision>
 
     <java.version>17</java.version>
 
-    <spring-boot.version>3.1.7</spring-boot.version>
-    <spring-cloud.version>2022.0.4</spring-cloud.version>
+    <spring-boot.version>3.1.12</spring-boot.version>
+    <spring-cloud.version>2022.0.5</spring-cloud.version>
 
     <commons-beanutils.version>1.9.4</commons-beanutils.version>
-    <embedded-postgresql.version>3.1.1</embedded-postgresql.version>
+    <embedded-postgresql.version>3.1.5</embedded-postgresql.version>
     <h2.version>2.2.224</h2.version>
     <hypersistence-utils-hibernate-62.version>3.4.3</hypersistence-utils-hibernate-62.version>
     <jackson-databind-nullable.version>0.2.6</jackson-databind-nullable.version>
     <javafaker.version>1.0.2</javafaker.version>
     <javasimon.version>4.2.0</javasimon.version>
     <jboss-threads.version>3.5.0.Final</jboss-threads.version>
-    <jose4j.version>0.9.3</jose4j.version>
+    <jose4j.version>0.9.6</jose4j.version>
     <logbook.version>3.0.0</logbook.version>
-    <lombok.version>1.18.30</lombok.version>
+    <lombok.version>1.18.32</lombok.version>
     <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
     <logstash-logback-encoder.version>7.4</logstash-logback-encoder.version>
     <mapstruct.version>1.5.3.Final</mapstruct.version>
@@ -72,19 +73,19 @@
     <meanbean.version>3.0.0-M9</meanbean.version>
 
     <artifactregistry-maven-wagon.version>2.2.1</artifactregistry-maven-wagon.version>
-    <build-helper-maven-plugin.version>3.3.0</build-helper-maven-plugin.version>
+    <build-helper-maven-plugin.version>3.5.0</build-helper-maven-plugin.version>
     <flatten-maven-plugin.version>1.2.7</flatten-maven-plugin.version>
     <frontend-maven-plugin.version>1.12.1</frontend-maven-plugin.version>
     <hibernate3-maven-plugin.version>2.2</hibernate3-maven-plugin.version>
     <jacoco-maven-plugin.version>0.8.9</jacoco-maven-plugin.version>
-    <gitflow-maven-plugin.version>1.19.0</gitflow-maven-plugin.version>
+    <gitflow-maven-plugin.version>1.21.0</gitflow-maven-plugin.version>
     <maven-compiler-plugin.version>3.12.1</maven-compiler-plugin.version>
-    <maven-failsafe-plugin.version>2.22.2</maven-failsafe-plugin.version>
-    <maven-javadoc-plugin.version>3.4.1</maven-javadoc-plugin.version>
+    <maven-failsafe-plugin.version>3.0.0</maven-failsafe-plugin.version>
+    <maven-javadoc-plugin.version>3.6.3</maven-javadoc-plugin.version>
     <maven-release-plugin.version>3.0.0-M6</maven-release-plugin.version>
     <maven-replacer-plugin.version>1.5.3</maven-replacer-plugin.version>
     <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
-    <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
+    <maven-surefire-plugin.version>3.2.5</maven-surefire-plugin.version>
     <sonar-maven-plugin.version>3.9.1.2184</sonar-maven-plugin.version>
     <sortpom-maven-plugin.version>3.2.1</sortpom-maven-plugin.version>
     <spotless-maven-plugin.version>2.36.0</spotless-maven-plugin.version>
@@ -339,6 +340,11 @@
               <phase>clean</phase>
             </execution>
           </executions>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-source-plugin</artifactId>
+          <version>${maven-source-plugin.version}</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -597,6 +603,7 @@
             </formats>
             <java>
               <removeUnusedImports></removeUnusedImports>
+              <toggleOffOn></toggleOffOn>
 
               <!-- apply a specific flavor of google-java-format -->
               <googleJavaFormat>
@@ -605,7 +612,7 @@
               </googleJavaFormat>
 
               <licenseHeader>
-                <content>/* Decathlon (C)$YEAR */</content>
+                <content>/* AssentSoftware (C)$YEAR */</content>
               </licenseHeader>
             </java>
           </configuration>
@@ -641,6 +648,10 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>flatten-maven-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
       </plugin>
       <plugin>
         <groupId>org.jacoco</groupId>

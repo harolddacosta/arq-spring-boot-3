@@ -1,4 +1,4 @@
-/* Decathlon (C)2023 */
+/* AssentSoftware (C)2023 */
 package com.decathlon.data.controllers;
 
 import com.decathlon.core.exceptions.ResourceNotFoundException;
@@ -15,8 +15,10 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.NoSuchMessageException;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.annotation.Order;
+import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -38,14 +40,22 @@ public class DefaultJPAExceptionHandlerController implements AdviceTrait {
     protected final MessageSource messageSource;
     protected final ContraintsNameResolver contraintsNameResolver;
 
-    @ExceptionHandler(DataIntegrityViolationException.class)
+    @ExceptionHandler({
+        DataIntegrityViolationException.class,
+        ObjectOptimisticLockingFailureException.class
+    })
     public ResponseEntity<Problem> dataIntegrityViolationExceptionHandler(
-            DataIntegrityViolationException exception, NativeWebRequest request) {
+            DataAccessException exception, NativeWebRequest request) {
         String rootMsg = ExceptionUtils.getRootCause(exception).getMessage();
         ProblemBuilder problemBuilder =
                 Problem.builder().withTitle("Conflict").withStatus(Status.CONFLICT);
 
-        if (StringUtils.isNotBlank(rootMsg)) {
+        if (exception instanceof ObjectOptimisticLockingFailureException) {
+            problemBuilder
+                    .withDetail(
+                            "Optimistic locking: the record has been modified by other user/process, the version field is'nt the latest")
+                    .with(PROBLEM_CONSTRAINT_KEY, "exception.optimistic.locking.failure");
+        } else if (StringUtils.isNotBlank(rootMsg)) {
             Optional<Map.Entry<String, String>> entry =
                     contraintsNameResolver.getConstraintName(rootMsg);
 

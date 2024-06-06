@@ -1,4 +1,4 @@
-/* Decathlon (C)2023 */
+/* AssentSoftware (C)2023 */
 package com.decathlon.security.jwt.service;
 
 import static org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED;
@@ -20,7 +20,7 @@ import org.springframework.web.client.RestTemplate;
 public class UserInformationService {
 
     private final String userInfoUri;
-    private final RestTemplate restTemplate;
+    private final RestTemplate restTemplateToUseWithJwtOperations;
 
     @Cacheable(key = "#sub", cacheNames = "userInformation")
     public UserInformationDetails getUserInformation(final String sub, final String token) {
@@ -32,7 +32,7 @@ public class UserInformationService {
         final HttpEntity<MultiValueMap<String, String>> userInformationRequest =
                 new HttpEntity<>(map, headers);
         try {
-            return restTemplate.postForObject(
+            return restTemplateToUseWithJwtOperations.postForObject(
                     userInfoUri, userInformationRequest, UserInformationDetails.class);
         } catch (HttpClientErrorException.Unauthorized e) {
             throw new AccessDeniedException(

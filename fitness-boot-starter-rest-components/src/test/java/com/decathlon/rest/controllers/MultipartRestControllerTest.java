@@ -1,4 +1,4 @@
-/* Decathlon (C)2023 */
+/* AssentSoftware (C)2023 */
 package com.decathlon.rest.controllers;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;

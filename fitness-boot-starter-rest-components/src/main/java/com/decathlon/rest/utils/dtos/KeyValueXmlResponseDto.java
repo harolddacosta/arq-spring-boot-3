@@ -1,4 +1,4 @@
-/* Decathlon (C)2023 */
+/* AssentSoftware (C)2023 */
 package com.decathlon.rest.utils.dtos;
 
 import jakarta.xml.bind.annotation.XmlAccessType;

@@ -1,4 +1,4 @@
-/* Decathlon (C)2023 */
+/* AssentSoftware (C)2023 */
 package com.decathlon.data.domain;
 
 import lombok.RequiredArgsConstructor;
@@ -29,7 +29,7 @@ public final class AuthenticatedUserAuditor implements AuditorAware<String> {
                 return Optional.of(
                         (String) jwtAuthenticationToken.getTokenAttributes().get(claimForAuditing));
             } else {
-                log.info(
+                log.warn(
                         "The claim selected '{}' for auditing does not exists, fallback to name, please select a claim that effectively exists in the jwt",
                         claimForAuditing);
             }

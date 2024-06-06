@@ -1,7 +1,5 @@
-/* Decathlon (C)2023 */
+/* AssentSoftware (C)2023 */
 package com.decathlon.security.config;
-
-import com.decathlon.security.jwt.converters.ResourceRolesConverter;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -19,18 +17,19 @@ public class JwtSecurityConfiguration extends DefaultJwtSecurityConfiguration {
     @Bean
     SecurityFilterChain configureSecurityFilterChain(
             HttpSecurity http, MvcRequestMatcher.Builder mvc) throws Exception {
-        super.preconfigureSecurityFilterChain(http, mvc);
+        HttpSecurity httpSecurity = super.preconfigureSecurityFilterChain(http, mvc);
 
         log.trace("The resourceAccessName configured is:{}", resourceAccessName);
 
-        http.oauth2ResourceServer(
-                oauth2 ->
-                        oauth2.jwt(
-                                jwt ->
-                                        jwt.jwtAuthenticationConverter(
-                                                new ResourceRolesConverter(resourceAccessName))));
+        // http.oauth2ResourceServer(
+        // oauth2 ->
+        // oauth2.jwt(
+        // jwt ->
+        // jwt.jwtAuthenticationConverter(
+        // new
+        // ResourceRolesConverter(resourceAccessName))));
 
-        http.authorizeHttpRequests(
+        httpSecurity.authorizeHttpRequests(
                 authz ->
                         authz.requestMatchers(mvc.pattern(HttpMethod.GET, "/api/v1/public/**"))
                                 .permitAll()
@@ -43,6 +42,6 @@ public class JwtSecurityConfiguration extends DefaultJwtSecurityConfiguration {
                                 .anyRequest()
                                 .authenticated());
 
-        return http.build();
+        return httpSecurity.build();
     }
 }

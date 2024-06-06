@@ -1,4 +1,4 @@
-/* Decathlon (C)2023 */
+/* AssentSoftware (C)2023 */
 package com.decathlon.rest.http.client;
 
 import lombok.extern.slf4j.Slf4j;

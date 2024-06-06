@@ -1,4 +1,4 @@
-/* Decathlon (C)2024 */
+/* AssentSoftware (C)2024 */
 package com.decathlon.data.context.properties;
 
 import lombok.Getter;

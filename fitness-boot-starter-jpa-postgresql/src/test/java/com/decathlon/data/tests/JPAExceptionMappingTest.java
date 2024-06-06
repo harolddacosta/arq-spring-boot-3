@@ -1,9 +1,10 @@
-/* Decathlon (C)2023 */
+/* AssentSoftware (C)2023 */
 package com.decathlon.data.tests;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -139,6 +140,40 @@ class JPAExceptionMappingTest {
                                 "$.detail",
                                 is("Data constraint violation: 'exception.msas.exists'")))
                 .andExpect(jsonPath("$.constraint_key", is("exception.msas.exists")))
+                .andExpect(status().isConflict());
+    }
+
+    @Test
+    void error_when_version_is_same_on_second_save() throws Exception {
+        PersonDto entityToSave = ObjectsBuilderUtils.createFullPersonDto(faker);
+        entityToSave.setIdentityDocument(UUID.randomUUID().toString().substring(0, 16));
+
+        mockMvc.perform(
+                        post("/api/v1/persons")
+                                .content(objectMapper.writeValueAsString(entityToSave))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .characterEncoding("UTF-8"))
+                .andDo(print())
+                .andExpect(header().string("Content-Type", "application/json;charset=UTF-8"))
+                .andExpect(status().isCreated());
+
+        entityToSave.setVersion(0l);
+
+        mockMvc.perform(
+                        put("/api/v1/persons")
+                                .content(objectMapper.writeValueAsString(entityToSave))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .characterEncoding("UTF-8"))
+                .andDo(print())
+                .andExpect(
+                        header().string("Content-Type", "application/problem+json;charset=UTF-8"))
+                .andExpect(jsonPath("$.title", is("Conflict")))
+                .andExpect(jsonPath("$.status", is(409)))
+                .andExpect(
+                        jsonPath(
+                                "$.detail",
+                                is(
+                                        "Optimistic locking: the record has been modified by other user/process, the version field is'nt the latest")))
                 .andExpect(status().isConflict());
     }
 

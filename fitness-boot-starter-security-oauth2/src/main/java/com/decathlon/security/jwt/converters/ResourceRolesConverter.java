@@ -1,4 +1,4 @@
-/* Decathlon (C)2023 */
+/* AssentSoftware (C)2023 */
 package com.decathlon.security.jwt.converters;
 
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

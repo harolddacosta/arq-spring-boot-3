@@ -1,4 +1,4 @@
-/* Decathlon (C)2023 */
+/* AssentSoftware (C)2023 */
 package com.decathlon.data.mappers.decorators;
 
 import com.decathlon.data.domain.Persona;

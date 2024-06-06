@@ -1,4 +1,4 @@
-/* Decathlon (C)2023 */
+/* AssentSoftware (C)2023 */
 package com.decathlon.rest.config;
 
 import com.decathlon.rest.http.client.LocaleHeaderInterceptor;

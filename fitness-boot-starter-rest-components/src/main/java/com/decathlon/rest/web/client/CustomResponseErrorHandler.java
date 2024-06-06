@@ -1,4 +1,4 @@
-/* Decathlon (C)2023 */
+/* AssentSoftware (C)2023 */
 package com.decathlon.rest.web.client;
 
 import com.decathlon.core.exceptions.LogicException;

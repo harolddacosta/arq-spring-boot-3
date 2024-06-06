@@ -1,4 +1,4 @@
-/* Decathlon (C)2023 */
+/* AssentSoftware (C)2023 */
 package com.decathlon.logging.config;
 
 import static org.springframework.security.config.Customizer.withDefaults;

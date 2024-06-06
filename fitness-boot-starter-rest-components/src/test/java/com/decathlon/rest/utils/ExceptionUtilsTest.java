@@ -1,4 +1,4 @@
-/* Decathlon (C)2023 */
+/* AssentSoftware (C)2023 */
 package com.decathlon.rest.utils;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

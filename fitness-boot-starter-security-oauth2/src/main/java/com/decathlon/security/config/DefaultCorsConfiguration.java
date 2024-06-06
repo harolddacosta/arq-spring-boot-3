@@ -1,7 +1,7 @@
-/* Decathlon (C)2023 */
+/* AssentSoftware (C)2023 */
 package com.decathlon.security.config;
 
-import com.decathlon.security.context.properties.SecurityConfigParameters;
+import com.decathlon.security.context.properties.SecurityConfigurationProperties;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -21,7 +21,8 @@ public class DefaultCorsConfiguration {
 
     @Bean
     //    @ConditionalOnMissingFilterBean(value = CorsFilter.class)
-    CorsConfigurationSource corsConfigurationSource(SecurityConfigParameters configParameters) {
+    CorsConfigurationSource corsConfigurationSource(
+            SecurityConfigurationProperties configParameters) {
         log.info("Configuring the CorsConfigurationSource as the CorsFilter is not present");
 
         CorsConfiguration configuration = new CorsConfiguration();

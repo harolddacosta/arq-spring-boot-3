@@ -1,4 +1,4 @@
-/* Decathlon (C)2023 */
+/* AssentSoftware (C)2023 */
 package com.decathlon.security.http.client;
 
 import com.decathlon.security.SecurityConstants;

@@ -99,5 +99,11 @@
       <artifactId>dkt-fitness-boot-starter-security-oauth2-test</artifactId>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.mock-server</groupId>
+      <artifactId>mockserver-spring-test-listener</artifactId>
+      <version>5.14.0</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 </project>

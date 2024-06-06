@@ -4,6 +4,7 @@ logs/
 !.mvn/wrapper/maven-wrapper.jar
 .flattened*
 *.bak
+.vscode/
 
 ### STS ###
 .apt_generated

@@ -1,4 +1,4 @@
-/* Decathlon (C)2023 */
+/* AssentSoftware (C)2023 */
 package com.decathlon.security.test.context.support;
 
 import com.decathlon.security.test.utils.JwtBuilder;

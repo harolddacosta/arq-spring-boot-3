@@ -1,12 +1,14 @@
-/* Decathlon (C)2023 */
+/* AssentSoftware (C)2023 */
 package com.decathlon.security.config;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
+import com.decathlon.security.authentication.M2MJwtAuthenticationManagerResolver;
 import com.decathlon.security.jwt.converters.ResourceRolesConverter;
 import com.decathlon.security.web.filter.ApiKeyRequestFilter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.commons.lang3.StringUtils;
@@ -16,6 +18,7 @@ import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointR
 import org.springframework.boot.actuate.health.HealthEndpoint;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
+import org.springframework.lang.Nullable;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -28,6 +31,7 @@ import java.util.Arrays;
 
 @Import(SecurityProblemSupport.class)
 @Slf4j
+@RequiredArgsConstructor
 public class DefaultJwtSecurityConfiguration {
 
     private static final String[] AUTH_WHITELIST = {
@@ -45,6 +49,8 @@ public class DefaultJwtSecurityConfiguration {
 
     @Autowired private SecurityProblemSupport problemSupport;
     @Autowired private ObjectMapper mapper;
+
+    @Autowired private @Nullable M2MJwtAuthenticationManagerResolver authenticationManagerResolver;
 
     @Value("${spring.security.oauth2.resourceserver.jwt.resource-access-name}")
     protected String resourceAccessName;
@@ -67,13 +73,6 @@ public class DefaultJwtSecurityConfiguration {
                                 exceptionHandling
                                         .authenticationEntryPoint(problemSupport)
                                         .accessDeniedHandler(problemSupport))
-                .oauth2ResourceServer(
-                        oauth2 ->
-                                oauth2.jwt(
-                                        jwt ->
-                                                jwt.jwtAuthenticationConverter(
-                                                        new ResourceRolesConverter(
-                                                                resourceAccessName))))
                 .sessionManagement(
                         sessionManagement ->
                                 sessionManagement.sessionCreationPolicy(
@@ -89,6 +88,19 @@ public class DefaultJwtSecurityConfiguration {
                             requests.requestMatchers(EndpointRequest.to(HealthEndpoint.class))
                                     .permitAll();
                         });
+
+        if (authenticationManagerResolver != null) {
+            http.oauth2ResourceServer(
+                    oauth2 -> oauth2.authenticationManagerResolver(authenticationManagerResolver));
+        } else {
+            http.oauth2ResourceServer(
+                    oauth2 ->
+                            oauth2.jwt(
+                                    jwt ->
+                                            jwt.jwtAuthenticationConverter(
+                                                    new ResourceRolesConverter(
+                                                            resourceAccessName))));
+        }
 
         if (StringUtils.isNotBlank(apiKey)) {
             log.info("ApiKeyRequestFilter enabled");

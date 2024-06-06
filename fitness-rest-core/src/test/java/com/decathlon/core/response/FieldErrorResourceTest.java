@@ -1,4 +1,4 @@
-/* Decathlon (C)2021 */
+/* AssentSoftware (C)2021 */
 package com.decathlon.core.response;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
