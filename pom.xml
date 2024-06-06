@@ -46,11 +46,11 @@
 
     <java.version>17</java.version>
 
-    <spring-boot.version>3.1.12</spring-boot.version>
+    <spring-boot.version>3.1.7</spring-boot.version>
     <spring-cloud.version>2022.0.5</spring-cloud.version>
 
     <commons-beanutils.version>1.9.4</commons-beanutils.version>
-    <embedded-postgresql.version>3.1.5</embedded-postgresql.version>
+    <embedded-postgresql.version>3.1.1</embedded-postgresql.version>
     <h2.version>2.2.224</h2.version>
     <hypersistence-utils-hibernate-62.version>3.4.3</hypersistence-utils-hibernate-62.version>
     <jackson-databind-nullable.version>0.2.6</jackson-databind-nullable.version>
